@@ -1,0 +1,125 @@
+<div style="width: 100%; padding: 2rem 3rem">
+  <div style="display: flex; align-items: center; margin-bottom: 1rem">
+    <img src="assets/images/find1.jpg" style="width: 25px; height: 25px" />
+    <div style="flex-basis: 100px; padding-left: 7px" class="patient__label">
+      {{ patientId }}
+    </div>
+    <div style="flex-basis: 250px" class="patient__label">
+      {{ patientName }}
+    </div>
+    <div style="flex-basis: 100px; padding-right: 12px">AD No.</div>
+    <div style="flex-basis: 150px">
+      <select
+        class="form-control"
+        style="width: 100%"
+        [(ngModel)]="adNo"
+        (change)="onAdNoChanged($event)"
+      >
+        <option *ngFor="let item of adNos" [value]="item.value">
+          {{ item.text }}
+        </option>
+      </select>
+    </div>
+    <img
+      (click)="viewInfo($event)"
+      src="assets/images/info.jpg"
+      style="width: 45px; height: 25px; padding: 0 10px"
+    />
+    <div class="menu__link">Clear</div>
+    <div style="flex-basis: 135px"></div>
+    <div class="menu__link">eMR</div>
+  </div>
+
+  <div style="display: flex">
+    <div
+      class="tab__list-item"
+      style="background: #3b5998"
+      (click)="tabClickHandler(1)"
+      id="tab1"
+    >
+      List
+    </div>
+    <div class="tab__list-item" (click)="tabClickHandler(2)" id="tab2">
+      Instruction
+    </div>
+  </div>
+
+  <div style="display: flex">
+    <div class="card tab__body">
+      <div *ngIf="tabNo == 1" style="flex: 1"></div>
+
+      <div *ngIf="tabNo == 2" style="flex: 1">
+        <div style="display: flex; margin-top: 1rem; margin-bottom: 2rem">
+          <button class="btn btn-primary btn__crud">New</button>
+          <button class="btn btn-success btn__crud">Save</button>
+          <button class="btn btn-danger btn__crud">Delete</button>
+        </div>
+
+        <div class="flex__row">
+          <div class="p__5" style="flex: 0 0 20%">
+            <label class="form__label">Date</label>
+            <input type="date" class="form-control form__input" />
+          </div>
+          <div class="p__5" style="flex: 0 0 20%">
+            <label class="form__label">Date Taken</label>
+            <input type="date" class="form-control form__input" />
+          </div>
+        </div>
+
+        <div class="flex__row">
+          <div style="flex: 0 0 70%" class="p__5">
+            <label class="form__label">Drug Allergy To</label>
+            <div class="tag__box">
+              <div class="__chip">Skin rash</div>
+              <div class="__chip">Hives</div>
+              <div class="__chip">Itching</div>
+              <div class="__chip">Skin rash</div>
+              <div class="__chip">Hives</div>
+              <div class="__chip">Itching</div>
+              <div class="__chip">Skin rash</div>
+              <div class="__chip">Hives</div>
+              <div class="__chip">Itching</div>
+              <div class="__chip">Skin rash</div>
+              <div class="__chip">Hives</div>
+              <div class="__chip">Itching</div>
+              <div class="__chip">Skin rash</div>
+              <div class="__chip">Hives</div>
+              <div class="__chip">Itching</div>
+              <div class="__chip">Skin rash</div>
+              <div class="__chip">Hives</div>
+              <div class="__chip">Itching</div>
+              <div class="__chip">Skin rash</div>
+              <div class="__chip">Hives</div>
+              <div class="__chip">Itching</div>
+              <div class="__chip">Skin rash</div>
+              <div class="__chip">Hives</div>
+              <div class="__chip">Itching</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex__row">
+          <div style="flex: 0 0 70%" class="p__5">
+            <label class="form__label">Instruction</label>
+            <textarea
+              type="date"
+              class="form-control form__input"
+              style="min-height: 120px"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="flex__row">
+          <div style="flex: 0 0 70%" class="p__5">
+            <label class="form__label">Remarks</label>
+            <textarea
+              type="date"
+              class="form-control form__input"
+              style="min-height: 120px"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
