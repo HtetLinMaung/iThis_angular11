@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { HttpService } from 'src/app/framework/http.service';
 
 @Component({
-  selector: 'app-inpatient-medication-record',
-  templateUrl: './inpatient-medication-record.component.html',
-  styleUrls: ['./inpatient-medication-record.component.css'],
+  selector: 'app-instruction',
+  templateUrl: './instruction.component.html',
+  styleUrls: ['./instruction.component.css'],
 })
-export class InpatientMedicationRecordComponent implements OnInit {
+export class InstructionComponent implements OnInit {
   currentSysKey = 0;
   patientId = 'HRN-0000002';
   patientName = 'Htet Lin Maung';
