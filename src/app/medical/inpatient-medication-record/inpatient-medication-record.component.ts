@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpService } from 'src/app/framework/http.service';
 
 @Component({
   selector: 'app-inpatient-medication-record',
@@ -6,15 +7,34 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./inpatient-medication-record.component.css'],
 })
 export class InpatientMedicationRecordComponent implements OnInit {
-  patientId = 'R20-000017';
+  currentSysKey = 0;
+  patientId = 'HRN-0000002';
   patientName = 'Htet Lin Maung';
   adNos = [{ value: 0, text: '20-A0010' }];
   adNo = 0;
   tabNo = 2;
+  headerData = [];
+  infoDialog = false;
+  patientAge = 0;
+  ADDate = '';
+  room = '';
+  doctor = '';
+  speciality = '';
+  patientType = '';
 
-  constructor() {}
+  date = null;
+  dateTaken = null;
+  drugAllergyTo = '';
+  instruction = '';
+  remarks = '';
 
-  ngOnInit(): void {}
+  isUpdate = false;
+
+  constructor(private http: HttpService) {}
+
+  ngOnInit(): void {
+    this.fetchPatientInfoById();
+  }
 
   onAdNoChanged(event) {
     // const data = this.headerData.find((v) => v.refNo == event.target.value);
@@ -50,5 +70,58 @@ export class InpatientMedicationRecordComponent implements OnInit {
     }
     this.tabNo = n;
     console.log(n);
+  }
+
+  save() {
+    console.log(this);
+    this.http
+      .doPost(
+        `inpatient-medical-record/${
+          this.isUpdate
+            ? 'update-instruction/' + this.currentSysKey
+            : 'save-instruction'
+        }`,
+        {
+          pId: 1,
+          RgsNo: 1,
+          userid: '',
+          username: '',
+          date: this.date,
+          dateTaken: this.dateTaken,
+          drugAllergyTo: this.drugAllergyTo,
+          instruction: this.instruction,
+          remarks: this.remarks,
+        }
+      )
+      .subscribe((data) => {
+        this.isUpdate = true;
+      });
+  }
+
+  fetchPatientInfoById() {
+    this.http
+      .doGet(`nurse-activity-worklist/patient-info/${this.patientId}`)
+      .subscribe(
+        (data) => {
+          // this.headerData = data;
+          // if (data.length) {
+          //   this.patientId = data[0].patientid;
+          //   this.patientName = data[0].persontitle + ' ' + data[0].personname;
+          //   this.patientAge = data[0].age;
+          //   this.ADDate = data[0].arriveDate;
+          //   this.room = data[0].roomNo;
+          //   this.doctor = data[0].doctorName;
+          //   this.speciality = data[0].speciality;
+          //   this.patientType = data[0].patientType;
+          //   this.adNos = data.map((v) => ({
+          //     value: v.refNo,
+          //     text: v.refNo,
+          //   }));
+          //   this.adNo = data[0].refNo;
+          // }
+        },
+        (error) => {},
+        () => {}
+      );
   }
 }
