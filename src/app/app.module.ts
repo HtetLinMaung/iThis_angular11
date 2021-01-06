@@ -5,9 +5,10 @@ import { MedicalModule } from './medical/medical.module';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, LoginComponent],
   imports: [
     BrowserModule,
     FormsModule,
@@ -16,7 +17,7 @@ import { FormsModule } from '@angular/forms';
     RouterModule.forRoot([
       {
         path: '',
-        component: AppComponent,
+        component: LoginComponent,
       },
     ]),
   ],
