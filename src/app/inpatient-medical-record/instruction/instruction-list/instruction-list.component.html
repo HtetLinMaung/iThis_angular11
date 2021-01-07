@@ -20,7 +20,7 @@
         <i class="fas fa-list"></i>
       </div>
       <div class="fab __raised" title="Clear">
-        <i class="far fa-times-circle"></i>
+        <i class="fas fa-times"></i>
       </div>
       <div
         class="fab __raised"
@@ -35,18 +35,57 @@
     </div>
   </div>
 
-  <div style="display: flex; margin: 1rem 0">
-    <div
-      style="
-        display: flex;
-        flex: 0 0 45%;
-        align-items: center;
-        justify-content: space-between;
-      "
-    >
-      <select class="form-control"></select>
-      <select class="form-control"></select>
-      <input type="text" class="form-control" />
+  <div *ngIf="true">
+    <div style="display: flex; margin-top: 1rem; margin-bottom: 1rem">
+      <button class="btn btn-primary btn__crud" (click)="addFilter()">
+        Add filter
+      </button>
+      <button class="btn btn-success btn__crud" (click)="advanceSearch()">
+        Search
+      </button>
+      <button class="btn btn-secondary btn__crud" (click)="clearFilter()">
+        Clear all filter
+      </button>
+    </div>
+
+    <div *ngFor="let filter of filters" style="display: flex; margin: 1rem 0">
+      <div
+        style="
+          display: flex;
+          flex: 0 0 50%;
+          align-items: center;
+          justify-content: space-between;
+        "
+      >
+        <i class="fas fa-times"></i>
+        <select
+          [(ngModel)]="filter.field"
+          class="form-control form__input"
+          style="flex: 0 0 30%"
+        >
+          <option *ngFor="let field of filter.fields" [value]="field.value">
+            {{ field.text }}
+          </option>
+        </select>
+        <select
+          [(ngModel)]="filter.condition"
+          class="form-control form__input"
+          style="flex: 0 0 30%"
+        >
+          <option
+            *ngFor="let condition of filter.conditions"
+            [value]="condition.value"
+          >
+            {{ condition.text }}
+          </option>
+        </select>
+        <input
+          [(ngModel)]="filter.search"
+          type="text"
+          class="form-control form__input"
+          style="flex: 0 0 35%"
+        />
+      </div>
     </div>
   </div>
 

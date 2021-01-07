@@ -10,7 +10,13 @@ import Instruction from '../Instruction.model';
   styleUrls: ['./instruction-list.component.css'],
 })
 export class InstructionListComponent implements OnInit {
-  headers = ['Date', 'Date Taken', 'Drug Allergy To', 'Instruction', 'Remarks'];
+  headers = [
+    'Date',
+    'Date Taken',
+    'Drug Allergy To',
+    'Instruction Under Treatment',
+    'Remarks',
+  ];
   page = 1;
   totalPage = 0;
   total = 0;
@@ -20,6 +26,58 @@ export class InstructionListComponent implements OnInit {
   end = 0;
 
   open = false;
+  filters = [
+    {
+      condition: 3,
+      conditions: [
+        {
+          text: 'Equals',
+          value: 1,
+        },
+        {
+          text: 'Contains',
+          value: 2,
+        },
+        {
+          text: 'Begins With',
+          value: 3,
+        },
+        {
+          text: 'Ends With',
+          value: 4,
+        },
+      ],
+      field: 1,
+      fields: [
+        {
+          text: 'Date',
+          value: 1,
+          key: 'date',
+        },
+        {
+          text: 'Date Taken',
+          value: 2,
+          key: 'dateTaken',
+        },
+        {
+          text: 'Drug Allergy To',
+          value: 3,
+          key: 'drugAllergyTo',
+        },
+        {
+          text: 'Instruction Under Treatment',
+          value: 4,
+          key: 'instruction',
+        },
+        {
+          text: 'Remarks',
+          value: 5,
+          key: 'remarks',
+        },
+      ],
+      search: '',
+    },
+  ];
 
   constructor(
     public instructionStoreService: InstructionStoreService,
@@ -29,6 +87,61 @@ export class InstructionListComponent implements OnInit {
   ngOnInit(): void {
     this.fetchAllInstructions();
     this.instructionStoreService.isUpdate = false;
+  }
+
+  getDefaultFilter() {
+    return [
+      {
+        condition: 3,
+        conditions: [
+          {
+            text: 'Equals',
+            value: 1,
+          },
+          {
+            text: 'Contains',
+            value: 2,
+          },
+          {
+            text: 'Begins With',
+            value: 3,
+          },
+          {
+            text: 'Ends With',
+            value: 4,
+          },
+        ],
+        field: 1,
+        fields: [
+          {
+            text: 'Date',
+            value: 1,
+            key: 'date',
+          },
+          {
+            text: 'Date Taken',
+            value: 2,
+            key: 'dateTaken',
+          },
+          {
+            text: 'Drug Allergy To',
+            value: 3,
+            key: 'drugAllergyTo',
+          },
+          {
+            text: 'Instruction Under Treatment',
+            value: 4,
+            key: 'instruction',
+          },
+          {
+            text: 'Remarks',
+            value: 5,
+            key: 'remarks',
+          },
+        ],
+        search: '',
+      },
+    ];
   }
 
   formatDate(dateStr: string, format: string) {
@@ -140,4 +253,10 @@ export class InstructionListComponent implements OnInit {
   openAdvSearch() {
     this.open = true;
   }
+
+  clearFilter() {}
+
+  addFilter() {}
+
+  advanceSearch() {}
 }

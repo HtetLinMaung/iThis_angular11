@@ -4,8 +4,17 @@ td {
 }
 
 .fab {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 50%;
-  display: inline-block;
   background-color: #fff;
-  padding: 0.7rem;
+  width: 35px;
+  height: 35px;
+  font-size: 14px;
+}
+.btn__crud {
+  font-size: 12px !important;
+  font-weight: bold;
+  margin: 0 0.2rem;
 }
