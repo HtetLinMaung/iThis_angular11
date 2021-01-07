@@ -33,17 +33,28 @@
 
   <div style="display: flex; margin: 0.5rem 0">
     <app-pagination
+      [total]="(instructionStoreService.instructions$ | async)?.length"
       [perPage]="perPage"
-      [page]="page"
+      [start]="start"
+      [end]="end"
       [perPages]="perPages"
       style="flex: 0 0 25%"
+      (onPerPageChanged)="handlePerPageChanged($event)"
+      (onNext)="handleSkip(1)"
+      (onPrev)="handleSkip(2)"
+      (onSkipFirst)="handleSkip(3)"
+      (onSkipLast)="handleSkip(4)"
     ></app-pagination>
   </div>
 
   <app-table [headers]="headers">
     <tr
       class="__raised"
-      *ngFor="let instruction of instructionStoreService.instructions$ | async"
+      *ngFor="
+        let instruction of (
+          instructionStoreService.instructions$ | async
+        ).slice(start, end)
+      "
       (click)="goToList(instruction)"
     >
       <td>

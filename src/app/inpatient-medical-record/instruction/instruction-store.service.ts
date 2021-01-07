@@ -41,4 +41,12 @@ export class InstructionStoreService {
   get tabNo(): number {
     return this._tabNo.getValue();
   }
+
+  get instructions(): Instruction[] {
+    return this._instructions.getValue();
+  }
+
+  get currentSysKey(): number {
+    return this._currentSysKey.getValue();
+  }
 }

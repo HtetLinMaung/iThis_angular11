@@ -65,7 +65,6 @@ export class InstructionComponent implements OnInit {
         tabEle1.style.background = '#8C9899';
     }
     this.instructionStoreService.tabNo = n;
-    console.log(n);
   }
 
   fetchPatientInfoById() {
