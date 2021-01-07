@@ -1,0 +1,10 @@
+.patient__label {
+  color: #00008b;
+  font-size: 10pt;
+  font-weight: bolder;
+}
+.menu__link {
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+}

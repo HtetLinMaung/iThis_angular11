@@ -1,0 +1,30 @@
+<div style="display: flex; align-items: center; margin-bottom: 1rem">
+  <img src="assets/images/find1.jpg" style="width: 25px; height: 25px" />
+  <div style="flex-basis: 100px; padding-left: 7px" class="patient__label">
+    {{ patientId }}
+  </div>
+  <div style="flex-basis: 250px; padding-left: 7px" class="patient__label">
+    {{ patientName }}
+  </div>
+  <div style="flex-basis: 100px; padding-right: 12px">AD No.</div>
+  <div style="flex-basis: 150px">
+    <select
+      class="form-control"
+      style="width: 100%"
+      [(ngModel)]="adNo"
+      (change)="onAdNoChanged($event)"
+    >
+      <option *ngFor="let item of adNos" [value]="item.value">
+        {{ item.text }}
+      </option>
+    </select>
+  </div>
+  <img
+    (click)="viewInfo($event)"
+    src="assets/images/info.jpg"
+    style="width: 45px; height: 25px; padding: 0 10px"
+  />
+  <div class="menu__link">Clear</div>
+  <div style="flex-basis: 135px"></div>
+  <div class="menu__link">eMR</div>
+</div>

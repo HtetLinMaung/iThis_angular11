@@ -8,6 +8,7 @@ import { InstructionListComponent } from './instruction/instruction-list/instruc
 import { TableComponent } from '../framework/table/table.component';
 import { PaginationComponent } from '../framework/pagination/pagination.component';
 import { DeleteDialogComponent } from '../framework/delete-dialog/delete-dialog.component';
+import { PatientHeaderComponent } from '../framework/patient-header/patient-header.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { DeleteDialogComponent } from '../framework/delete-dialog/delete-dialog.
     TableComponent,
     PaginationComponent,
     DeleteDialogComponent,
+    PatientHeaderComponent,
   ],
   imports: [
     CommonModule,
