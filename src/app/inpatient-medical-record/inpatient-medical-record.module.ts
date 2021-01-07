@@ -7,6 +7,7 @@ import { InstructionFormComponent } from './instruction/instruction-form/instruc
 import { InstructionListComponent } from './instruction/instruction-list/instruction-list.component';
 import { TableComponent } from '../framework/table/table.component';
 import { PaginationComponent } from '../framework/pagination/pagination.component';
+import { DeleteDialogComponent } from '../framework/delete-dialog/delete-dialog.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { PaginationComponent } from '../framework/pagination/pagination.componen
     InstructionListComponent,
     TableComponent,
     PaginationComponent,
+    DeleteDialogComponent,
   ],
   imports: [
     CommonModule,

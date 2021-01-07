@@ -10,11 +10,13 @@ export class InstructionStoreService {
   private readonly _instructions = new BehaviorSubject<Instruction[]>([]);
   private readonly _isUpdate = new BehaviorSubject<boolean>(false);
   private readonly _tabNo = new BehaviorSubject<number>(1);
+  private readonly _deleteDialog = new BehaviorSubject<boolean>(false);
 
   readonly currentSysKey$ = this._currentSysKey.asObservable();
   readonly instructions$ = this._instructions.asObservable();
   readonly isUpdate$ = this._isUpdate.asObservable();
   readonly tabNo$ = this._tabNo.asObservable();
+  readonly deleteDialog$ = this._deleteDialog.asObservable();
 
   constructor() {}
 
@@ -34,6 +36,10 @@ export class InstructionStoreService {
     this._isUpdate.next(v);
   }
 
+  set deleteDialog(v: boolean) {
+    this._deleteDialog.next(v);
+  }
+
   get isUpdate(): boolean {
     return this._isUpdate.getValue();
   }
@@ -48,5 +54,9 @@ export class InstructionStoreService {
 
   get currentSysKey(): number {
     return this._currentSysKey.getValue();
+  }
+
+  get deleteDialog(): boolean {
+    return this._deleteDialog.getValue();
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from 'src/app/framework/http.service';
 import { InstructionStoreService } from '../instruction-store.service';
+import { jsPDF } from 'jspdf';
 
 @Component({
   selector: 'app-instruction-form',
@@ -44,7 +45,7 @@ export class InstructionFormComponent implements OnInit {
       const instruction = this.instructionStoreService.instructions.find(
         (v) => v.syskey == this.instructionStoreService.currentSysKey
       );
-      console.log(instruction);
+
       this.date = instruction.date;
       this.dateTaken = instruction.dateTaken;
       this.drugAllergyTo = instruction.drugAllergyTo;
@@ -83,23 +84,13 @@ export class InstructionFormComponent implements OnInit {
   }
 
   delete() {
-    if (this.instructionStoreService.isUpdate) {
-      this.http
-        .doPost(
-          `inpatient-medical-record/delete-instruction/${this.instructionStoreService.currentSysKey}`,
-          { syskey: this.instructionStoreService.currentSysKey }
-        )
-        .subscribe((data) => {
-          const tabEle1 = document.getElementById('tab1');
-          const tabEle2 = document.getElementById('tab2');
-          tabEle1.style.background = '#3b5998';
-          tabEle2.style.background = '#8C9899';
-
-          this.instructionStoreService.isUpdate = false;
-          this.instructionStoreService.tabNo = 1;
-        });
-    }
+    if (this.instructionStoreService.isUpdate)
+      this.instructionStoreService.deleteDialog = true;
   }
 
-  print() {}
+  print() {
+    const doc = new jsPDF();
+    doc.text('Hello world!', 10, 10);
+    doc.save('a4.pdf');
+  }
 }

@@ -1,0 +1,32 @@
+<div class="dialog__wrapper">
+  <div class="dialog__content">
+    <h3 style="font-size: 17px; color: #fff; text-align: center">
+      Are you sure you want to delete?
+    </h3>
+    <div style="font-size: 12px; color: #fff; padding: 0 1rem">
+      Please be careful. Deleting action cannot be undone. Make sure you know
+      what you are doing.
+    </div>
+    <div class="flex__row" style="justify-content: space-between">
+      <div>
+        <button (click)="cancel()" class="btn btn-outline-primary cancel__btn">
+          Cancel
+        </button>
+      </div>
+      <div>
+        <button
+          class="btn btn-danger __raised"
+          style="font-size: 12px"
+          (click)="delete()"
+          style="
+            font-size: 12px;
+            padding: 5px 25px !important;
+            border-radius: 10px;
+          "
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
