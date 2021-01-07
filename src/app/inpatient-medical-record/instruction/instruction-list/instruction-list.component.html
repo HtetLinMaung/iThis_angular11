@@ -1,4 +1,36 @@
 <div style="flex: 1">
+  <div style="display: flex; margin: 1rem 0">
+    <div
+      style="
+        display: flex;
+        flex: 0 0 45%;
+        align-items: center;
+        justify-content: space-between;
+      "
+    >
+      <input
+        type="text"
+        class="form-control form__input"
+        style="flex: 0 0 45%"
+      />
+      <div class="fab __raised" title="Search">
+        <i class="fas fa-arrow-right"></i>
+      </div>
+      <div class="fab __raised" title="Show all">
+        <i class="fas fa-list"></i>
+      </div>
+      <div class="fab __raised" title="Clear">
+        <i class="far fa-times-circle"></i>
+      </div>
+      <div class="fab __raised" title="Advanced Search">
+        <i class="fas fa-search"></i>
+      </div>
+      <div class="fab __raised" title="Export">
+        <i class="fas fa-file-export"></i>
+      </div>
+    </div>
+  </div>
+
   <div style="display: flex; margin: 0.5rem 0">
     <app-pagination
       [perPage]="perPage"
@@ -7,6 +39,7 @@
       style="flex: 0 0 25%"
     ></app-pagination>
   </div>
+
   <app-table [headers]="headers">
     <tr
       class="__raised"

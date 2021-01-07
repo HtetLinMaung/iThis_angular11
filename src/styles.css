@@ -31,6 +31,6 @@
   font-size: 13px;
 }
 .form__input {
-  font-size: 14px;
-  border-radius: 10px;
+  font-size: 14px !important;
+  border-radius: 10px !important;
 }

@@ -2,3 +2,10 @@ td {
   font-size: 13px;
   text-align: center;
 }
+
+.fab {
+  border-radius: 50%;
+  display: inline-block;
+  background-color: #fff;
+  padding: 0.7rem;
+}
