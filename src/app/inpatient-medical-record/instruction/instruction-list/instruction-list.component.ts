@@ -19,6 +19,8 @@ export class InstructionListComponent implements OnInit {
   start = 0;
   end = 0;
 
+  open = false;
+
   constructor(
     public instructionStoreService: InstructionStoreService,
     private http: HttpService
@@ -133,5 +135,9 @@ export class InstructionListComponent implements OnInit {
             (this.instructionStoreService.instructions.length % this.perPage);
         }
     }
+  }
+
+  openAdvSearch() {
+    this.open = true;
   }
 }
