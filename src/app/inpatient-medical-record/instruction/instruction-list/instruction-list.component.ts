@@ -26,58 +26,35 @@ export class InstructionListComponent implements OnInit {
   end = 0;
 
   open = false;
-  filters = [
+  fields = [
     {
-      condition: 3,
-      conditions: [
-        {
-          text: 'Equals',
-          value: 1,
-        },
-        {
-          text: 'Contains',
-          value: 2,
-        },
-        {
-          text: 'Begins With',
-          value: 3,
-        },
-        {
-          text: 'Ends With',
-          value: 4,
-        },
-      ],
-      field: 1,
-      fields: [
-        {
-          text: 'Date',
-          value: 1,
-          key: 'date',
-        },
-        {
-          text: 'Date Taken',
-          value: 2,
-          key: 'dateTaken',
-        },
-        {
-          text: 'Drug Allergy To',
-          value: 3,
-          key: 'drugAllergyTo',
-        },
-        {
-          text: 'Instruction Under Treatment',
-          value: 4,
-          key: 'instruction',
-        },
-        {
-          text: 'Remarks',
-          value: 5,
-          key: 'remarks',
-        },
-      ],
-      search: '',
+      text: 'Date',
+      value: 1,
+      key: 'date',
+    },
+    {
+      text: 'Date Taken',
+      value: 2,
+      key: 'dateTaken',
+    },
+    {
+      text: 'Drug Allergy To',
+      value: 3,
+      key: 'drugAllergyTo',
+    },
+    {
+      text: 'Instruction Under Treatment',
+      value: 4,
+      key: 'instruction',
+    },
+    {
+      text: 'Remarks',
+      value: 5,
+      key: 'remarks',
     },
   ];
+
+  search = '';
 
   constructor(
     public instructionStoreService: InstructionStoreService,
@@ -87,61 +64,6 @@ export class InstructionListComponent implements OnInit {
   ngOnInit(): void {
     this.fetchAllInstructions();
     this.instructionStoreService.isUpdate = false;
-  }
-
-  getDefaultFilter() {
-    return [
-      {
-        condition: 3,
-        conditions: [
-          {
-            text: 'Equals',
-            value: 1,
-          },
-          {
-            text: 'Contains',
-            value: 2,
-          },
-          {
-            text: 'Begins With',
-            value: 3,
-          },
-          {
-            text: 'Ends With',
-            value: 4,
-          },
-        ],
-        field: 1,
-        fields: [
-          {
-            text: 'Date',
-            value: 1,
-            key: 'date',
-          },
-          {
-            text: 'Date Taken',
-            value: 2,
-            key: 'dateTaken',
-          },
-          {
-            text: 'Drug Allergy To',
-            value: 3,
-            key: 'drugAllergyTo',
-          },
-          {
-            text: 'Instruction Under Treatment',
-            value: 4,
-            key: 'instruction',
-          },
-          {
-            text: 'Remarks',
-            value: 5,
-            key: 'remarks',
-          },
-        ],
-        search: '',
-      },
-    ];
   }
 
   formatDate(dateStr: string, format: string) {
@@ -254,9 +176,48 @@ export class InstructionListComponent implements OnInit {
     this.open = true;
   }
 
-  clearFilter() {}
+  advanceSearch(filters) {
+    this.instructionStoreService.instructions = this.instructionStoreService.instructions.filter(
+      (instruction) => {
+        let flag = true;
+        for (const filter of filters) {
+          const key = this.fields.find((field) => field.value == filter.field)
+            ?.key;
+          switch (filter.condition) {
+            case 1:
+              flag = flag && filter.search == instruction[key];
+              break;
+            case 2:
+              flag = flag && instruction[key].includes(filter.search);
+              break;
+            case 3:
+              flag = flag && instruction[key].startsWith(filter.search);
+              break;
+            default:
+              flag = flag && instruction[key].endsWith(filter.search);
+          }
+        }
+        return flag;
+      }
+    );
+    this.initPagination(this.instructionStoreService.instructions);
+  }
 
-  addFilter() {}
+  normalSearch() {
+    this.instructionStoreService.instructions = this.instructionStoreService.instructions.filter(
+      (instruction) => {
+        for (const value in instruction) {
+          return value.includes(this.search);
+        }
+      }
+    );
+  }
 
-  advanceSearch() {}
+  showAll() {
+    this.fetchAllInstructions();
+  }
+
+  clearSearch() {
+    this.search = '';
+  }
 }

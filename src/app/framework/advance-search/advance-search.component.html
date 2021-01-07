@@ -1,0 +1,51 @@
+<div style="display: flex; margin-top: 1rem; margin-bottom: 1rem">
+  <button class="btn btn-primary btn__crud" (click)="addFilter()">
+    Add filter
+  </button>
+  <button class="btn btn-success btn__crud" (click)="advanceSearch()">
+    Search
+  </button>
+  <button class="btn btn-secondary btn__crud" (click)="clearFilter()">
+    Clear all filter
+  </button>
+</div>
+
+<div
+  *ngFor="let filter of filters; let i = index"
+  style="display: flex; margin: 1rem 0"
+>
+  <div
+    style="
+      display: flex;
+      flex: 0 0 50%;
+      align-items: center;
+      justify-content: space-between;
+    "
+  >
+    <i class="fas fa-times" (click)="removeFilter(i)"></i>
+    <select
+      [(ngModel)]="filter.field"
+      class="form-control form__input"
+      style="flex: 0 0 30%"
+    >
+      <option *ngFor="let field of fields" [value]="field.value">
+        {{ field.text }}
+      </option>
+    </select>
+    <select
+      [(ngModel)]="filter.condition"
+      class="form-control form__input"
+      style="flex: 0 0 30%"
+    >
+      <option *ngFor="let condition of conditions" [value]="condition.value">
+        {{ condition.text }}
+      </option>
+    </select>
+    <input
+      [(ngModel)]="filter.search"
+      type="text"
+      class="form-control form__input"
+      style="flex: 0 0 35%"
+    />
+  </div>
+</div>
