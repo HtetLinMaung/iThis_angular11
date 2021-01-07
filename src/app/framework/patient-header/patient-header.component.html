@@ -28,3 +28,61 @@
   <div style="flex-basis: 135px"></div>
   <div class="menu__link">eMR</div>
 </div>
+
+<div class="__menu" id="info-dialog">
+  <div
+    class="flex__row"
+    style="
+      background: #446cb3;
+      padding: 0.1rem 1rem;
+      border-radius: 0.5rem 0.5rem 0 0;
+    "
+  >
+    <div style="flex: 1"></div>
+    <div style="text-align: center; color: #fff; flex: 1">Information</div>
+    <div style="flex: 1">
+      <div
+        style="margin-left: auto; background: #fff"
+        class="btn__close"
+        (click)="closeInfoDialog()"
+      >
+        x
+      </div>
+    </div>
+  </div>
+
+  <div class="flex__row">
+    <div style="flex-basis: 25%">Name</div>
+    <div style="flex-basis: 75%">: {{ patientName }}</div>
+  </div>
+
+  <div class="flex__row">
+    <div style="flex-basis: 25%">Age</div>
+    <div style="flex-basis: 75%">: {{ patientAge }} Yrs</div>
+  </div>
+
+  <div class="flex__row">
+    <div style="flex-basis: 25%">AD Date</div>
+    <div style="flex-basis: 75%">: {{ ADDate }}</div>
+  </div>
+
+  <div class="flex__row">
+    <div style="flex-basis: 25%">Room</div>
+    <div style="flex-basis: 75%">: {{ room }}</div>
+  </div>
+
+  <div class="flex__row">
+    <div style="flex-basis: 25%">Doctor</div>
+    <div style="flex-basis: 75%">: {{ doctor }}</div>
+  </div>
+
+  <div class="flex__row">
+    <div style="flex-basis: 25%">Speciality</div>
+    <div style="flex-basis: 75%">: {{ speciality }}</div>
+  </div>
+
+  <div class="flex__row">
+    <div style="flex-basis: 25%">Type</div>
+    <div style="flex-basis: 75%">: {{ patientType }}</div>
+  </div>
+</div>

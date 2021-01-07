@@ -40,9 +40,14 @@ export class PatientHeaderComponent implements OnInit {
 
   viewInfo(e) {
     const dialogEle = document.getElementById('info-dialog');
-    dialogEle.style.left = e.clientX;
-    dialogEle.style.top = e.clientY;
+    dialogEle.style.left = e.clientX + 'px';
+    dialogEle.style.top = e.clientY + 'px';
     dialogEle.style.display = 'block';
+  }
+
+  closeInfoDialog() {
+    const dialogEle = document.getElementById('info-dialog');
+    dialogEle.style.display = 'none';
   }
 
   fetchPatientInfoById() {
