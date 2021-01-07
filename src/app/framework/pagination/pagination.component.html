@@ -1,0 +1,16 @@
+<div class="pagination">
+  <i class="fas fa-backward"></i>
+  <i class="fas fa-angle-left"></i>
+  <select
+    (change)="handlePerPageChanged($event)"
+    style="flex: 0 0 20%"
+    class="select"
+  >
+    <option *ngFor="let item of perPages" [value]="item">
+      {{ item }}
+    </option>
+  </select>
+  <i class="fas fa-angle-right"></i>
+  <i class="fas fa-forward"></i>
+  <div>1 - 4 of 4</div>
+</div>

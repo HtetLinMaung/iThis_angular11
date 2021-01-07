@@ -1,0 +1,10 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.select {
+  border-radius: 4px;
+  font-size: 14px;
+}
