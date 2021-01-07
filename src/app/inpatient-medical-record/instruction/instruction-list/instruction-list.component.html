@@ -44,6 +44,7 @@
     <tr
       class="__raised"
       *ngFor="let instruction of instructionStoreService.instructions$ | async"
+      (click)="goToList(instruction)"
     >
       <td>
         {{ formatDate(instruction.date, "DD/MM/yyyy") }}

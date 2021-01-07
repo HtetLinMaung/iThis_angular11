@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from 'src/app/framework/http.service';
+import { InstructionStoreService } from '../instruction-store.service';
 
 @Component({
   selector: 'app-instruction-form',
@@ -7,29 +8,42 @@ import { HttpService } from 'src/app/framework/http.service';
   styleUrls: ['./instruction-form.component.css'],
 })
 export class InstructionFormComponent implements OnInit {
-  date = null;
-  dateTaken = null;
+  date = '';
+  dateTaken = '';
   drugAllergyTo = '';
   instruction = '';
   remarks = '';
-  isUpdate = false;
 
   currentSysKey = 0; // temp
 
-  constructor(private http: HttpService) {}
+  constructor(
+    private http: HttpService,
+    public instructionStoreService: InstructionStoreService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.instructionStoreService.isUpdate);
+  }
+
+  new() {
+    this.instructionStoreService.isUpdate = false;
+    this.date = '';
+    this.dateTaken = '';
+    this.drugAllergyTo = '';
+    this.instruction = '';
+    this.remarks = '';
+  }
 
   save() {
-    console.log(this);
     this.http
       .doPost(
         `inpatient-medical-record/${
-          this.isUpdate
+          this.instructionStoreService.isUpdate
             ? 'update-instruction/' + this.currentSysKey
             : 'save-instruction'
         }`,
         {
+          syskey: 0, // dummy syskey, it is not used is service
           pId: 1,
           RgsNo: 1,
           userid: '',
@@ -42,7 +56,11 @@ export class InstructionFormComponent implements OnInit {
         }
       )
       .subscribe((data) => {
-        this.isUpdate = true;
+        console.log(data);
+        if (!this.instructionStoreService.isUpdate) {
+          // this.currentSysKey = data.syskey;
+        }
+        this.instructionStoreService.isUpdate = true;
       });
   }
 }

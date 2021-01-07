@@ -1,5 +1,6 @@
 export default class Instruction {
   constructor(
+    public syskey: number,
     public date: string,
     public dateTaken: string,
     public drugAllergyTo: string,
