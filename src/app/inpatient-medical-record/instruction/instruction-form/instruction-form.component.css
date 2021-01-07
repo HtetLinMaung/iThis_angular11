@@ -1,0 +1,32 @@
+.form__label {
+  font-size: 13px;
+}
+.form__input {
+  font-size: 14px;
+  border-radius: 10px;
+}
+.tag__box {
+  border-radius: 10px;
+  border: 1px solid #c4c4c4;
+  width: 100%;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  flex-wrap: wrap;
+}
+.__chip {
+  font-weight: bolder;
+  padding: 0.3rem 1rem;
+  margin: 0.2rem;
+  font-size: 12px;
+  display: inline-block;
+  border-radius: 35px;
+  border: 1px solid #c4c4c4;
+}
+.btn__crud {
+  font-size: 12px;
+  flex-basis: 80px;
+  font-weight: bold;
+  margin: 0 0.2rem;
+}

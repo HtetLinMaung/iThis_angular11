@@ -46,80 +46,9 @@
 
   <div style="display: flex">
     <div class="card tab__body">
-      <div *ngIf="tabNo == 1" style="flex: 1"></div>
+      <app-instruction-list *ngIf="tabNo == 1"></app-instruction-list>
 
-      <div *ngIf="tabNo == 2" style="flex: 1">
-        <div style="display: flex; margin-top: 1rem; margin-bottom: 2rem">
-          <button class="btn btn-primary btn__crud">New</button>
-          <button class="btn btn-success btn__crud" (click)="save()">
-            Save
-          </button>
-          <button class="btn btn-danger btn__crud">Delete</button>
-        </div>
-
-        <div class="flex__row">
-          <div class="p__5" style="flex: 0 0 20%">
-            <label class="form__label">Date</label>
-            <input
-              type="date"
-              class="form-control form__input"
-              [(ngModel)]="date"
-            />
-          </div>
-          <div class="p__5" style="flex: 0 0 20%">
-            <label class="form__label">Date Taken</label>
-            <input
-              type="date"
-              class="form-control form__input"
-              [(ngModel)]="dateTaken"
-            />
-          </div>
-        </div>
-
-        <div class="flex__row">
-          <div style="flex: 0 0 70%" class="p__5">
-            <label class="form__label">Drug Allergy To</label>
-            <div
-              *ngIf="!drugAllergyTo"
-              class="tag__box"
-              style="justify-content: center"
-            >
-              <div>No Known Drug Allergy</div>
-            </div>
-            <div *ngIf="drugAllergyTo" class="tag__box">
-              <div class="__chip">Skin rash</div>
-              <div class="__chip">Hives</div>
-              <div class="__chip">Itching</div>
-              <div class="__chip">Skin rash</div>
-              <div class="__chip">Hives</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex__row">
-          <div style="flex: 0 0 70%" class="p__5">
-            <label class="form__label">Instruction</label>
-            <textarea
-              [(ngModel)]="instruction"
-              type="date"
-              class="form-control form__input"
-              style="min-height: 120px"
-            ></textarea>
-          </div>
-        </div>
-
-        <div class="flex__row">
-          <div style="flex: 0 0 70%" class="p__5">
-            <label class="form__label">Remarks</label>
-            <textarea
-              [(ngModel)]="remarks"
-              type="date"
-              class="form-control form__input"
-              style="min-height: 120px"
-            ></textarea>
-          </div>
-        </div>
-      </div>
+      <app-instruction-form *ngIf="tabNo == 2"></app-instruction-form>
     </div>
   </div>
 </div>

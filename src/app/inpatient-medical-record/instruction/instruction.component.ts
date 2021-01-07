@@ -22,14 +22,6 @@ export class InstructionComponent implements OnInit {
   speciality = '';
   patientType = '';
 
-  date = null;
-  dateTaken = null;
-  drugAllergyTo = '';
-  instruction = '';
-  remarks = '';
-
-  isUpdate = false;
-
   constructor(private http: HttpService) {}
 
   ngOnInit(): void {
@@ -70,32 +62,6 @@ export class InstructionComponent implements OnInit {
     }
     this.tabNo = n;
     console.log(n);
-  }
-
-  save() {
-    console.log(this);
-    this.http
-      .doPost(
-        `inpatient-medical-record/${
-          this.isUpdate
-            ? 'update-instruction/' + this.currentSysKey
-            : 'save-instruction'
-        }`,
-        {
-          pId: 1,
-          RgsNo: 1,
-          userid: '',
-          username: '',
-          date: this.date,
-          dateTaken: this.dateTaken,
-          drugAllergyTo: this.drugAllergyTo,
-          instruction: this.instruction,
-          remarks: this.remarks,
-        }
-      )
-      .subscribe((data) => {
-        this.isUpdate = true;
-      });
   }
 
   fetchPatientInfoById() {
