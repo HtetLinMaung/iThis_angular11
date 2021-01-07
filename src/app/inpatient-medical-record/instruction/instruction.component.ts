@@ -12,7 +12,7 @@ export class InstructionComponent implements OnInit {
   patientName = 'Htet Lin Maung';
   adNos = [{ value: 0, text: '20-A0010' }];
   adNo = 0;
-  tabNo = 2;
+  tabNo = 1;
   headerData = [];
   infoDialog = false;
   patientAge = 0;

@@ -5,9 +5,15 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { InstructionFormComponent } from './instruction/instruction-form/instruction-form.component';
 import { InstructionListComponent } from './instruction/instruction-list/instruction-list.component';
+import { TableComponent } from '../framework/table/table.component';
 
 @NgModule({
-  declarations: [InstructionComponent, InstructionFormComponent, InstructionListComponent],
+  declarations: [
+    InstructionComponent,
+    InstructionFormComponent,
+    InstructionListComponent,
+    TableComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,
