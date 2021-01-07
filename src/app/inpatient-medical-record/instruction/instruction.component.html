@@ -46,9 +46,13 @@
 
   <div style="display: flex">
     <div class="card tab__body">
-      <app-instruction-list *ngIf="tabNo == 1"></app-instruction-list>
+      <app-instruction-list
+        *ngIf="(instructionStoreService.tabNo$ | async) == 1"
+      ></app-instruction-list>
 
-      <app-instruction-form *ngIf="tabNo == 2"></app-instruction-form>
+      <app-instruction-form
+        *ngIf="(instructionStoreService.tabNo$ | async) == 2"
+      ></app-instruction-form>
     </div>
   </div>
 </div>

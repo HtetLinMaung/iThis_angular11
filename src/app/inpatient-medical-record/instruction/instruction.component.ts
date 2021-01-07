@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from 'src/app/framework/http.service';
+import { InstructionStoreService } from './instruction-store.service';
 
 @Component({
   selector: 'app-instruction',
@@ -12,7 +13,7 @@ export class InstructionComponent implements OnInit {
   patientName = 'Htet Lin Maung';
   adNos = [{ value: 0, text: '20-A0010' }];
   adNo = 0;
-  tabNo = 1;
+
   headerData = [];
   infoDialog = false;
   patientAge = 0;
@@ -22,7 +23,10 @@ export class InstructionComponent implements OnInit {
   speciality = '';
   patientType = '';
 
-  constructor(private http: HttpService) {}
+  constructor(
+    private http: HttpService,
+    public instructionStoreService: InstructionStoreService
+  ) {}
 
   ngOnInit(): void {
     this.fetchPatientInfoById();
@@ -60,7 +64,7 @@ export class InstructionComponent implements OnInit {
         tabEle2.style.background = '#3b5998';
         tabEle1.style.background = '#8C9899';
     }
-    this.tabNo = n;
+    this.instructionStoreService.tabNo = n;
     console.log(n);
   }
 
