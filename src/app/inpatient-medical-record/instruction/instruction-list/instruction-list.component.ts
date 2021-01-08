@@ -121,22 +121,14 @@ export class InstructionListComponent implements OnInit {
   handleSkip(n: number) {
     switch (n) {
       case 1:
-        if (this.page !== this.totalPage) {
+        if (this.page < this.totalPage) {
           this.page++;
           this.end = this.page * this.perPage;
-          this.start = (this.page - 1) * this.perPage;
-        } else {
-          this.start = (this.page - 1) * this.perPage;
-          if (
-            this.instructionStoreService.instructions.length % this.perPage ===
-            0
-          ) {
-            this.end = this.page * this.perPage;
-          } else {
+          if (this.page == this.totalPage) {
             this.end =
-              this.start +
-              (this.instructionStoreService.instructions.length % this.perPage);
+              this.instructionStoreService.instructions.length - this.start;
           }
+          this.start = (this.page - 1) * this.perPage;
         }
         break;
       case 2:
