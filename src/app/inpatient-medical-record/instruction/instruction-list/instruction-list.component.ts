@@ -179,6 +179,10 @@ export class InstructionListComponent implements OnInit {
     this.open = true;
   }
 
+  closeFilter() {
+    this.open = false;
+  }
+
   advanceSearch(filters) {
     this.instructionStoreService.instructions = this.instructionStoreService.instructions.filter(
       (instruction) => {

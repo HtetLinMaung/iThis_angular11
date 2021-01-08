@@ -16,8 +16,8 @@ export class InstructionFormComponent implements OnInit {
   drugAllergyTo = '';
   instruction = '';
   remarks = '';
-
   filteredInstructions = [];
+  drugAllergyToCurrent = '';
 
   constructor(
     private http: HttpService,
@@ -39,6 +39,7 @@ export class InstructionFormComponent implements OnInit {
     this.drugAllergyTo = '';
     this.instruction = '';
     this.remarks = '';
+    this.fetchAllergiesByPatient(this.appStoreService.pId);
   }
 
   bindEditData() {
@@ -57,6 +58,8 @@ export class InstructionFormComponent implements OnInit {
       this.drugAllergyTo = instruction.drugAllergyTo;
       this.instruction = instruction.instruction;
       this.remarks = instruction.remarks;
+    } else {
+      this.fetchAllergiesByPatient(this.appStoreService.pId);
     }
   }
 
@@ -109,9 +112,19 @@ export class InstructionFormComponent implements OnInit {
             switch (data.column.index) {
               case 0:
                 doc.text('WARD', data.cell.x + 2, data.cell.y + 5);
+                doc.text(
+                  this.appStoreService.patientInfo.ward,
+                  data.cell.x + 5,
+                  data.cell.y + 10
+                );
                 break;
               case 1:
                 doc.text('BED', data.cell.x + 2, data.cell.y + 5);
+                doc.text(
+                  this.appStoreService.patientInfo.bed,
+                  data.cell.x + 5,
+                  data.cell.y + 10
+                );
                 break;
             }
             break;
@@ -119,6 +132,11 @@ export class InstructionFormComponent implements OnInit {
             doc.setFontSize(9);
             doc.text('DRUG ALLERGY', data.cell.x + 1, data.cell.y + 3);
             doc.text('DRUG ALLERGY TO:', data.cell.x + 40, data.cell.y + 3);
+            doc.text(
+              this.appStoreService.patientInfo.drugAllergyTo,
+              data.cell.x + 73,
+              data.cell.y + 3
+            );
 
             doc.rect(data.cell.x + 3, data.cell.y + 5, 5, 5);
             doc.text('YES', data.cell.x + 10, data.cell.y + 9);
@@ -128,12 +146,6 @@ export class InstructionFormComponent implements OnInit {
             break;
         }
       },
-      // willDrawCell: (data) => {
-      //   switch (data.row.index) {
-      //     case 0:
-      //       break;
-      //   }
-      // },
       styles: {
         minCellWidth: 15,
         fontSize: 11,
@@ -168,14 +180,6 @@ export class InstructionFormComponent implements OnInit {
       html: '#instruction__print',
       startY: 90,
       theme: 'grid',
-      willDrawCell: (data) => {
-        switch (data.row.index) {
-          case 0:
-            // doc.setFillColor('#CDC8C8');
-            // doc.setTextColor('#fff');
-            break;
-        }
-      },
       styles: {
         fontSize: 12,
         valign: 'middle',
@@ -185,6 +189,14 @@ export class InstructionFormComponent implements OnInit {
         fillColor: '#686869',
       },
     });
-    doc.save('a4.pdf');
+    doc.save('instruction.pdf');
+  }
+
+  fetchAllergiesByPatient(pId: number) {
+    this.http
+      .doGet(`inpatient-medical-record/allergies/${pId}`)
+      .subscribe((data: any) => {
+        this.drugAllergyTo = data.length ? data[0].allergy : '';
+      });
   }
 }

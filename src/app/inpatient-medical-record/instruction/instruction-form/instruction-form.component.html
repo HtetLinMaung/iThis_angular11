@@ -32,11 +32,9 @@
         <div>No Known Drug Allergy</div>
       </div>
       <div *ngIf="drugAllergyTo" class="tag__box">
-        <div class="__chip">Skin rash</div>
-        <div class="__chip">Hives</div>
-        <div class="__chip">Itching</div>
-        <div class="__chip">Skin rash</div>
-        <div class="__chip">Hives</div>
+        <div class="__chip" *ngFor="let allergy of drugAllergyTo.split(',')">
+          {{ allergy.trim() }}
+        </div>
       </div>
     </div>
   </div>

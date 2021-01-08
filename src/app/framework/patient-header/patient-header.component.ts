@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppStoreService } from 'src/app/app-store.service';
+import { Patient } from 'src/app/patient.model';
 import { HttpService } from '../http.service';
 
 @Component({
@@ -40,6 +41,11 @@ export class PatientHeaderComponent implements OnInit {
     this.doctor = data.doctorName;
     this.speciality = data.speciality;
     this.patientType = data.patientType;
+    this.appStoreService.patientInfo = new Patient(
+      data.allergy,
+      data.ward,
+      data.bed
+    );
   }
 
   viewInfo(e) {
@@ -74,6 +80,11 @@ export class PatientHeaderComponent implements OnInit {
               text: v.refNo,
             }));
             this.adNo = data[0].refNo;
+            this.appStoreService.patientInfo = new Patient(
+              data[0].allergy,
+              data[0].ward,
+              data[0].bed
+            );
           }
         },
         (error) => {},

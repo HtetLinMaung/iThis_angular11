@@ -8,6 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class AdvanceSearchComponent implements OnInit {
   @Input() fields = [];
   @Output() onAdvanceSearch = new EventEmitter();
+  @Output() onCloseFilter = new EventEmitter();
   conditions = [
     {
       text: 'Equals',
@@ -60,5 +61,9 @@ export class AdvanceSearchComponent implements OnInit {
 
   removeFilter(i: number) {
     this.filters = this.filters.filter((_, index) => index != i);
+  }
+
+  closeFilter() {
+    this.onCloseFilter.emit();
   }
 }
