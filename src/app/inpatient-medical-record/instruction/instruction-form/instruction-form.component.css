@@ -24,3 +24,6 @@
   font-weight: bold;
   margin: 0 0.2rem;
 }
+#inpatient__record td {
+  border: 1px solid black;
+}
