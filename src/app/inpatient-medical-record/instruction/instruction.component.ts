@@ -20,7 +20,6 @@ export class InstructionComponent implements OnInit {
     const tabEle2 = document.getElementById('tab2');
     switch (n) {
       case 1:
-        // this.initPagination();
         tabEle1.style.background = '#3b5998';
         tabEle2.style.background = '#8C9899';
         break;

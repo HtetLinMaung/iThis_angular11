@@ -10,6 +10,9 @@ import { PaginationComponent } from '../framework/pagination/pagination.componen
 import { DeleteDialogComponent } from '../framework/delete-dialog/delete-dialog.component';
 import { PatientHeaderComponent } from '../framework/patient-header/patient-header.component';
 import { AdvanceSearchComponent } from '../framework/advance-search/advance-search.component';
+import { StatMedicationComponent } from './stat-medication/stat-medication.component';
+import { StatMedicationFormComponent } from './stat-medication/stat-medication-form/stat-medication-form.component';
+import { StatMedicationListComponent } from './stat-medication/stat-medication-list/stat-medication-list.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +24,9 @@ import { AdvanceSearchComponent } from '../framework/advance-search/advance-sear
     DeleteDialogComponent,
     PatientHeaderComponent,
     AdvanceSearchComponent,
+    StatMedicationComponent,
+    StatMedicationFormComponent,
+    StatMedicationListComponent,
   ],
   imports: [
     CommonModule,
@@ -29,6 +35,10 @@ import { AdvanceSearchComponent } from '../framework/advance-search/advance-sear
       {
         path: 'inpatient-medication-record/instruction',
         component: InstructionComponent,
+      },
+      {
+        path: 'inpatient-medication-record/stat-medication',
+        component: StatMedicationComponent,
       },
     ]),
   ],
