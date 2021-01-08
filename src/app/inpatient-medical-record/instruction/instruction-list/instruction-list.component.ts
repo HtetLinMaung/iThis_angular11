@@ -24,32 +24,32 @@ export class InstructionListComponent implements OnInit {
   perPages = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
   start = 0;
   end = 0;
-
+  instructions = [];
   open = false;
   fields = [
     {
       text: 'Date',
-      value: 1,
+      value: '1',
       key: 'fmtDate',
     },
     {
       text: 'Date Taken',
-      value: 2,
+      value: '2',
       key: 'fmtDateTaken',
     },
     {
       text: 'Drug Allergy To',
-      value: 3,
+      value: '3',
       key: 'drugAllergyTo',
     },
     {
       text: 'Instruction Under Treatment',
-      value: 4,
+      value: '4',
       key: 'instruction',
     },
     {
       text: 'Remarks',
-      value: 5,
+      value: '5',
       key: 'remarks',
     },
   ];
@@ -102,6 +102,7 @@ export class InstructionListComponent implements OnInit {
               v.pId
             )
         );
+        this.instructions = this.instructionStoreService.instructions;
         this.initPagination(data);
       });
   }
@@ -176,24 +177,27 @@ export class InstructionListComponent implements OnInit {
   }
 
   advanceSearch(filters) {
-    this.instructionStoreService.instructions = this.instructionStoreService.instructions.filter(
+    this.instructionStoreService.instructions = this.instructions.filter(
       (instruction) => {
         let flag = true;
         for (const filter of filters) {
           const key = this.fields.find((field) => field.value == filter.field)
             ?.key;
           switch (filter.condition) {
-            case 1:
+            case '1':
               flag = flag && filter.search == instruction[key];
               break;
-            case 2:
-              flag = flag && instruction[key].includes(filter.search);
+            case '2':
+              flag =
+                flag && instruction[key].toString().includes(filter.search);
               break;
-            case 3:
-              flag = flag && instruction[key].startsWith(filter.search);
+            case '3':
+              flag =
+                flag && instruction[key].toString().startsWith(filter.search);
               break;
             default:
-              flag = flag && instruction[key].endsWith(filter.search);
+              flag =
+                flag && instruction[key].toString().endsWith(filter.search);
           }
         }
         return flag;
@@ -203,13 +207,21 @@ export class InstructionListComponent implements OnInit {
   }
 
   normalSearch() {
-    this.instructionStoreService.instructions = this.instructionStoreService.instructions.filter(
-      (instruction) => {
-        for (const value in instruction) {
-          return value.includes(this.search);
+    if (this.search) {
+      const searchKeys = this.fields.map((field) => field.key);
+      this.instructionStoreService.instructions = this.instructions.filter(
+        (instruction) => {
+          let flag = false;
+          for (const key in instruction) {
+            if (searchKeys.includes(key)) {
+              flag = flag || instruction[key].toString().includes(this.search);
+            }
+          }
+          return flag;
         }
-      }
-    );
+      );
+    }
+
     this.initPagination(this.instructionStoreService.instructions);
   }
 

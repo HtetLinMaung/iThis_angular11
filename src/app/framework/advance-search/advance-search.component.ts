@@ -12,25 +12,25 @@ export class AdvanceSearchComponent implements OnInit {
   conditions = [
     {
       text: 'Equals',
-      value: 1,
+      value: '1',
     },
     {
       text: 'Contains',
-      value: 2,
+      value: '2',
     },
     {
       text: 'Begins With',
-      value: 3,
+      value: '3',
     },
     {
       text: 'Ends With',
-      value: 4,
+      value: '4',
     },
   ];
   filters = [
     {
-      condition: 3,
-      field: 1,
+      condition: '3',
+      field: '1',
       search: '',
     },
   ];
@@ -41,8 +41,8 @@ export class AdvanceSearchComponent implements OnInit {
 
   getDefaultFilter() {
     return {
-      condition: 3,
-      field: 1,
+      condition: '3',
+      field: '1',
       search: '',
     };
   }
@@ -56,11 +56,14 @@ export class AdvanceSearchComponent implements OnInit {
   }
 
   advanceSearch() {
+    console.log(this.filters);
     this.onAdvanceSearch.emit(this.filters);
   }
 
   removeFilter(i: number) {
-    this.filters = this.filters.filter((_, index) => index != i);
+    if (this.filters.length > 1) {
+      this.filters = this.filters.filter((_, index) => index != i);
+    }
   }
 
   closeFilter() {
