@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { InpatientMedicalRecordModule } from './inpatient-medical-record/inpatient-medical-record.module';
+import { NursingActivityWorklistModule } from './nursing-activity-worklist/nursing-activity-worklist.module';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -14,6 +16,8 @@ import { InpatientMedicalRecordModule } from './inpatient-medical-record/inpatie
     FormsModule,
     HttpClientModule,
     InpatientMedicalRecordModule,
+    NursingActivityWorklistModule,
+    SharedModule,
     RouterModule.forRoot([
       {
         path: '',

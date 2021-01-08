@@ -16,6 +16,10 @@ export class LoginComponent implements OnInit {
         break;
       case 2:
         this.router.navigate(['/inpatient-medication-record/stat-medication']);
+        break;
+      case 3:
+        this.router.navigate(['/nursing-activity-worklist']);
+        break;
     }
   }
 

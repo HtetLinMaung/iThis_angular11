@@ -1,0 +1,35 @@
+<div style="width: 100%; padding: 2rem 3rem">
+  <app-patient-header></app-patient-header>
+
+  <div style="display: flex">
+    <div
+      class="tab__list-item"
+      style="background: #3b5998"
+      (click)="tabClickHandler(1)"
+      id="tab1"
+    >
+      List
+    </div>
+    <div class="tab__list-item" (click)="tabClickHandler(2)" id="tab2">
+      Nurse Activity
+    </div>
+  </div>
+
+  <div style="display: flex">
+    <div class="card tab__body">
+      <app-nursing-activity-worklist-list
+        *ngIf="(nurseActivityWorkListStoreService.tabNo$ | async) == 1"
+      ></app-nursing-activity-worklist-list>
+
+      <app-nursing-activity-worklist-form
+        *ngIf="(nurseActivityWorkListStoreService.tabNo$ | async) == 2"
+      ></app-nursing-activity-worklist-form>
+    </div>
+  </div>
+</div>
+
+<app-delete-dialog
+  *ngIf="nurseActivityWorkListStoreService.deleteDialog$ | async"
+  (onDelete)="deleteData()"
+  (onCancel)="cancelDelete()"
+></app-delete-dialog>
