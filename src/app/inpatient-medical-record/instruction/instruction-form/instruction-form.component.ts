@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpService } from 'src/app/framework/http.service';
 import { InstructionStoreService } from '../instruction-store.service';
 import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
+import { AppStoreService } from 'src/app/app-store.service';
 
 @Component({
   selector: 'app-instruction-form',
@@ -15,11 +17,12 @@ export class InstructionFormComponent implements OnInit {
   instruction = '';
   remarks = '';
 
-  currentSysKey = 0; // temp
+  filteredInstructions = [];
 
   constructor(
     private http: HttpService,
-    public instructionStoreService: InstructionStoreService
+    public instructionStoreService: InstructionStoreService,
+    public appStoreService: AppStoreService
   ) {}
 
   ngOnInit(): void {
@@ -63,8 +66,8 @@ export class InstructionFormComponent implements OnInit {
             : 'save-instruction'
         }`,
         {
-          syskey: 0, // dummy syskey, it is not used is service
-          pId: 1,
+          syskey: 0, // dummy syskey, it is not used in service
+          pId: this.appStoreService.pId,
           RgsNo: 1,
           userid: '',
           username: '',
@@ -90,7 +93,30 @@ export class InstructionFormComponent implements OnInit {
 
   print() {
     const doc = new jsPDF();
-    doc.text('Hello world!', 10, 10);
+    // doc.text('Hello world!', 10, 10);
+    this.filteredInstructions = this.instructionStoreService.instructions.filter(
+      (instruction) => instruction.pId == this.appStoreService.pId
+    );
+    (doc as any).autoTable({
+      html: '#instruction__print',
+      startY: 60,
+      theme: 'grid',
+      willDrawCell: (data) => {
+        switch (data.row.index) {
+          case 0:
+            doc.setFillColor('#CDC8C8');
+            doc.setTextColor('#fff');
+            break;
+        }
+      },
+      styles: {
+        fontSize: 9,
+        minCellHeight: 1,
+        cellPadding: 1,
+        valign: 'middle',
+        halign: 'center',
+      },
+    });
     doc.save('a4.pdf');
   }
 }

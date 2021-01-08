@@ -30,12 +30,12 @@ export class InstructionListComponent implements OnInit {
     {
       text: 'Date',
       value: 1,
-      key: 'date',
+      key: 'fmtDate',
     },
     {
       text: 'Date Taken',
       value: 2,
-      key: 'dateTaken',
+      key: 'fmtDateTaken',
     },
     {
       text: 'Drug Allergy To',
@@ -96,7 +96,10 @@ export class InstructionListComponent implements OnInit {
               v.dateTaken,
               v.drugAllergyTo,
               v.instruction,
-              v.remarks
+              v.remarks,
+              this.formatDate(v.date, 'DD/MM/yyyy'),
+              this.formatDate(v.dateTaken, 'DD/MM/yyyy'),
+              v.pId
             )
         );
         this.initPagination(data);
@@ -211,6 +214,7 @@ export class InstructionListComponent implements OnInit {
         }
       }
     );
+    this.initPagination(this.instructionStoreService.instructions);
   }
 
   showAll() {

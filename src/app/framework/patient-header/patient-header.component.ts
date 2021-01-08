@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppStoreService } from 'src/app/app-store.service';
 import { HttpService } from '../http.service';
 
 @Component({
@@ -7,7 +8,7 @@ import { HttpService } from '../http.service';
   styleUrls: ['./patient-header.component.css'],
 })
 export class PatientHeaderComponent implements OnInit {
-  patientId = 'HRN-0000002';
+  patientId = '';
   patientName = 'Htet Lin Maung';
   adNos = [{ value: 0, text: '20-A0010' }];
   adNo = 0;
@@ -20,7 +21,10 @@ export class PatientHeaderComponent implements OnInit {
   speciality = '';
   patientType = '';
 
-  constructor(private http: HttpService) {}
+  constructor(
+    private http: HttpService,
+    public appStoreService: AppStoreService
+  ) {}
 
   ngOnInit(): void {
     this.fetchPatientInfoById();
@@ -52,7 +56,7 @@ export class PatientHeaderComponent implements OnInit {
 
   fetchPatientInfoById() {
     this.http
-      .doGet(`nurse-activity-worklist/patient-info/${this.patientId}`)
+      .doGet(`nurse-activity-worklist/patient-info/${this.appStoreService.pId}`)
       .subscribe(
         (data: any) => {
           this.headerData = data;
