@@ -1,0 +1,84 @@
+<div class="dialog__wrapper">
+  <div class="dialog__content">
+    <div style="display: flex; margin: 1rem 0">
+      <div
+        style="
+          display: flex;
+          flex: 0 0 70%;
+          align-items: center;
+          justify-content: space-between;
+        "
+      >
+        <input
+          [(ngModel)]="search"
+          type="text"
+          class="form-control form__input"
+          style="flex: 0 0 45%"
+        />
+        <div class="__fab __raised" title="Search" (click)="normalSearch()">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+        <div class="__fab __raised" title="Show all" (click)="showAll()">
+          <i class="fas fa-list"></i>
+        </div>
+        <div class="__fab __raised" title="Clear" (click)="clearSearch()">
+          <i class="fas fa-times"></i>
+        </div>
+        <div
+          class="__fab __raised"
+          title="Advanced Search"
+          (click)="openAdvSearch()"
+        >
+          <i class="fas fa-search"></i>
+        </div>
+        <div class="__fab __raised" title="Export">
+          <i class="fas fa-file-export"></i>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="open">
+      <app-advance-search
+        [fields]="fields"
+        (onAdvanceSearch)="advanceSearch($event)"
+        (onCloseFilter)="closeFilter()"
+      ></app-advance-search>
+    </div>
+
+    <div style="display: flex; margin: 0.5rem 0">
+      <app-pagination
+        [total]="doctors.length"
+        [perPage]="perPage"
+        [start]="start"
+        [end]="end"
+        [perPages]="perPages"
+        style="flex: 0 0 47%"
+        (onPerPageChanged)="handlePerPageChanged($event)"
+        (onNext)="handleSkip(1)"
+        (onPrev)="handleSkip(2)"
+        (onSkipFirst)="handleSkip(3)"
+        (onSkipLast)="handleSkip(4)"
+      ></app-pagination>
+    </div>
+
+    <app-table [headers]="headers">
+      <tr
+        class="__raised"
+        *ngFor="let doctor of doctors.slice(start, end)"
+        (click)="selectDoctor(doctor)"
+      >
+        <td style="text-decoration: underline">
+          {{ doctor.doctorID }}
+        </td>
+        <td style="text-decoration: underline">
+          {{ doctor.doctorName }}
+        </td>
+        <td>{{ doctor.speciality }}</td>
+        <td>{{ doctor.rank }}</td>
+        <td>{{ doctor.degree }}</td>
+        <td>{{ doctor.phone }}</td>
+        <td>{{ doctor.clinic }}</td>
+      </tr>
+    </app-table>
+  </div>
+</div>

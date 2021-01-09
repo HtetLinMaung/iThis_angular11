@@ -33,3 +33,7 @@
   (onDelete)="deleteData()"
   (onCancel)="cancelDelete()"
 ></app-delete-dialog>
+
+<app-doctor-dialog
+  *ngIf="appStoreService.doctorDialog$ | async"
+></app-doctor-dialog>

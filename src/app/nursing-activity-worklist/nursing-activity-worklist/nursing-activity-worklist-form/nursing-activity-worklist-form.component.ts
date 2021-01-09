@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AppStoreService } from 'src/app/app-store.service';
+import { Doctor } from 'src/app/framework/doctor-dialog/doctor.model';
 import { HttpService } from 'src/app/framework/http.service';
 import { NurseActivityWorkListStoreService } from '../../nurse-activity-work-list-store.service';
 
@@ -21,16 +23,16 @@ export class NursingActivityWorklistFormComponent implements OnInit {
   markingUnit = 'mm';
   externalLength = '';
   externalLengthUnit = 'mm';
-  doctors = [];
-  doctorName = '';
-  doctorDialog = false;
 
   constructor(
+    public appStoreService: AppStoreService,
     public nurseActivityWorkListStoreService: NurseActivityWorkListStoreService,
     private http: HttpService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.appStoreService.doctor = new Doctor();
+  }
 
   new() {}
 
@@ -40,5 +42,7 @@ export class NursingActivityWorklistFormComponent implements OnInit {
 
   print() {}
 
-  browseDoctor() {}
+  browseDoctor() {
+    this.appStoreService.doctorDialog = true;
+  }
 }

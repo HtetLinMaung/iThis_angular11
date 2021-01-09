@@ -53,7 +53,6 @@ export class InstructionListComponent implements OnInit {
       key: 'remarks',
     },
   ];
-
   search = '';
 
   constructor(
@@ -114,7 +113,6 @@ export class InstructionListComponent implements OnInit {
   }
 
   handlePerPageChanged(perPage) {
-    console.log(perPage);
     this.perPage = perPage;
     this.initPagination(this.instructionStoreService.instructions);
   }

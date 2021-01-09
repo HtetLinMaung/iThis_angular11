@@ -6,6 +6,7 @@ import { TableComponent } from '../framework/table/table.component';
 import { PaginationComponent } from '../framework/pagination/pagination.component';
 import { DeleteDialogComponent } from '../framework/delete-dialog/delete-dialog.component';
 import { AdvanceSearchComponent } from '../framework/advance-search/advance-search.component';
+import { DoctorDialogComponent } from '../framework/doctor-dialog/doctor-dialog.component';
 
 @NgModule({
   exports: [
@@ -16,6 +17,7 @@ import { AdvanceSearchComponent } from '../framework/advance-search/advance-sear
     PaginationComponent,
     DeleteDialogComponent,
     AdvanceSearchComponent,
+    DoctorDialogComponent,
   ],
   declarations: [
     PatientHeaderComponent,
@@ -23,6 +25,7 @@ import { AdvanceSearchComponent } from '../framework/advance-search/advance-sear
     PaginationComponent,
     DeleteDialogComponent,
     AdvanceSearchComponent,
+    DoctorDialogComponent,
   ],
   imports: [CommonModule, FormsModule],
 })
