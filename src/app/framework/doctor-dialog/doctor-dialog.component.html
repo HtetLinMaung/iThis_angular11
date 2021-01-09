@@ -1,10 +1,10 @@
-<div class="dialog__wrapper">
-  <div class="dialog__content">
+<div class="dialog__wrapper" (click)="closeDialog()">
+  <div class="dialog__content" (click)="preventBubble($event)">
     <div style="display: flex; margin: 1rem 0">
       <div
         style="
           display: flex;
-          flex: 0 0 70%;
+          flex: 0 0 50%;
           align-items: center;
           justify-content: space-between;
         "
@@ -52,7 +52,7 @@
         [start]="start"
         [end]="end"
         [perPages]="perPages"
-        style="flex: 0 0 47%"
+        style="flex: 0 0 35%"
         (onPerPageChanged)="handlePerPageChanged($event)"
         (onNext)="handleSkip(1)"
         (onPrev)="handleSkip(2)"
@@ -61,16 +61,16 @@
       ></app-pagination>
     </div>
 
-    <app-table [headers]="headers">
+    <app-table [headers]="headers" class="doctor__table">
       <tr
         class="__raised"
         *ngFor="let doctor of doctors.slice(start, end)"
         (click)="selectDoctor(doctor)"
       >
-        <td style="text-decoration: underline">
+        <td>
           {{ doctor.doctorID }}
         </td>
-        <td style="text-decoration: underline">
+        <td>
           {{ doctor.doctorName }}
         </td>
         <td>{{ doctor.speciality }}</td>

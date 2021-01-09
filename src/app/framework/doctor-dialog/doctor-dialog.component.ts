@@ -21,29 +21,39 @@ export class DoctorDialogComponent implements OnInit {
   end = 0;
   fields = [
     {
-      text: 'Date',
+      text: 'ID',
       value: '1',
-      key: 'fmtDate',
+      key: 'doctorID',
     },
     {
-      text: 'Date Taken',
+      text: 'Name',
       value: '2',
-      key: 'fmtDateTaken',
+      key: 'doctorName',
     },
     {
-      text: 'Drug Allergy To',
+      text: 'Speciality',
       value: '3',
-      key: 'drugAllergyTo',
+      key: 'speciality',
     },
     {
-      text: 'Instruction Under Treatment',
+      text: 'Rank',
       value: '4',
-      key: 'instruction',
+      key: 'rank',
     },
     {
-      text: 'Remarks',
+      text: 'Degree',
       value: '5',
-      key: 'remarks',
+      key: 'degree',
+    },
+    {
+      text: 'Phone',
+      value: '6',
+      key: 'phone',
+    },
+    {
+      text: 'Clinic',
+      value: '7',
+      key: 'clinic',
     },
   ];
   search = '';
@@ -54,10 +64,13 @@ export class DoctorDialogComponent implements OnInit {
     public appStoreService: AppStoreService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.fetchDoctors();
+  }
 
   selectDoctor(doctor: Doctor) {
     this.appStoreService.doctor = doctor;
+    this.appStoreService.doctorDialog = false;
   }
 
   initPagination(data) {
@@ -190,5 +203,13 @@ export class DoctorDialogComponent implements OnInit {
 
   clearSearch() {
     this.search = '';
+  }
+
+  closeDialog() {
+    this.appStoreService.doctorDialog = false;
+  }
+
+  preventBubble(e) {
+    e.stopPropagation();
   }
 }

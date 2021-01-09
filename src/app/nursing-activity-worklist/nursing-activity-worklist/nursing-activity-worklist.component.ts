@@ -34,22 +34,26 @@ export class NursingActivityWorklistComponent implements OnInit {
 
   deleteData() {
     this.nurseActivityWorkListStoreService.deleteDialog = false;
-    // if (this.nurseActivityWorkListStoreService.isUpdate) {
-    //   this.http
-    //     .doPost(
-    //       `inpatient-medical-record/delete-instruction/${this.nurseActivityWorkListStoreService.currentSysKey}`,
-    //       { syskey: this.nurseActivityWorkListStoreService.currentSysKey }
-    //     )
-    //     .subscribe((data) => {
-    //       const tabEle1 = document.getElementById('tab1');
-    //       const tabEle2 = document.getElementById('tab2');
-    //       tabEle1.style.background = '#3b5998';
-    //       tabEle2.style.background = '#8C9899';
+    if (this.nurseActivityWorkListStoreService.isUpdate) {
+      this.http
+        .doPost(
+          `nurse-activity-worklist/delete/${this.nurseActivityWorkListStoreService.currentSysKey}`,
+          { syskey: this.nurseActivityWorkListStoreService.currentSysKey }
+        )
+        .subscribe(
+          (data) => {
+            const tabEle1 = document.getElementById('tab1');
+            const tabEle2 = document.getElementById('tab2');
+            tabEle1.style.background = '#3b5998';
+            tabEle2.style.background = '#8C9899';
 
-    //       this.nurseActivityWorkListStoreService.isUpdate = false;
-    //       this.nurseActivityWorkListStoreService.tabNo = 1;
-    //     });
-    // }
+            this.nurseActivityWorkListStoreService.isUpdate = false;
+            this.nurseActivityWorkListStoreService.tabNo = 1;
+          },
+          (error) => {},
+          () => {}
+        );
+    }
   }
 
   cancelDelete() {

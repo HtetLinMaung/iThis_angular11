@@ -1,1 +1,92 @@
-<p>nursing-activity-worklist-list works!</p>
+<div style="flex: 1">
+  <div style="display: flex; margin: 1rem 0">
+    <div
+      style="
+        display: flex;
+        flex: 0 0 45%;
+        align-items: center;
+        justify-content: space-between;
+      "
+    >
+      <input
+        [(ngModel)]="search"
+        type="text"
+        class="form-control form__input"
+        style="flex: 0 0 45%"
+      />
+      <div class="__fab __raised" title="Search" (click)="normalSearch()">
+        <i class="fas fa-arrow-right"></i>
+      </div>
+      <div class="__fab __raised" title="Show all" (click)="showAll()">
+        <i class="fas fa-list"></i>
+      </div>
+      <div class="__fab __raised" title="Clear" (click)="clearSearch()">
+        <i class="fas fa-times"></i>
+      </div>
+      <div
+        class="__fab __raised"
+        title="Advanced Search"
+        (click)="openAdvSearch()"
+      >
+        <i class="fas fa-search"></i>
+      </div>
+      <div class="__fab __raised" title="Export">
+        <i class="fas fa-file-export"></i>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="open">
+    <app-advance-search
+      [fields]="fields"
+      (onAdvanceSearch)="advanceSearch($event)"
+      (onCloseFilter)="closeFilter()"
+    ></app-advance-search>
+  </div>
+
+  <div style="display: flex; margin: 0.5rem 0">
+    <app-pagination
+      [total]="(instructionStoreService.instructions$ | async)?.length"
+      [perPage]="perPage"
+      [start]="start"
+      [end]="end"
+      [perPages]="perPages"
+      style="flex: 0 0 25%"
+      (onPerPageChanged)="handlePerPageChanged($event)"
+      (onNext)="handleSkip(1)"
+      (onPrev)="handleSkip(2)"
+      (onSkipFirst)="handleSkip(3)"
+      (onSkipLast)="handleSkip(4)"
+    ></app-pagination>
+  </div>
+
+  <app-table [headers]="headers">
+    <tr
+      class="__raised"
+      *ngFor="
+        let activity of (
+          nurseActivityWorkListStoreService.activities$ | async
+        ).slice(start, end)
+      "
+      (click)="goToList(instruction)"
+    >
+      <td>
+        {{ getProcedure(activity) }}
+      </td>
+      <td>
+        {{ formatDate(activity.date, "DD/MM/yyyy") }}
+      </td>
+      <td>
+        {{ formatDate(activity.dueDateChange, "DD/MM/yyyy") }}
+      </td>
+      <td>
+        {{ formatDate(activity.dueDateRemove, "DD/MM/yyyy") }}
+      </td>
+      <td>{{ activity.size }}</td>
+      <td>{{ activity.site }}</td>
+      <td>{{ activity.marking }}</td>
+      <td>{{ activity.externalLength }}</td>
+      <td>{{ activity.doctorName }}</td>
+    </tr>
+  </app-table>
+</div>
