@@ -3,13 +3,4 @@ td {
   text-align: center;
 }
 
-.fab {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  background-color: #fff;
-  width: 35px;
-  height: 35px;
-  font-size: 14px;
-}
+
