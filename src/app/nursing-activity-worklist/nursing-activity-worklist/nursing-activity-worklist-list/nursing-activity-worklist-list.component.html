@@ -46,7 +46,7 @@
 
   <div style="display: flex; margin: 0.5rem 0">
     <app-pagination
-      [total]="(instructionStoreService.instructions$ | async)?.length"
+      [total]="(nurseActivityWorkListStoreService.activities$ | async)?.length"
       [perPage]="perPage"
       [start]="start"
       [end]="end"
