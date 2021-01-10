@@ -61,7 +61,9 @@ export class NursingActivityWorklistListComponent implements OnInit {
     public nurseActivityWorkListStoreService: NurseActivityWorkListStoreService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.fetchAllActivities();
+  }
 
   formatDate(dateStr: string, format: string) {
     return moment(dateStr).format(format);
@@ -215,16 +217,6 @@ export class NursingActivityWorklistListComponent implements OnInit {
   fetchAllActivities() {
     this.http.doGet('nurse-activity-worklist/activities').subscribe(
       (data: any) => {
-        // this.original.activities = [...data];
-        // this.totalPage = Math.ceil(data.length / this.perPage);
-        // this.end = this.perPage;
-        // if (data.length < this.perPage) {
-        //   this.end = data.length;
-        // }
-        // this.activities = data.slice(this.start, this.end);
-        // console.log(data);
-        // console.log(this.start, this.end);
-
         // this.instructionStoreService.instructions = data.map(
         //   (v) =>
         //     new Instruction(
@@ -239,6 +231,7 @@ export class NursingActivityWorklistListComponent implements OnInit {
         //       v.pId
         //     )
         // );
+        // this.nurseActivityWorkListStoreService.activities = data.map(v => new Activity(v.syskey, ))
         this.activities = this.nurseActivityWorkListStoreService.activities;
         this.initPagination(data);
       },

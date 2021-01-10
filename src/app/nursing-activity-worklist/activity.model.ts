@@ -14,6 +14,6 @@ export default class Activity {
     public marking: number,
     public externalLength: number,
     public doctorName: string,
-    public doctorSysKey: number
+    public doctorId: number
   ) {}
 }
