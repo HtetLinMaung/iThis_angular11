@@ -214,7 +214,7 @@ export class NursingActivityWorklistListComponent implements OnInit {
     this.search = '';
   }
 
-  getProcedure({ procedure }) {
+  getProcedure(procedure) {
     const item = this.nurseActivityWorkListStoreService.procedures.find(
       (v) => v.value == procedure.toString()
     );
@@ -242,7 +242,7 @@ export class NursingActivityWorklistListComponent implements OnInit {
           (v) =>
             new Activity(
               v.syskey,
-              this.getProcedure(data),
+              this.getProcedure(v.procedure),
               v.procedure,
               v.date,
               v.dueDateChange,
