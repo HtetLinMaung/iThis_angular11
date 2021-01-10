@@ -11,11 +11,15 @@ import Activity from '../../activity.model';
 })
 export class NursingActivityWorklistListComponent implements OnInit {
   headers = [
+    'Procedure',
     'Date',
-    'Date Taken',
-    'Drug Allergy To',
-    'Instruction Under Treatment',
-    'Remarks',
+    'Due Date For Change',
+    'Due Date For Remove',
+    'Size',
+    'Site',
+    'Marking',
+    'External Length',
+    'Doctor Name',
   ];
   page = 1;
   totalPage = 0;
@@ -28,29 +32,49 @@ export class NursingActivityWorklistListComponent implements OnInit {
   open = false;
   fields = [
     {
-      text: 'Date',
+      text: 'Procedure',
       value: '1',
+      key: 'procedureName',
+    },
+    {
+      text: 'Date',
+      value: '2',
       key: 'fmtDate',
     },
     {
-      text: 'Date Taken',
-      value: '2',
-      key: 'fmtDateTaken',
-    },
-    {
-      text: 'Drug Allergy To',
+      text: 'Due Date For Change',
       value: '3',
-      key: 'drugAllergyTo',
+      key: 'fmtDueDateForChange',
     },
     {
-      text: 'Instruction Under Treatment',
+      text: 'Due Date For Remove',
       value: '4',
-      key: 'instruction',
+      key: 'fmtDueDateForRemove',
     },
     {
-      text: 'Remarks',
+      text: 'Size',
       value: '5',
-      key: 'remarks',
+      key: 'fmtSize',
+    },
+    {
+      text: 'Site',
+      value: '6',
+      key: 'fmtSite',
+    },
+    {
+      text: 'Marking',
+      value: '7',
+      key: 'fmtMarking',
+    },
+    {
+      text: 'External Length',
+      value: '8',
+      key: 'fmtExternalLength',
+    },
+    {
+      text: 'Doctor Name',
+      value: '9',
+      key: 'doctorName',
     },
   ];
   search = '';
@@ -259,7 +283,11 @@ export class NursingActivityWorklistListComponent implements OnInit {
               v.sizeUnit,
               v.siteUnit,
               v.markingUnit,
-              v.externalLengthUnit
+              v.externalLengthUnit,
+              v.size + v.sizeUnit,
+              v.site + v.siteUnit,
+              v.marking + v.markingUnit,
+              v.externalLength + v.externalLengthUnit
             )
         );
         this.activities = this.nurseActivityWorkListStoreService.activities;

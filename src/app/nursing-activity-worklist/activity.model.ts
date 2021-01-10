@@ -18,6 +18,10 @@ export default class Activity {
     public sizeUnit: string,
     public siteUnit: string,
     public markingUnit: string,
-    public externalLengthUnit: string
+    public externalLengthUnit: string,
+    public fmtSize: string,
+    public fmtSite: string,
+    public fmtMarking: string,
+    public fmtExternalLength: string
   ) {}
 }
