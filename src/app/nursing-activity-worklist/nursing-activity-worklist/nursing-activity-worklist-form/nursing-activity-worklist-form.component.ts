@@ -35,6 +35,36 @@ export class NursingActivityWorklistFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.appStoreService.doctor = new Doctor();
+    this.bindEditData();
+  }
+
+  bindEditData() {
+    if (this.nurseActivityWorkListStoreService.isUpdate) {
+      const tabEle1 = document.getElementById('tab1');
+      const tabEle2 = document.getElementById('tab2');
+      tabEle2.style.background = '#3b5998';
+      tabEle1.style.background = '#8C9899';
+
+      const activity = this.nurseActivityWorkListStoreService.activities.find(
+        (v) => v.syskey == this.nurseActivityWorkListStoreService.currentSysKey
+      );
+
+      this.procedure = activity.procedure.toString();
+      this.date = activity.date;
+      this.dueDateChange = activity.dueDateChange;
+      this.dueDateRemove = activity.dueDateRemove;
+      this.size = activity.size.toString();
+      this.sizeUnit = activity.sizeUnit;
+      this.site = activity.site.toString();
+      this.siteUnit = activity.siteUnit;
+      this.marking = activity.marking.toString();
+      this.markingUnit = activity.markingUnit;
+      this.externalLength = activity.externalLength.toString();
+      this.externalLengthUnit = activity.externalLengthUnit;
+      this.appStoreService.doctor = this.appStoreService.doctors.find(
+        (doctor) => doctor.syskey == activity.doctorId
+      );
+    }
   }
 
   new() {
@@ -62,7 +92,7 @@ export class NursingActivityWorklistFormComponent implements OnInit {
             : `update/${this.nurseActivityWorkListStoreService.currentSysKey}`
         }`,
         {
-          pId: 1,
+          pId: this.appStoreService.pId,
           RgsNo: 1,
           userid: '',
           username: '',

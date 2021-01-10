@@ -11,7 +11,6 @@ import { Doctor } from './doctor.model';
 export class DoctorDialogComponent implements OnInit {
   headers = ['ID', 'Name', 'Speciality', 'Rank', 'Degree', 'Phone', 'Clinic'];
   doctors: Doctor[] = [];
-  doctorsOriginal: Doctor[] = [];
   page = 1;
   totalPage = 0;
   total = 0;
@@ -90,7 +89,7 @@ export class DoctorDialogComponent implements OnInit {
   fetchDoctors() {
     this.http.doGet('nurse-activity-worklist/doctors').subscribe(
       (data: Doctor[]) => {
-        this.doctorsOriginal = [...data];
+        this.appStoreService.doctors = [...data];
         this.doctors = data;
         this.initPagination(data);
       },
@@ -156,7 +155,7 @@ export class DoctorDialogComponent implements OnInit {
   }
 
   advanceSearch(filters) {
-    this.doctors = this.doctorsOriginal.filter((doctor) => {
+    this.doctors = this.appStoreService.doctors.filter((doctor) => {
       let flag = true;
       for (const filter of filters) {
         const key = this.fields.find((field) => field.value == filter.field)
@@ -183,7 +182,7 @@ export class DoctorDialogComponent implements OnInit {
   normalSearch() {
     if (this.search) {
       const searchKeys = this.fields.map((field) => field.key);
-      this.doctors = this.doctorsOriginal.filter((doctor) => {
+      this.doctors = this.appStoreService.doctors.filter((doctor) => {
         let flag = false;
         for (const key in doctor) {
           if (searchKeys.includes(key)) {

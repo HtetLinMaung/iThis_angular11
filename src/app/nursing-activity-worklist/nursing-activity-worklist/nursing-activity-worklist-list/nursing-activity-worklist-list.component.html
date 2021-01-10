@@ -68,7 +68,7 @@
           nurseActivityWorkListStoreService.activities$ | async
         ).slice(start, end)
       "
-      (click)="goToList(instruction)"
+      (click)="goToList(activity)"
     >
       <td>
         {{ getProcedure(activity.procedure) }}

@@ -30,7 +30,7 @@
           style="flex: 0 0 85%"
           type="text"
           class="form-control form__input"
-          [value]="(appStoreService.doctor$ | async).doctorName"
+          [value]="(appStoreService.doctor$ | async)?.doctorName || ''"
         />
         <div
           class="__fab __raised"

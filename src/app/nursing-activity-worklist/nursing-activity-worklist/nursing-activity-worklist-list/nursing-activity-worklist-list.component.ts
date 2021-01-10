@@ -87,6 +87,7 @@ export class NursingActivityWorklistListComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchProcedures();
+    this.nurseActivityWorkListStoreService.isUpdate = false;
   }
 
   formatDate(dateStr: string, format: string) {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppStoreService } from 'src/app/app-store.service';
+import { Doctor } from 'src/app/framework/doctor-dialog/doctor.model';
 import { HttpService } from 'src/app/framework/http.service';
 import { NurseActivityWorkListStoreService } from '../nurse-activity-work-list-store.service';
 
@@ -15,7 +16,19 @@ export class NursingActivityWorklistComponent implements OnInit {
     private http: HttpService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.fetchDoctors();
+  }
+
+  fetchDoctors() {
+    this.http.doGet('nurse-activity-worklist/doctors').subscribe(
+      (data: Doctor[]) => {
+        this.appStoreService.doctors = data;
+      },
+      (error) => {},
+      () => {}
+    );
+  }
 
   tabClickHandler(n: number) {
     const tabEle1 = document.getElementById('tab1');
