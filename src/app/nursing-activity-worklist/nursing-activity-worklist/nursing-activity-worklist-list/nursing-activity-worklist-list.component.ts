@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from 'src/app/framework/http.service';
 import { NurseActivityWorkListStoreService } from '../../nurse-activity-work-list-store.service';
+import * as moment from 'moment';
+import Activity from '../../activity.model';
 
 @Component({
   selector: 'app-nursing-activity-worklist-list',
@@ -8,6 +10,52 @@ import { NurseActivityWorkListStoreService } from '../../nurse-activity-work-lis
   styleUrls: ['./nursing-activity-worklist-list.component.css'],
 })
 export class NursingActivityWorklistListComponent implements OnInit {
+  headers = [
+    'Date',
+    'Date Taken',
+    'Drug Allergy To',
+    'Instruction Under Treatment',
+    'Remarks',
+  ];
+  page = 1;
+  totalPage = 0;
+  total = 0;
+  perPage = 10;
+  perPages = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+  start = 0;
+  end = 0;
+  instructions = [];
+  open = false;
+  fields = [
+    {
+      text: 'Date',
+      value: '1',
+      key: 'fmtDate',
+    },
+    {
+      text: 'Date Taken',
+      value: '2',
+      key: 'fmtDateTaken',
+    },
+    {
+      text: 'Drug Allergy To',
+      value: '3',
+      key: 'drugAllergyTo',
+    },
+    {
+      text: 'Instruction Under Treatment',
+      value: '4',
+      key: 'instruction',
+    },
+    {
+      text: 'Remarks',
+      value: '5',
+      key: 'remarks',
+    },
+  ];
+  search = '';
+  activities: Activity[] = [];
+
   constructor(
     private http: HttpService,
     public nurseActivityWorkListStoreService: NurseActivityWorkListStoreService
@@ -34,14 +82,14 @@ export class NursingActivityWorklistListComponent implements OnInit {
   }
 
   goToList({ syskey }: { syskey: number }) {
-    this.instructionStoreService.currentSysKey = syskey;
-    this.instructionStoreService.isUpdate = true;
-    this.instructionStoreService.tabNo = 2;
+    this.nurseActivityWorkListStoreService.currentSysKey = syskey;
+    this.nurseActivityWorkListStoreService.isUpdate = true;
+    this.nurseActivityWorkListStoreService.tabNo = 2;
   }
 
   handlePerPageChanged(perPage) {
     this.perPage = perPage;
-    this.initPagination(this.instructionStoreService.instructions);
+    this.initPagination(this.nurseActivityWorkListStoreService.activities);
   }
 
   handleSkip(n: number) {
@@ -52,7 +100,8 @@ export class NursingActivityWorklistListComponent implements OnInit {
           this.end = this.page * this.perPage;
           if (this.page == this.totalPage) {
             this.end =
-              this.instructionStoreService.instructions.length - this.start;
+              this.nurseActivityWorkListStoreService.activities.length -
+              this.start;
           }
           this.start = (this.page - 1) * this.perPage;
         }
@@ -65,30 +114,38 @@ export class NursingActivityWorklistListComponent implements OnInit {
         } else {
           this.start = (this.page - 1) * this.perPage;
           this.end = this.perPage;
-          if (this.instructionStoreService.instructions.length < this.perPage) {
-            this.end = this.instructionStoreService.instructions.length;
+          if (
+            this.nurseActivityWorkListStoreService.activities.length <
+            this.perPage
+          ) {
+            this.end = this.nurseActivityWorkListStoreService.activities.length;
           }
         }
       case 3:
         this.page = 1;
         this.start = (this.page - 1) * this.perPage;
         this.end = this.perPage;
-        if (this.instructionStoreService.instructions.length < this.perPage) {
-          this.end = this.instructionStoreService.instructions.length;
+        if (
+          this.nurseActivityWorkListStoreService.activities.length <
+          this.perPage
+        ) {
+          this.end = this.nurseActivityWorkListStoreService.activities.length;
         }
         break;
       default:
         this.page = this.totalPage;
         this.start = (this.page - 1) * this.perPage;
         if (
-          this.instructionStoreService.instructions.length % this.perPage ===
+          this.nurseActivityWorkListStoreService.activities.length %
+            this.perPage ===
           0
         ) {
           this.end = this.page * this.perPage;
         } else {
           this.end =
             this.start +
-            (this.instructionStoreService.instructions.length % this.perPage);
+            (this.nurseActivityWorkListStoreService.activities.length %
+              this.perPage);
         }
     }
   }
@@ -102,39 +159,36 @@ export class NursingActivityWorklistListComponent implements OnInit {
   }
 
   advanceSearch(filters) {
-    this.instructionStoreService.instructions = this.instructions.filter(
-      (instruction) => {
+    this.nurseActivityWorkListStoreService.activities = this.activities.filter(
+      (activity) => {
         let flag = true;
         for (const filter of filters) {
           const key = this.fields.find((field) => field.value == filter.field)
             ?.key;
           switch (filter.condition) {
             case '1':
-              flag = flag && filter.search == instruction[key];
+              flag = flag && filter.search == activity[key];
               break;
             case '2':
-              flag =
-                flag && instruction[key].toString().includes(filter.search);
+              flag = flag && activity[key].toString().includes(filter.search);
               break;
             case '3':
-              flag =
-                flag && instruction[key].toString().startsWith(filter.search);
+              flag = flag && activity[key].toString().startsWith(filter.search);
               break;
             default:
-              flag =
-                flag && instruction[key].toString().endsWith(filter.search);
+              flag = flag && activity[key].toString().endsWith(filter.search);
           }
         }
         return flag;
       }
     );
-    this.initPagination(this.instructionStoreService.instructions);
+    this.initPagination(this.nurseActivityWorkListStoreService.activities);
   }
 
   normalSearch() {
     if (this.search) {
       const searchKeys = this.fields.map((field) => field.key);
-      this.instructionStoreService.instructions = this.instructions.filter(
+      this.nurseActivityWorkListStoreService.activities = this.activities.filter(
         (instruction) => {
           let flag = false;
           for (const key in instruction) {
@@ -147,14 +201,49 @@ export class NursingActivityWorklistListComponent implements OnInit {
       );
     }
 
-    this.initPagination(this.instructionStoreService.instructions);
+    this.initPagination(this.nurseActivityWorkListStoreService.activities);
   }
 
   showAll() {
-    this.fetchAllInstructions();
+    this.fetchAllActivities();
   }
 
   clearSearch() {
     this.search = '';
+  }
+
+  fetchAllActivities() {
+    this.http.doGet('nurse-activity-worklist/activities').subscribe(
+      (data: any) => {
+        // this.original.activities = [...data];
+        // this.totalPage = Math.ceil(data.length / this.perPage);
+        // this.end = this.perPage;
+        // if (data.length < this.perPage) {
+        //   this.end = data.length;
+        // }
+        // this.activities = data.slice(this.start, this.end);
+        // console.log(data);
+        // console.log(this.start, this.end);
+
+        // this.instructionStoreService.instructions = data.map(
+        //   (v) =>
+        //     new Instruction(
+        //       v.syskey,
+        //       v.date,
+        //       v.dateTaken,
+        //       v.drugAllergyTo,
+        //       v.instruction,
+        //       v.remarks,
+        //       this.formatDate(v.date, 'DD/MM/yyyy'),
+        //       this.formatDate(v.dateTaken, 'DD/MM/yyyy'),
+        //       v.pId
+        //     )
+        // );
+        this.activities = this.nurseActivityWorkListStoreService.activities;
+        this.initPagination(data);
+      },
+      (error) => {},
+      () => {}
+    );
   }
 }

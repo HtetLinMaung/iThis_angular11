@@ -13,11 +13,13 @@ export class AppStoreService {
   );
   private readonly _doctor = new BehaviorSubject<Doctor>(new Doctor());
   private readonly _doctorDialog = new BehaviorSubject<boolean>(false);
+  private readonly _doctors = new BehaviorSubject<Doctor[]>([]);
 
   readonly pId$ = this._pId.asObservable();
   readonly patientInfo$ = this._patientInfo.asObservable();
   readonly doctor$ = this._doctor.asObservable();
   readonly doctorDialog$ = this._doctorDialog.asObservable();
+  readonly _doctors$ = this._doctors.asObservable();
 
   constructor() {}
 
@@ -51,5 +53,13 @@ export class AppStoreService {
 
   get doctorDialog(): boolean {
     return this._doctorDialog.getValue();
+  }
+
+  set doctors(v: Doctor[]) {
+    this._doctors.next(v);
+  }
+
+  get doctors(): Doctor[] {
+    return this._doctors.getValue();
   }
 }
