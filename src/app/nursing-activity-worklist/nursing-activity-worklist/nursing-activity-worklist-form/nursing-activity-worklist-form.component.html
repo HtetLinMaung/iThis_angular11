@@ -85,7 +85,12 @@
       <label class="form__label">Procedure</label>
 
       <select class="form-control form__input" [(ngModel)]="procedure">
-        <option *ngFor="let item of procedures" [value]="item.value">
+        <option
+          *ngFor="
+            let item of nurseActivityWorkListStoreService.procedures$ | async
+          "
+          [value]="item.value"
+        >
           {{ item.text }}
         </option>
       </select>

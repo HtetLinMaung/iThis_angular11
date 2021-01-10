@@ -14,6 +14,10 @@ export default class Activity {
     public marking: number,
     public externalLength: number,
     public doctorName: string,
-    public doctorId: number
+    public doctorId: number,
+    public sizeUnit: string,
+    public siteUnit: string,
+    public markingUnit: string,
+    public externalLengthUnit: string
   ) {}
 }

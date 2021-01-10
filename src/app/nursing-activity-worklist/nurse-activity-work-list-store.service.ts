@@ -11,12 +11,16 @@ export class NurseActivityWorkListStoreService {
   private readonly _isUpdate = new BehaviorSubject<boolean>(false);
   private readonly _tabNo = new BehaviorSubject<number>(1);
   private readonly _deleteDialog = new BehaviorSubject<boolean>(false);
+  private readonly _procedures = new BehaviorSubject<
+    { value: string; text: string }[]
+  >([]);
 
   readonly currentSysKey$ = this._currentSysKey.asObservable();
   readonly activities$ = this._activities.asObservable();
   readonly isUpdate$ = this._isUpdate.asObservable();
   readonly tabNo$ = this._tabNo.asObservable();
   readonly deleteDialog$ = this._deleteDialog.asObservable();
+  readonly procedures$ = this._procedures.asObservable();
 
   constructor() {}
 
@@ -40,6 +44,10 @@ export class NurseActivityWorkListStoreService {
     this._deleteDialog.next(v);
   }
 
+  set procedures(v: { value: string; text: string }[]) {
+    this._procedures.next(v);
+  }
+
   get isUpdate(): boolean {
     return this._isUpdate.getValue();
   }
@@ -58,5 +66,9 @@ export class NurseActivityWorkListStoreService {
 
   get deleteDialog(): boolean {
     return this._deleteDialog.getValue();
+  }
+
+  get procedures(): { value: string; text: string }[] {
+    return this._procedures.getValue();
   }
 }

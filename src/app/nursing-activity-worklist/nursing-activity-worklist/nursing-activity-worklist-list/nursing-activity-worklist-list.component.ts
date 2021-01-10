@@ -62,7 +62,7 @@ export class NursingActivityWorklistListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchAllActivities();
+    this.fetchProcedures();
   }
 
   formatDate(dateStr: string, format: string) {
@@ -214,24 +214,54 @@ export class NursingActivityWorklistListComponent implements OnInit {
     this.search = '';
   }
 
+  getProcedure({ procedure }) {
+    const item = this.nurseActivityWorkListStoreService.procedures.find(
+      (v) => v.value == procedure.toString()
+    );
+    if (item) {
+      return item.text;
+    }
+    return '';
+  }
+
+  fetchProcedures() {
+    this.http.doGet('nurse-activity-worklist/procedures').subscribe(
+      (data: any) => {
+        this.nurseActivityWorkListStoreService.procedures = data;
+        this.fetchAllActivities();
+      },
+      (error) => {},
+      () => {}
+    );
+  }
+
   fetchAllActivities() {
     this.http.doGet('nurse-activity-worklist/activities').subscribe(
       (data: any) => {
-        // this.instructionStoreService.instructions = data.map(
-        //   (v) =>
-        //     new Instruction(
-        //       v.syskey,
-        //       v.date,
-        //       v.dateTaken,
-        //       v.drugAllergyTo,
-        //       v.instruction,
-        //       v.remarks,
-        //       this.formatDate(v.date, 'DD/MM/yyyy'),
-        //       this.formatDate(v.dateTaken, 'DD/MM/yyyy'),
-        //       v.pId
-        //     )
-        // );
-        // this.nurseActivityWorkListStoreService.activities = data.map(v => new Activity(v.syskey, ))
+        this.nurseActivityWorkListStoreService.activities = data.map(
+          (v) =>
+            new Activity(
+              v.syskey,
+              this.getProcedure(data),
+              v.procedure,
+              v.date,
+              v.dueDateChange,
+              v.dueDateRemove,
+              this.formatDate(v.date, 'DD/MM/yyyy'),
+              this.formatDate(v.dueDateChange, 'DD/MM/yyyy'),
+              this.formatDate(v.dueDateRemove, 'DD/MM/yyyy'),
+              v.size,
+              v.site,
+              v.marking,
+              v.externalLength,
+              v.doctorName,
+              v.doctorId,
+              v.sizeUnit,
+              v.siteUnit,
+              v.markingUnit,
+              v.externalLengthUnit
+            )
+        );
         this.activities = this.nurseActivityWorkListStoreService.activities;
         this.initPagination(data);
       },

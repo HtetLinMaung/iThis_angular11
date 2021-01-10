@@ -13,7 +13,6 @@ import 'jspdf-autotable';
   styleUrls: ['./nursing-activity-worklist-form.component.css'],
 })
 export class NursingActivityWorklistFormComponent implements OnInit {
-  procedures = [];
   procedure = '1';
   date = '';
   dueDateChange = '';
@@ -36,7 +35,6 @@ export class NursingActivityWorklistFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.appStoreService.doctor = new Doctor();
-    this.fetchProcedures();
   }
 
   new() {
@@ -113,8 +111,8 @@ export class NursingActivityWorklistFormComponent implements OnInit {
         const proEles: any = document.querySelectorAll(query1);
         proEles.forEach((p, i) => {
           const tubeName = p.innerHTML.trim();
-          const proRef = this.procedures.find((v) =>
-            v.text.match(new RegExp(tubeName))
+          const proRef = this.nurseActivityWorkListStoreService.procedures.find(
+            (v) => v.text.match(new RegExp(tubeName))
           );
           if (proRef) {
             this.filterdPrintData = printData.filter(
@@ -147,8 +145,8 @@ export class NursingActivityWorklistFormComponent implements OnInit {
               case 40:
               case 44:
                 const tubeName = data.row.cells[0].text.join(' ');
-                const proRef = this.procedures.find((v) =>
-                  v.text.match(new RegExp(tubeName))
+                const proRef = this.nurseActivityWorkListStoreService.procedures.find(
+                  (v) => v.text.match(new RegExp(tubeName))
                 );
                 if (proRef) {
                   this.filterdPrintData = printData.filter(
@@ -270,15 +268,5 @@ export class NursingActivityWorklistFormComponent implements OnInit {
 
   browseDoctor() {
     this.appStoreService.doctorDialog = true;
-  }
-
-  fetchProcedures() {
-    this.http.doGet('nurse-activity-worklist/procedures').subscribe(
-      (data: any) => {
-        this.procedures = data;
-      },
-      (error) => {},
-      () => {}
-    );
   }
 }
