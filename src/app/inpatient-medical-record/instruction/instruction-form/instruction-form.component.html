@@ -1,8 +1,22 @@
 <div style="flex: 1">
   <div style="display: flex; margin-top: 1rem; margin-bottom: 2rem">
-    <button class="btn btn-primary btn__crud">New</button>
-    <button class="btn btn-success btn__crud" (click)="save()">Save</button>
-    <button class="btn btn-danger btn__crud">Delete</button>
+    <button class="btn btn-primary btn__crud" (click)="new()">New</button>
+    <button
+      *ngIf="instructionStoreService.isUpdate$ | async"
+      class="btn btn-success btn__crud"
+      (click)="save()"
+    >
+      Update
+    </button>
+    <button
+      *ngIf="!(instructionStoreService.isUpdate$ | async)"
+      class="btn btn-success btn__crud"
+      (click)="save()"
+    >
+      Save
+    </button>
+    <button class="btn btn-danger btn__crud" (click)="delete()">Delete</button>
+    <button class="btn btn-primary btn__crud" (click)="print()">Print</button>
   </div>
 
   <div class="flex__row">
@@ -31,18 +45,16 @@
         <div>No Known Drug Allergy</div>
       </div>
       <div *ngIf="drugAllergyTo" class="tag__box">
-        <div class="__chip">Skin rash</div>
-        <div class="__chip">Hives</div>
-        <div class="__chip">Itching</div>
-        <div class="__chip">Skin rash</div>
-        <div class="__chip">Hives</div>
+        <div class="__chip" *ngFor="let allergy of drugAllergyTo.split(',')">
+          {{ allergy.trim() }}
+        </div>
       </div>
     </div>
   </div>
 
   <div class="flex__row">
     <div style="flex: 0 0 70%" class="p__5">
-      <label class="form__label">Instruction</label>
+      <label class="form__label">Instruction Under Treatment</label>
       <textarea
         [(ngModel)]="instruction"
         type="date"
@@ -64,3 +76,34 @@
     </div>
   </div>
 </div>
+
+<table id="inpatient__record" style="display: none">
+  <tr>
+    <td colspan="2">IN-PATIENT MEDICATION RECORD</td>
+    <td rowspan="2">PATIENT LABEL</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td colspan="3"></td>
+  </tr>
+</table>
+
+<table id="instruction__print" style="display: none">
+  <thead>
+    <tr>
+      <th>DATE</th>
+      <th>INSTRUCTION</th>
+      <th>REMARKS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let instruction of filteredInstructions">
+      <td>{{ instruction.fmtDate }}</td>
+      <td>{{ instruction.instruction }}</td>
+      <td>{{ instruction.remarks }}</td>
+    </tr>
+  </tbody>
+</table>

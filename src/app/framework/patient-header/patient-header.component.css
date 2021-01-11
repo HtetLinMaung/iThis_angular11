@@ -1,0 +1,33 @@
+.patient__label {
+  color: #00008b;
+  font-size: 10pt;
+  font-weight: bolder;
+}
+.menu__link {
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.__menu {
+  display: none;
+  position: absolute;
+  width: 300px;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  padding: 0.5rem;
+  background: #fff;
+  transition: all 0.3s;
+  z-index: 99;
+  overflow-y: auto;
+}
+.btn__close {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #302c2d;
+  font-weight: bolder;
+}

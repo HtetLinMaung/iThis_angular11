@@ -1,0 +1,43 @@
+<div style="width: 100%; padding: 2rem 3rem">
+  <app-patient-header></app-patient-header>
+
+  <div style="display: flex">
+    <div
+      class="tab__list-item"
+      style="background: #3b5998"
+      (click)="tabClickHandler(1)"
+      id="tab1"
+    >
+      List
+    </div>
+    <div class="tab__list-item" (click)="tabClickHandler(2)" id="tab2">
+      Injection
+    </div>
+  </div>
+
+  <div style="display: flex">
+    <div class="card tab__body" style="flex: 1">
+      <app-injection-list
+        *ngIf="(injectionStoreService.tabNo$ | async) == 1"
+      ></app-injection-list>
+
+      <app-injection-form
+        *ngIf="(injectionStoreService.tabNo$ | async) == 2"
+      ></app-injection-form>
+    </div>
+  </div>
+</div>
+
+<app-delete-dialog
+  *ngIf="injectionStoreService.deleteDialog$ | async"
+  (onDelete)="deleteData()"
+  (onCancel)="cancelDelete()"
+></app-delete-dialog>
+
+<!-- this is for dev only -->
+<button
+  (click)="toggleRank()"
+  style="position: absolute; top: 10px; right: 10px"
+>
+  Toggle Rank
+</button>

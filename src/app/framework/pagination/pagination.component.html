@@ -1,0 +1,16 @@
+<div class="pagination">
+  <i class="fas fa-backward" (click)="skipFirst()"></i>
+  <i class="fas fa-angle-left" (click)="prev()"></i>
+  <select
+    (change)="handlePerPageChanged($event)"
+    style="flex: 0 0 20%"
+    class="select"
+  >
+    <option *ngFor="let item of perPages" [value]="item">
+      {{ item }}
+    </option>
+  </select>
+  <i class="fas fa-angle-right" (click)="next()"></i>
+  <i class="fas fa-forward" (click)="skipLast()"></i>
+  <div>{{ start + 1 }} - {{ end }} of {{ total }}</div>
+</div>

@@ -1,0 +1,33 @@
+.tag__box {
+  border-radius: 10px;
+  border: 1px solid #c4c4c4;
+  width: 100%;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  flex-wrap: wrap;
+}
+.__chip {
+  font-weight: bolder;
+  padding: 0.3rem 1rem;
+  margin: 0.2rem;
+  font-size: 12px;
+  display: inline-block;
+  border-radius: 35px;
+  border: 1px solid #c4c4c4;
+}
+.checkbox__label {
+  font-size: 12px;
+  padding-left: 0.5rem;
+}
+.__checkbox {
+  width: 18px;
+  height: 18px;
+}
+.flex-table__column:nth-child(2) {
+  flex-basis: 140px;
+}
+.flex-table__column:nth-child(6) {
+  flex: 0 0 120px;
+}
