@@ -13,6 +13,9 @@ import { NonParenteralListComponent } from './non-parenteral/non-parenteral-list
 import { InjectionComponent } from './injection/injection.component';
 import { InjectionFormComponent } from './injection/injection-form/injection-form.component';
 import { InjectionListComponent } from './injection/injection-list/injection-list.component';
+import { BloodComponent } from './blood/blood.component';
+import { BloodFormComponent } from './blood/blood-form/blood-form.component';
+import { BloodListComponent } from './blood/blood-list/blood-list.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +31,9 @@ import { InjectionListComponent } from './injection/injection-list/injection-lis
     InjectionComponent,
     InjectionFormComponent,
     InjectionListComponent,
+    BloodComponent,
+    BloodFormComponent,
+    BloodListComponent,
   ],
   imports: [
     SharedModule,
@@ -47,6 +53,10 @@ import { InjectionListComponent } from './injection/injection-list/injection-lis
       {
         path: 'inpatient-medication-record/injection',
         component: InjectionComponent,
+      },
+      {
+        path: 'inpatient-medication-record/blood',
+        component: BloodComponent,
       },
     ]),
   ],

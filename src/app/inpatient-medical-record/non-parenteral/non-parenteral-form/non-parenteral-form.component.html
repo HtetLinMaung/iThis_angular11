@@ -62,7 +62,24 @@
       />
     </div>
 
-    <div style="flex: 0 0 30%"></div>
+    <div
+      class="p__5"
+      style="flex: 0 0 21.1%"
+      *ngIf="!(appStoreService.isDoctorRank$ | async)"
+    >
+      <label class="form__label">Action</label>
+      <select class="form-control form__input"></select>
+    </div>
+
+    <div
+      style="flex: 0 0 8.9%"
+      *ngIf="!(appStoreService.isDoctorRank$ | async)"
+    ></div>
+
+    <div
+      style="flex: 0 0 30%"
+      *ngIf="appStoreService.isDoctorRank$ | async"
+    ></div>
 
     <div
       class="p__5"

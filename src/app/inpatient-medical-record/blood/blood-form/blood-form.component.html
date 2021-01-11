@@ -2,14 +2,14 @@
   <div style="display: flex; margin-top: 1rem; margin-bottom: 2rem">
     <button class="btn btn-primary btn__crud" (click)="new()">New</button>
     <button
-      *ngIf="injectionStoreService.isUpdate$ | async"
+      *ngIf="bloodStoreService.isUpdate$ | async"
       class="btn btn-success btn__crud"
       (click)="save()"
     >
       Update
     </button>
     <button
-      *ngIf="!(injectionStoreService.isUpdate$ | async)"
+      *ngIf="!(bloodStoreService.isUpdate$ | async)"
       class="btn btn-success btn__crud"
       (click)="save()"
     >

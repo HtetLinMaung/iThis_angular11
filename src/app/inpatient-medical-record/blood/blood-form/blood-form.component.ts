@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { AppStoreService } from 'src/app/app-store.service';
-import { InjectionStoreService } from '../injection-store.service';
+import { BloodStoreService } from '../blood-store.service';
 
 @Component({
-  selector: 'app-injection-form',
-  templateUrl: './injection-form.component.html',
-  styleUrls: ['./injection-form.component.css'],
+  selector: 'app-blood-form',
+  templateUrl: './blood-form.component.html',
+  styleUrls: ['./blood-form.component.css'],
 })
-export class InjectionFormComponent implements OnInit {
+export class BloodFormComponent implements OnInit {
   date = '';
 
   constructor(
     public appStoreService: AppStoreService,
-    public injectionStoreService: InjectionStoreService
+    public bloodStoreService: BloodStoreService
   ) {}
 
   ngOnInit(): void {}
