@@ -1,0 +1,6 @@
+.flex-table__column:nth-child(1) {
+  flex: 0 0 120px;
+}
+.flex-table__column:nth-child(2) {
+  flex-basis: 200px;
+}

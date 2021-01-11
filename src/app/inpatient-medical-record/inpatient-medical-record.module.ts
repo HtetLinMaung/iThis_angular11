@@ -16,6 +16,9 @@ import { InjectionListComponent } from './injection/injection-list/injection-lis
 import { BloodComponent } from './blood/blood.component';
 import { BloodFormComponent } from './blood/blood-form/blood-form.component';
 import { BloodListComponent } from './blood/blood-list/blood-list.component';
+import { DietComponent } from './diet/diet.component';
+import { DietFormComponent } from './diet/diet-form/diet-form.component';
+import { DietListComponent } from './diet/diet-list/diet-list.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +37,9 @@ import { BloodListComponent } from './blood/blood-list/blood-list.component';
     BloodComponent,
     BloodFormComponent,
     BloodListComponent,
+    DietComponent,
+    DietFormComponent,
+    DietListComponent,
   ],
   imports: [
     SharedModule,
@@ -57,6 +63,10 @@ import { BloodListComponent } from './blood/blood-list/blood-list.component';
       {
         path: 'inpatient-medication-record/blood',
         component: BloodComponent,
+      },
+      {
+        path: 'inpatient-medication-record/diet',
+        component: DietComponent,
       },
     ]),
   ],
