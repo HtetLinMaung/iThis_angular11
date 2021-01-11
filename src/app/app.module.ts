@@ -6,9 +6,10 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { InpatientMedicalRecordModule } from './inpatient-medical-record/inpatient-medical-record.module';
+import { NurseshiftsummaryComponent } from './nurseshiftsummary/nurseshiftsummary.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent],
+  declarations: [AppComponent, LoginComponent, NurseshiftsummaryComponent],
   imports: [
     BrowserModule,
     FormsModule,

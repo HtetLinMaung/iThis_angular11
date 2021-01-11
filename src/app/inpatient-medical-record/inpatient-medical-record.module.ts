@@ -1,11 +1,13 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InstructionComponent } from './instruction/instruction.component';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+
+import { TableComponent } from '../framework/table/table.component';
+import { NurseshiftsummaryComponent } from '../nurseshiftsummary/nurseshiftsummary.component';
 import { InstructionFormComponent } from './instruction/instruction-form/instruction-form.component';
 import { InstructionListComponent } from './instruction/instruction-list/instruction-list.component';
-import { TableComponent } from '../framework/table/table.component';
+import { InstructionComponent } from './instruction/instruction.component';
 
 @NgModule({
   declarations: [
@@ -25,4 +27,4 @@ import { TableComponent } from '../framework/table/table.component';
     ]),
   ],
 })
-export class InpatientMedicalRecordModule {}
+export class InpatientMedicalRecordModule { }
