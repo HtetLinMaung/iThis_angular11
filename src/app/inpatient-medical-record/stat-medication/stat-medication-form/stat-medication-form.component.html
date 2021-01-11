@@ -32,7 +32,11 @@
   </div>
 
   <div class="flex__row">
-    <div *ngFor="let header of headers" class="flex-table__column">
+    <div
+      *ngFor="let header of headers"
+      class="flex-table__column"
+      style="font-size: 14px"
+    >
       {{ header }}
     </div>
   </div>
