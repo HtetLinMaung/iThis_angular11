@@ -32,7 +32,11 @@
 
     <div class="p__5" style="flex: 0 0 30%"></div>
 
-    <div class="p__5 flex__row" style="flex: 0 0 50%">
+    <div
+      class="p__5 flex__row"
+      style="flex: 0 0 50%"
+      *ngIf="appStoreService.isDoctorRank$ | async"
+    >
       <div class="flex__row p__5">
         <input type="checkbox" class="__checkbox" [(ngModel)]="tubeFeed" />
         <div class="checkbox__label">Tube Feed</div>
@@ -60,7 +64,11 @@
 
     <div style="flex: 0 0 30%"></div>
 
-    <div class="p__5" style="flex: 0 0 20%">
+    <div
+      class="p__5"
+      style="flex: 0 0 20%"
+      *ngIf="appStoreService.isDoctorRank$ | async"
+    >
       <label class="form__label">Date Start</label>
       <input
         type="date"
@@ -69,7 +77,11 @@
       />
     </div>
 
-    <div class="p__5" style="flex: 0 0 20%">
+    <div
+      class="p__5"
+      style="flex: 0 0 20%"
+      *ngIf="appStoreService.isDoctorRank$ | async"
+    >
       <label class="form__label">Date Off</label>
       <input
         type="date"
@@ -97,7 +109,7 @@
     </div>
   </div>
 
-  <div class="flex__row">
+  <div class="flex__row" *ngIf="appStoreService.isDoctorRank$ | async">
     <div class="flex__row p__5">
       <input
         type="checkbox"
@@ -114,7 +126,7 @@
 
   <div class="flex__row">
     <div
-      *ngFor="let header of headers"
+      *ngFor="let header of getHeaders()"
       class="flex-table__column"
       style="font-size: 14px"
     >
@@ -141,6 +153,12 @@
     </div>
     <div class="flex-table__column">
       <input type="text" class="form-control form__input" />
+    </div>
+    <div
+      class="flex-table__column"
+      *ngIf="!(appStoreService.isDoctorRank$ | async)"
+    >
+      <input type="checkbox" class="__checkbox" />
     </div>
   </div>
 </div>

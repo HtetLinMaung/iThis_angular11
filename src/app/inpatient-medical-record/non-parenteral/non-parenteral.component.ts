@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppStoreService } from 'src/app/app-store.service';
 import { HttpService } from 'src/app/framework/http.service';
 import { NonParenteralStoreService } from './non-parenteral-store.service';
 
@@ -9,6 +10,7 @@ import { NonParenteralStoreService } from './non-parenteral-store.service';
 })
 export class NonParenteralComponent implements OnInit {
   constructor(
+    public appStoreService: AppStoreService,
     public nonParenteralStoreService: NonParenteralStoreService,
     private http: HttpService
   ) {}
@@ -51,5 +53,10 @@ export class NonParenteralComponent implements OnInit {
 
   cancelDelete() {
     this.nonParenteralStoreService.deleteDialog = false;
+  }
+
+  // this is for dev only
+  toggleRank() {
+    this.appStoreService.isDoctorRank = !this.appStoreService.isDoctorRank;
   }
 }

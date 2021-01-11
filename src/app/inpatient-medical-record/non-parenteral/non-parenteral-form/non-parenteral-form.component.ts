@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppStoreService } from 'src/app/app-store.service';
 import { NonParenteralStoreService } from '../non-parenteral-store.service';
 
 @Component({
@@ -7,7 +8,6 @@ import { NonParenteralStoreService } from '../non-parenteral-store.service';
   styleUrls: ['./non-parenteral-form.component.css'],
 })
 export class NonParenteralFormComponent implements OnInit {
-  headers = ['Route', 'Medication', 'Dose', 'Frequency', 'Duration'];
   date = '';
   diagnosis: '';
   drugAllergyTo = '';
@@ -18,9 +18,27 @@ export class NonParenteralFormComponent implements OnInit {
   dateStart = '';
   dateOff = '';
 
-  constructor(public nonParenteralStoreService: NonParenteralStoreService) {}
+  constructor(
+    public nonParenteralStoreService: NonParenteralStoreService,
+    public appStoreService: AppStoreService
+  ) {}
 
   ngOnInit(): void {}
+
+  getHeaders() {
+    if (this.appStoreService.isDoctorRank) {
+      return ['Route', 'Medication', 'Dose', 'Frequency', 'Duration'];
+    } else {
+      return [
+        'Route',
+        'Medication',
+        'Dose',
+        'Frequency',
+        'Duration',
+        "Nurse's Sign",
+      ];
+    }
+  }
 
   new() {}
 
