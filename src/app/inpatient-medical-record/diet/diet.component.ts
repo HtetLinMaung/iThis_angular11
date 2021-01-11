@@ -54,9 +54,4 @@ export class DietComponent implements OnInit {
   cancelDelete() {
     this.dietStoreService.deleteDialog = false;
   }
-
-  // this is for dev only
-  toggleRank() {
-    this.appStoreService.isDoctorRank = !this.appStoreService.isDoctorRank;
-  }
 }
