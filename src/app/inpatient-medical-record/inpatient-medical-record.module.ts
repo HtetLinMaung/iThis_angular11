@@ -7,6 +7,9 @@ import { StatMedicationComponent } from './stat-medication/stat-medication.compo
 import { StatMedicationFormComponent } from './stat-medication/stat-medication-form/stat-medication-form.component';
 import { StatMedicationListComponent } from './stat-medication/stat-medication-list/stat-medication-list.component';
 import { SharedModule } from '../shared/shared.module';
+import { NonParenteralComponent } from './non-parenteral/non-parenteral.component';
+import { NonParenteralFormComponent } from './non-parenteral/non-parenteral-form/non-parenteral-form.component';
+import { NonParenteralListComponent } from './non-parenteral/non-parenteral-list/non-parenteral-list.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +19,9 @@ import { SharedModule } from '../shared/shared.module';
     StatMedicationComponent,
     StatMedicationFormComponent,
     StatMedicationListComponent,
+    NonParenteralComponent,
+    NonParenteralFormComponent,
+    NonParenteralListComponent,
   ],
   imports: [
     SharedModule,
@@ -27,6 +33,10 @@ import { SharedModule } from '../shared/shared.module';
       {
         path: 'inpatient-medication-record/stat-medication',
         component: StatMedicationComponent,
+      },
+      {
+        path: 'inpatient-medication-record/non-parenteral',
+        component: NonParenteralComponent,
       },
     ]),
   ],
