@@ -10,6 +10,9 @@ import { SharedModule } from '../shared/shared.module';
 import { NonParenteralComponent } from './non-parenteral/non-parenteral.component';
 import { NonParenteralFormComponent } from './non-parenteral/non-parenteral-form/non-parenteral-form.component';
 import { NonParenteralListComponent } from './non-parenteral/non-parenteral-list/non-parenteral-list.component';
+import { InjectionComponent } from './injection/injection.component';
+import { InjectionFormComponent } from './injection/injection-form/injection-form.component';
+import { InjectionListComponent } from './injection/injection-list/injection-list.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +25,9 @@ import { NonParenteralListComponent } from './non-parenteral/non-parenteral-list
     NonParenteralComponent,
     NonParenteralFormComponent,
     NonParenteralListComponent,
+    InjectionComponent,
+    InjectionFormComponent,
+    InjectionListComponent,
   ],
   imports: [
     SharedModule,
@@ -37,6 +43,10 @@ import { NonParenteralListComponent } from './non-parenteral/non-parenteral-list
       {
         path: 'inpatient-medication-record/non-parenteral',
         component: NonParenteralComponent,
+      },
+      {
+        path: 'inpatient-medication-record/injection',
+        component: InjectionComponent,
       },
     ]),
   ],

@@ -11,25 +11,25 @@
       List
     </div>
     <div class="tab__list-item" (click)="tabClickHandler(2)" id="tab2">
-      Non-Parenteral
+      Injection
     </div>
   </div>
 
   <div style="display: flex">
     <div class="card tab__body" style="flex: 1">
-      <app-non-parenteral-list
-        *ngIf="(nonParenteralStoreService.tabNo$ | async) == 1"
-      ></app-non-parenteral-list>
+      <app-injection-list
+        *ngIf="(injectionStoreService.tabNo$ | async) == 1"
+      ></app-injection-list>
 
-      <app-non-parenteral-form
-        *ngIf="(nonParenteralStoreService.tabNo$ | async) == 2"
-      ></app-non-parenteral-form>
+      <app-injection-form
+        *ngIf="(injectionStoreService.tabNo$ | async) == 2"
+      ></app-injection-form>
     </div>
   </div>
 </div>
 
 <app-delete-dialog
-  *ngIf="nonParenteralStoreService.deleteDialog$ | async"
+  *ngIf="injectionStoreService.deleteDialog$ | async"
   (onDelete)="deleteData()"
   (onCancel)="cancelDelete()"
 ></app-delete-dialog>
