@@ -50,7 +50,10 @@
     (click)="handleRowClick($event)"
   >
     <div class="flex-table__column">
-      <select class="form-control form__input">
+      <select
+        class="form-control form__input"
+        [(ngModel)]="statMedication.route"
+      >
         <option
           *ngFor="let route of statMedicationStoreService.routes$ | async"
           [value]="route.value"
@@ -71,7 +74,11 @@
         style="flex: 0 0 47%; text-align: right"
         [(ngModel)]="statMedication.doseCount"
       />
-      <select class="form-control form__input" style="flex: 0 0 47%">
+      <select
+        class="form-control form__input"
+        style="flex: 0 0 47%"
+        [(ngModel)]="statMedication.doseDesc"
+      >
         <option
           *ngFor="let dose of statMedicationStoreService.doses$ | async"
           [value]="dose.value"

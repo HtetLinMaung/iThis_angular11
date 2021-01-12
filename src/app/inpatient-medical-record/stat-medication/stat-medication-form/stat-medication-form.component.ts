@@ -70,10 +70,10 @@ export class StatMedicationFormComponent implements OnInit {
   }
 
   handleRowClick(e) {
-    window.scrollTo({
-      top: e.clientY,
-      behavior: 'smooth',
-    });
+    // window.scrollTo({
+    //   top: e.clientY,
+    //   behavior: 'smooth',
+    // });
   }
 
   new() {}

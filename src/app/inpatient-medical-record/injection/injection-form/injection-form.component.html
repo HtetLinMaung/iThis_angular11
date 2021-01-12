@@ -50,31 +50,68 @@
     </div>
   </div>
 
-  <div class="flex-table__row">
+  <div
+    class="flex-table__row"
+    style="margin: 1rem 0"
+    *ngFor="let injection of injectionStoreService.injections$ | async"
+  >
     <div class="flex-table__column">
-      <select class="form-control form__input"></select>
+      <select class="form-control form__input" [(ngModel)]="injection.route">
+        <option
+          *ngFor="let route of injectionStoreService.routes$ | async"
+          [value]="route.value"
+        >
+          {{ route.text }}
+        </option>
+      </select>
     </div>
     <div class="flex-table__column">
-      <input class="form-control form__input" />
+      <input
+        class="form-control form__input"
+        [(ngModel)]="injection.medication"
+      />
     </div>
     <div class="flex-table__column" style="justify-content: space-between">
       <input
         class="form-control form__input"
         style="flex: 0 0 47%; text-align: right"
+        [(ngModel)]="injection.doseCount"
       />
-      <select class="form-control form__input" style="flex: 0 0 47%"></select>
+      <select
+        class="form-control form__input"
+        style="flex: 0 0 47%"
+        [(ngModel)]="injection.doseDesc"
+      >
+        <option
+          *ngFor="let dose of injectionStoreService.doses$ | async"
+          [value]="dose.value"
+        >
+          {{ dose.text }}
+        </option>
+      </select>
     </div>
     <div class="flex-table__column">
-      <input class="form-control form__input" />
+      <input
+        class="form-control form__input"
+        [(ngModel)]="injection.frequency"
+      />
     </div>
     <div class="flex-table__column">
-      <input type="text" class="form-control form__input" />
+      <input
+        type="text"
+        class="form-control form__input"
+        [(ngModel)]="injection.doseDuration"
+      />
     </div>
     <div
       class="flex-table__column"
       *ngIf="!(appStoreService.isDoctorRank$ | async)"
     >
-      <input type="checkbox" class="__checkbox" />
+      <input
+        type="checkbox"
+        class="__checkbox"
+        [(ngModel)]="injection.nurseSign"
+      />
     </div>
   </div>
 </div>
