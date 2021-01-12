@@ -1,21 +1,31 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import StatMedication from './stat-medication.model';
+
+interface SelectType {
+  value: string;
+  text: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class StatMedicationStoreService {
   private readonly _currentSysKey = new BehaviorSubject<number>(0);
-  // private readonly _instructions = new BehaviorSubject<Instruction[]>([]);
+  private readonly _statMedications = new BehaviorSubject<StatMedication[]>([]);
   private readonly _isUpdate = new BehaviorSubject<boolean>(false);
   private readonly _tabNo = new BehaviorSubject<number>(2);
   private readonly _deleteDialog = new BehaviorSubject<boolean>(false);
+  private readonly _routes = new BehaviorSubject<SelectType[]>([]);
+  private readonly _doses = new BehaviorSubject<SelectType[]>([]);
 
   readonly currentSysKey$ = this._currentSysKey.asObservable();
-  // readonly instructions$ = this._instructions.asObservable();
+  readonly statMedications$ = this._statMedications.asObservable();
   readonly isUpdate$ = this._isUpdate.asObservable();
   readonly tabNo$ = this._tabNo.asObservable();
   readonly deleteDialog$ = this._deleteDialog.asObservable();
+  readonly routes$ = this._routes.asObservable();
+  readonly doses$ = this._doses.asObservable();
 
   constructor() {}
 
@@ -23,9 +33,9 @@ export class StatMedicationStoreService {
     this._currentSysKey.next(v);
   }
 
-  // set instructions(v: Instruction[]) {
-  //   this._instructions.next(v);
-  // }
+  set statMedications(v: StatMedication[]) {
+    this._statMedications.next(v);
+  }
 
   set tabNo(v: number) {
     this._tabNo.next(v);
@@ -39,6 +49,14 @@ export class StatMedicationStoreService {
     this._deleteDialog.next(v);
   }
 
+  set routes(v: SelectType[]) {
+    this._routes.next(v);
+  }
+
+  set doses(v: SelectType[]) {
+    this._doses.next(v);
+  }
+
   get isUpdate(): boolean {
     return this._isUpdate.getValue();
   }
@@ -47,9 +65,9 @@ export class StatMedicationStoreService {
     return this._tabNo.getValue();
   }
 
-  // get instructions(): Instruction[] {
-  //   return this._instructions.getValue();
-  // }
+  get statMedications(): StatMedication[] {
+    return this._statMedications.getValue();
+  }
 
   get currentSysKey(): number {
     return this._currentSysKey.getValue();
@@ -57,5 +75,13 @@ export class StatMedicationStoreService {
 
   get deleteDialog(): boolean {
     return this._deleteDialog.getValue();
+  }
+
+  get routes(): SelectType[] {
+    return this._routes.getValue();
+  }
+
+  get doses(): SelectType[] {
+    return this._doses.getValue();
   }
 }

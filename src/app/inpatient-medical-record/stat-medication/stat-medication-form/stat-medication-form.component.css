@@ -4,3 +4,7 @@
 .flex-table__column:nth-child(2) {
   flex-basis: 140px;
 }
+
+.flex-table__column:nth-child(3) {
+  flex-basis: 75px;
+}

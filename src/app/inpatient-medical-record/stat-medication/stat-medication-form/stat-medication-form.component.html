@@ -41,31 +41,70 @@
     </div>
   </div>
 
-  <div class="flex-table__row">
+  <div
+    class="flex-table__row"
+    style="margin: 1rem 0"
+    *ngFor="
+      let statMedication of statMedicationStoreService.statMedications$ | async
+    "
+    (click)="handleRowClick($event)"
+  >
     <div class="flex-table__column">
-      <select class="form-control form__input"></select>
+      <select class="form-control form__input">
+        <option
+          *ngFor="let route of statMedicationStoreService.routes$ | async"
+          [value]="route.value"
+        >
+          {{ route.text }}
+        </option>
+      </select>
     </div>
     <div class="flex-table__column">
-      <input class="form-control form__input" />
+      <input
+        class="form-control form__input"
+        [(ngModel)]="statMedication.medication"
+      />
     </div>
     <div class="flex-table__column" style="justify-content: space-between">
       <input
         class="form-control form__input"
         style="flex: 0 0 47%; text-align: right"
+        [(ngModel)]="statMedication.doseCount"
       />
-      <select class="form-control form__input" style="flex: 0 0 47%"></select>
+      <select class="form-control form__input" style="flex: 0 0 47%">
+        <option
+          *ngFor="let dose of statMedicationStoreService.doses$ | async"
+          [value]="dose.value"
+        >
+          {{ dose.text }}
+        </option>
+      </select>
     </div>
     <div class="flex-table__column">
-      <input class="form-control form__input" />
+      <input
+        class="form-control form__input"
+        [(ngModel)]="statMedication.prescriptionRemark"
+      />
     </div>
     <div class="flex-table__column">
-      <input type="time" step="1" class="form-control form__input" />
+      <input
+        type="time"
+        step="1"
+        class="form-control form__input"
+        [(ngModel)]="statMedication.timeAdmin"
+      />
     </div>
     <div class="flex-table__column">
-      <input class="form-control form__input" />
+      <input
+        class="form-control form__input"
+        [(ngModel)]="statMedication.givenBy"
+      />
     </div>
     <div class="flex-table__column">
-      <input class="form-control form__input" />
+      <input
+        class="form-control form__input"
+        [(ngModel)]="statMedication.drRemark"
+      />
     </div>
   </div>
 </div>
