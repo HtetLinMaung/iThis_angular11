@@ -8,6 +8,8 @@ export default class StatMedication {
     public prescriptionRemarks: string = '',
     public timeAdmin: string = '',
     public givenBy: string = '',
-    public drRemark: string = ''
+    public task: string = '',
+    public drRemark: string = '',
+    public stockId: string = ''
   ) {}
 }

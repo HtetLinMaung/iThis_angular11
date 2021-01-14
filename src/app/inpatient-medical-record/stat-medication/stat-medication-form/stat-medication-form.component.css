@@ -1,5 +1,5 @@
-.flex-table__column:nth-child(4) {
-  flex-basis: 100px;
+/* .flex-table__column:nth-child(4) {
+  flex-basis: 140px;
 }
 .flex-table__column:nth-child(2) {
   flex-basis: 140px;
@@ -7,4 +7,18 @@
 
 .flex-table__column:nth-child(3) {
   flex-basis: 75px;
+} */
+
+.flex-table__column:nth-child(1) {
+  flex: 0 0 10%;
+}
+.flex-table__column:nth-child(2) {
+  flex: 0 0 20%;
+}
+.flex-table__column:nth-child(6) {
+  flex: 0 0 15%;
+}
+
+#stat-medication__screen .form__input {
+  font-size: 12px !important;
 }

@@ -85,6 +85,8 @@ export class PatientHeaderComponent implements OnInit {
               data[0].ward,
               data[0].bed
             );
+            this.appStoreService.rgsNo = data[0].rgsNo;
+            this.appStoreService.drID = data[0].drID;
           }
         },
         (error) => {},

@@ -74,7 +74,7 @@ export class InstructionFormComponent implements OnInit {
         {
           syskey: 0, // dummy syskey, it is not used in service
           pId: this.appStoreService.pId,
-          RgsNo: 1,
+          RgsNo: this.appStoreService.rgsNo,
           userid: '',
           username: '',
           date: this.date,
@@ -105,7 +105,6 @@ export class InstructionFormComponent implements OnInit {
       startY: 35,
       theme: 'grid',
       didDrawCell: (data) => {
-        console.log(data.row);
         switch (data.row.index) {
           case 1:
             doc.setFontSize(9);
