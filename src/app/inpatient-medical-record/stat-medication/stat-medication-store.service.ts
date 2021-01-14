@@ -5,6 +5,7 @@ import StatMedication from './stat-medication.model';
 interface SelectType {
   value: string;
   text: string;
+  syskey: number;
 }
 
 @Injectable({
@@ -18,6 +19,7 @@ export class StatMedicationStoreService {
   private readonly _deleteDialog = new BehaviorSubject<boolean>(false);
   private readonly _routes = new BehaviorSubject<SelectType[]>([]);
   private readonly _doses = new BehaviorSubject<SelectType[]>([]);
+  private readonly _drugTasks = new BehaviorSubject<SelectType[]>([]);
 
   readonly currentSysKey$ = this._currentSysKey.asObservable();
   readonly statMedications$ = this._statMedications.asObservable();
@@ -26,6 +28,7 @@ export class StatMedicationStoreService {
   readonly deleteDialog$ = this._deleteDialog.asObservable();
   readonly routes$ = this._routes.asObservable();
   readonly doses$ = this._doses.asObservable();
+  readonly drugTasks$ = this._drugTasks.asObservable();
 
   constructor() {}
 
@@ -57,6 +60,10 @@ export class StatMedicationStoreService {
     this._doses.next(v);
   }
 
+  set drugTasks(v: SelectType[]) {
+    this._drugTasks.next(v);
+  }
+
   get isUpdate(): boolean {
     return this._isUpdate.getValue();
   }
@@ -83,5 +90,9 @@ export class StatMedicationStoreService {
 
   get doses(): SelectType[] {
     return this._doses.getValue();
+  }
+
+  get drugTasks(): SelectType[] {
+    return this._drugTasks.getValue();
   }
 }

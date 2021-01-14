@@ -1,4 +1,4 @@
-<div style="flex: 1">
+<div style="flex: 1" id="non-parenteral__form">
   <div style="display: flex; margin-top: 1rem; margin-bottom: 2rem">
     <button class="btn btn-primary btn__crud" (click)="new()">New</button>
     <button
@@ -145,7 +145,7 @@
     <div
       *ngFor="let header of getHeaders()"
       class="flex-table__column"
-      style="font-size: 14px"
+      style="font-size: 13px"
     >
       {{ header }}
     </div>

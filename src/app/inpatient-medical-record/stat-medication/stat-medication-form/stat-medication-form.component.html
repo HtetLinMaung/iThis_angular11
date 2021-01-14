@@ -1,4 +1,4 @@
-<div style="flex: 1">
+<div style="flex: 1" id="stat-medication__screen">
   <div style="display: flex; margin-top: 1rem; margin-bottom: 2rem">
     <button class="btn btn-primary btn__crud" (click)="new()">New</button>
     <button
@@ -35,7 +35,7 @@
     <div
       *ngFor="let header of headers"
       class="flex-table__column"
-      style="font-size: 14px"
+      style="font-size: 13px"
     >
       {{ header }}
     </div>
@@ -71,12 +71,12 @@
     <div class="flex-table__column" style="justify-content: space-between">
       <input
         class="form-control form__input"
-        style="flex: 0 0 47%; text-align: right"
+        style="flex: 0 0 42%; text-align: right"
         [(ngModel)]="statMedication.doseCount"
       />
       <select
         class="form-control form__input"
-        style="flex: 0 0 47%"
+        style="flex: 0 0 52%"
         [(ngModel)]="statMedication.doseDesc"
       >
         <option
@@ -101,11 +101,20 @@
         [(ngModel)]="statMedication.timeAdmin"
       />
     </div>
-    <div class="flex-table__column">
+    <div class="flex-table__column" style="justify-content: space-between">
       <input
+        style="flex: 0 0 47%"
         class="form-control form__input"
         [(ngModel)]="statMedication.givenBy"
       />
+      <select class="form-control form__input" style="flex: 0 0 47%">
+        <option
+          *ngFor="let drugTask of statMedicationStoreService.drugTasks$ | async"
+          [value]="drugTask.value"
+        >
+          {{ drugTask.text }}
+        </option>
+      </select>
     </div>
     <div class="flex-table__column">
       <input
