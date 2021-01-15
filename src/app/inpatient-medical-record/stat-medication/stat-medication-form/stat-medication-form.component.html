@@ -130,3 +130,34 @@
     </div>
   </div>
 </div>
+
+<table id="stat-medication__record" style="display: none">
+  <thead>
+    <tr>
+      <th>DATE</th>
+      <th>TIME</th>
+      <th>ROUTE</th>
+      <th>MEDICATION</th>
+      <th>DOSE</th>
+      <th>DR'S SIGN</th>
+      <th>TIME ADMIN</th>
+      <th>GIVEN BY</th>
+      <th>REMARKS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let statMedication of printData">
+      <td>{{ formatDate(statMedication.confirmDate, "DD/MM/yyyy") }}</td>
+      <td>{{ formatDate(statMedication.confirmDate, "h:mm:ss") }}</td>
+      <td>
+        {{ statMedication.routeDesc }}
+      </td>
+      <td>{{ statMedication.medication }}</td>
+      <td>{{ statMedication.doseCount }}</td>
+      <td></td>
+      <td>{{ statMedication.timeAdmin }}</td>
+      <td>{{ statMedication.givenBy }}</td>
+      <td>{{ statMedication.remark }}</td>
+    </tr>
+  </tbody>
+</table>

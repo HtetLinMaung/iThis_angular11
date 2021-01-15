@@ -3,6 +3,9 @@ import { AppStoreService } from 'src/app/app-store.service';
 import { HttpService } from 'src/app/framework/http.service';
 import { StatMedicationStoreService } from '../stat-medication-store.service';
 import StatMedication from '../stat-medication.model';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-stat-medication-form',
@@ -21,6 +24,7 @@ export class StatMedicationFormComponent implements OnInit {
     'Remark',
   ];
   date = '';
+  printData = [];
 
   constructor(
     private http: HttpService,
@@ -32,6 +36,11 @@ export class StatMedicationFormComponent implements OnInit {
     this.bindEditData();
   }
 
+  formatDate(dateStr: string, format: string) {
+    if (!dateStr) return '';
+    return moment(dateStr).format(format);
+  }
+
   bindEditData() {
     if (this.statMedicationStoreService.isUpdate) {
       const tabEle1 = document.getElementById('tab1');
@@ -41,12 +50,14 @@ export class StatMedicationFormComponent implements OnInit {
       this.statMedicationStoreService.statMedications = this.statMedicationStoreService.statMedications.filter(
         (v) => v.syskey == this.statMedicationStoreService.currentSysKey
       );
+      this.date = this.statMedicationStoreService.statMedications[0].confirmDate;
     } else {
       this.fetchStatMedications();
     }
   }
 
   fetchStatMedications() {
+    this.statMedicationStoreService.statMedications = [];
     Promise.all([
       this.fetchRoutes(),
       this.fetchDoses(),
@@ -99,10 +110,9 @@ export class StatMedicationFormComponent implements OnInit {
                   '',
                   '',
                   '',
-                  v.remark,
-                  v.stockId,
                   '',
-                  ''
+                  v.stockId,
+                  v.remark
                 )
               );
             }
@@ -156,6 +166,8 @@ export class StatMedicationFormComponent implements OnInit {
             ).syskey,
             doseRemarkSyskey: 0,
             dose: v.doseCount,
+            remark: v.remark,
+            prescriptionRemark: v.prescriptionRemark,
           }
         )
         .subscribe((data: any) => {});
@@ -188,6 +200,8 @@ export class StatMedicationFormComponent implements OnInit {
               ).syskey,
               doseRemarkSyskey: 0,
               dose: v.doseCount,
+              remark: v.remark,
+              prescriptionRemark: v.prescriptionRemark,
             })
           ),
         })
@@ -200,5 +214,58 @@ export class StatMedicationFormComponent implements OnInit {
       this.statMedicationStoreService.deleteDialog = true;
   }
 
-  print() {}
+  print() {
+    const doc = new jsPDF();
+    doc.setFontSize(11);
+    doc.text('ASIA ROYAL HOSPITAL', 105, 15, { align: 'center' });
+    doc.text('IN-PATIENT MEDICATION RECORD - INSTRUCTION', 105, 23, {
+      align: 'center',
+    });
+
+    this.http
+      .doGet(`inpatient-medical-record/stat-medications`)
+      .subscribe((data: any) => {
+        this.printData = data.map((v) => {
+          return new StatMedication(
+            v.syskey,
+            this.statMedicationStoreService.routes.find(
+              (item) => item.syskey == v.routeSyskey
+            ).value,
+            v.stockDescription,
+            v.dose,
+            '',
+            v.prescriptionRemark,
+            v.timeAdmin,
+            v.givenBy,
+            '',
+            v.drRemark,
+            v.stockId,
+            v.remark,
+            this.statMedicationStoreService.routes.find(
+              (item) => item.syskey == v.routeSyskey
+            ).text,
+            this.appStoreService.isDoctorRank
+              ? v.moConfirmDate
+              : v.nurseConfirmDate
+          );
+        });
+
+        setTimeout(() => {
+          (doc as any).autoTable({
+            html: '#stat-medication__record',
+            startY: 35,
+            theme: 'grid',
+            headStyles: {
+              fillColor: '#686869',
+            },
+            styles: {
+              fontSize: 9,
+              valign: 'middle',
+              halign: 'center',
+            },
+          });
+          doc.save('stat-medication.pdf');
+        }, 1000);
+      });
+  }
 }

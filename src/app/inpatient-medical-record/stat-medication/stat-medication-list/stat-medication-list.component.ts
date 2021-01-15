@@ -3,6 +3,7 @@ import { HttpService } from 'src/app/framework/http.service';
 import { StatMedicationStoreService } from '../stat-medication-store.service';
 import * as moment from 'moment';
 import StatMedication from '../stat-medication.model';
+import { AppStoreService } from 'src/app/app-store.service';
 
 @Component({
   selector: 'app-stat-medication-list',
@@ -31,34 +32,50 @@ export class StatMedicationListComponent implements OnInit {
   open = false;
   fields = [
     {
-      text: 'Date',
+      text: 'Route',
       value: '1',
-      key: 'fmtDate',
+      key: 'routeDesc',
     },
     {
-      text: 'Date Taken',
+      text: 'Medication',
       value: '2',
-      key: 'fmtDateTaken',
+      key: 'stockDescription',
     },
     {
-      text: 'Drug Allergy To',
+      text: 'Dose',
       value: '3',
-      key: 'drugAllergyTo',
+      key: 'dose',
     },
     {
-      text: 'Instruction Under Treatment',
+      text: 'Prescription Remark',
       value: '4',
-      key: 'instruction',
+      key: 'prescriptionRemark',
     },
     {
-      text: 'Remarks',
+      text: 'Time Admin',
       value: '5',
-      key: 'remarks',
+      key: 'timeAdmin',
+    },
+    {
+      text: 'Given By',
+      value: '6',
+      key: 'givenBy',
+    },
+    {
+      text: "Dr's remark",
+      value: '7',
+      key: 'drRemark',
+    },
+    {
+      text: 'Remark',
+      value: '8',
+      key: 'remark',
     },
   ];
   search = '';
 
   constructor(
+    public appStoreService: AppStoreService,
     public statMedicationStoreService: StatMedicationStoreService,
     private http: HttpService
   ) {}
@@ -119,15 +136,17 @@ export class StatMedicationListComponent implements OnInit {
                 v.stockDescription,
                 v.dose,
                 doses.map((item) => item.syskey == v.doseTypeSyskey).EngDesc,
-                '',
+                v.prescriptionRemark,
                 v.timeAdmin,
                 v.givenBy,
                 '',
                 v.drRemark,
                 v.stockId,
-                '',
+                v.remark,
                 routes.find((item) => item.syskey == v.routeSyskey).EngDesc,
-                moment().format('h:mm:ss a')
+                this.appStoreService.isDoctorRank
+                  ? v.moConfirmDate
+                  : v.nurseConfirmDate
               )
           );
 
