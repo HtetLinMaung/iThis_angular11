@@ -56,6 +56,7 @@ export class StatMedicationFormComponent implements OnInit {
       this.http
         .doGet('inpatient-medical-record/stat-medications-initial')
         .subscribe((data: any) => {
+          this.statMedicationStoreService.statMedications = [];
           for (const v of data) {
             let times = 1;
             switch (data.engdesc) {
