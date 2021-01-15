@@ -3,6 +3,9 @@ import { AppStoreService } from 'src/app/app-store.service';
 import { HttpService } from 'src/app/framework/http.service';
 import { StatMedicationStoreService } from '../stat-medication-store.service';
 import StatMedication from '../stat-medication.model';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-stat-medication-form',
@@ -18,8 +21,10 @@ export class StatMedicationFormComponent implements OnInit {
     'Time Admin',
     'Given By',
     "Dr's remark",
+    'Remark',
   ];
   date = '';
+  printData = [];
 
   constructor(
     private http: HttpService,
@@ -28,10 +33,31 @@ export class StatMedicationFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchStatMedications();
+    this.bindEditData();
+  }
+
+  formatDate(dateStr: string, format: string) {
+    if (!dateStr) return '';
+    return moment(dateStr).format(format);
+  }
+
+  bindEditData() {
+    if (this.statMedicationStoreService.isUpdate) {
+      const tabEle1 = document.getElementById('tab1');
+      const tabEle2 = document.getElementById('tab2');
+      tabEle2.style.background = '#3b5998';
+      tabEle1.style.background = '#8C9899';
+      this.statMedicationStoreService.statMedications = this.statMedicationStoreService.statMedications.filter(
+        (v) => v.syskey == this.statMedicationStoreService.currentSysKey
+      );
+      this.date = this.statMedicationStoreService.statMedications[0].confirmDate;
+    } else {
+      this.fetchStatMedications();
+    }
   }
 
   fetchStatMedications() {
+    this.statMedicationStoreService.statMedications = [];
     Promise.all([
       this.fetchRoutes(),
       this.fetchDoses(),
@@ -56,6 +82,7 @@ export class StatMedicationFormComponent implements OnInit {
       this.http
         .doGet('inpatient-medical-record/stat-medications-initial')
         .subscribe((data: any) => {
+          this.statMedicationStoreService.statMedications = [];
           for (const v of data) {
             let times = 1;
             switch (data.engdesc) {
@@ -83,8 +110,9 @@ export class StatMedicationFormComponent implements OnInit {
                   '',
                   '',
                   '',
-                  v.remark,
-                  v.stockId
+                  '',
+                  v.stockId,
+                  v.remark
                 )
               );
             }
@@ -115,38 +143,129 @@ export class StatMedicationFormComponent implements OnInit {
   new() {}
 
   save() {
-    console.log(this.statMedicationStoreService.statMedications);
-    this.http
-      .doPost('inpatient-medical-record/save-stat-medication', {
-        statMedications: this.statMedicationStoreService.statMedications.map(
-          (v) => ({
-            pId: this.appStoreService.pId,
-            RgsNo: this.appStoreService.rgsNo,
+    if (this.statMedicationStoreService.isUpdate) {
+      const v = this.statMedicationStoreService.statMedications[0];
+      this.http
+        .doPost(
+          `inpatient-medical-record/update-stat-medication/${this.statMedicationStoreService.currentSysKey}`,
+          {
             userid: '',
             username: '',
-            parentId: v.syskey,
-            doctorId: this.appStoreService.drID,
             stockId: v.stockId,
             stockDescription: v.medication,
             timeAdmin: v.timeAdmin,
             givenBy: v.givenBy,
             drRemark: v.drRemark,
             isDoctor: this.appStoreService.isDoctorRank,
-            confirmDate: this.date,
+            moConfirmDate: this.appStoreService.isDoctorRank ? this.date : '',
+            nurseConfirmDate: !this.appStoreService.isDoctorRank
+              ? this.date
+              : '',
             routeSyskey: this.statMedicationStoreService.routes.find(
               (item) => item.value == v.route
             ).syskey,
-            doseTypeSyskey: this.statMedicationStoreService.doses.find(
-              (item) => item.value == v.doseDesc
-            ).syskey,
             doseRemarkSyskey: 0,
-          })
-        ),
-      })
-      .subscribe((data: any) => {});
+            dose: v.doseCount,
+            remark: v.remark,
+            prescriptionRemark: v.prescriptionRemark,
+          }
+        )
+        .subscribe((data: any) => {});
+    } else {
+      this.http
+        .doPost('inpatient-medical-record/save-stat-medication', {
+          statMedications: this.statMedicationStoreService.statMedications.map(
+            (v) => ({
+              pId: this.appStoreService.pId,
+              RgsNo: this.appStoreService.rgsNo,
+              userid: '',
+              username: '',
+              parentId: v.syskey,
+              doctorId: this.appStoreService.drID,
+              stockId: v.stockId,
+              stockDescription: v.medication,
+              timeAdmin: v.timeAdmin,
+              givenBy: v.givenBy,
+              drRemark: v.drRemark,
+              isDoctor: this.appStoreService.isDoctorRank,
+              moConfirmDate: this.appStoreService.isDoctorRank ? this.date : '',
+              nurseConfirmDate: !this.appStoreService.isDoctorRank
+                ? this.date
+                : '',
+              routeSyskey: this.statMedicationStoreService.routes.find(
+                (item) => item.value == v.route
+              ).syskey,
+              doseTypeSyskey: this.statMedicationStoreService.doses.find(
+                (item) => item.value == v.doseDesc
+              ).syskey,
+              doseRemarkSyskey: 0,
+              dose: v.doseCount,
+              remark: v.remark,
+              prescriptionRemark: v.prescriptionRemark,
+            })
+          ),
+        })
+        .subscribe((data: any) => {});
+    }
   }
 
-  delete() {}
+  delete() {
+    if (this.statMedicationStoreService.isUpdate)
+      this.statMedicationStoreService.deleteDialog = true;
+  }
 
-  print() {}
+  print() {
+    const doc = new jsPDF();
+    doc.setFontSize(11);
+    doc.text('ASIA ROYAL HOSPITAL', 105, 15, { align: 'center' });
+    doc.text('IN-PATIENT MEDICATION RECORD - INSTRUCTION', 105, 23, {
+      align: 'center',
+    });
+
+    this.http
+      .doGet(`inpatient-medical-record/stat-medications`)
+      .subscribe((data: any) => {
+        this.printData = data.map((v) => {
+          return new StatMedication(
+            v.syskey,
+            this.statMedicationStoreService.routes.find(
+              (item) => item.syskey == v.routeSyskey
+            ).value,
+            v.stockDescription,
+            v.dose,
+            '',
+            v.prescriptionRemark,
+            v.timeAdmin,
+            v.givenBy,
+            '',
+            v.drRemark,
+            v.stockId,
+            v.remark,
+            this.statMedicationStoreService.routes.find(
+              (item) => item.syskey == v.routeSyskey
+            ).text,
+            this.appStoreService.isDoctorRank
+              ? v.moConfirmDate
+              : v.nurseConfirmDate
+          );
+        });
+
+        setTimeout(() => {
+          (doc as any).autoTable({
+            html: '#stat-medication__record',
+            startY: 35,
+            theme: 'grid',
+            headStyles: {
+              fillColor: '#686869',
+            },
+            styles: {
+              fontSize: 9,
+              valign: 'middle',
+              halign: 'center',
+            },
+          });
+          doc.save('stat-medication.pdf');
+        }, 1000);
+      });
+  }
 }

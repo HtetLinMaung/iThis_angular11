@@ -5,11 +5,15 @@ export default class StatMedication {
     public medication: string = '',
     public doseCount: number = 1,
     public doseDesc: string = '',
-    public prescriptionRemarks: string = '',
+    public prescriptionRemark: string = '',
     public timeAdmin: string = '',
     public givenBy: string = '',
     public task: string = '',
     public drRemark: string = '',
-    public stockId: string = ''
+    public stockId: string = '',
+    public remark: string = '',
+    public routeDesc: string = '',
+    public confirmDate: string = '',
+    public fmtTimeAdmin: string = ''
   ) {}
 }
