@@ -8,7 +8,10 @@ import { StatMedicationStoreService } from './stat-medication-store.service';
   styleUrls: ['./stat-medication.component.css'],
 })
 export class StatMedicationComponent implements OnInit {
-  constructor(public statMedicationStoreService: StatMedicationStoreService, private http: HttpService) {}
+  constructor(
+    public statMedicationStoreService: StatMedicationStoreService,
+    private http: HttpService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -30,19 +33,19 @@ export class StatMedicationComponent implements OnInit {
   deleteData() {
     this.statMedicationStoreService.deleteDialog = false;
     if (this.statMedicationStoreService.isUpdate) {
-      // this.http
-      //   .doPost(
-      //     `inpatient-medical-record/delete-instruction/${this.instructionStoreService.currentSysKey}`,
-      //     { syskey: this.instructionStoreService.currentSysKey }
-      //   )
-      //   .subscribe((data) => {
-      //     const tabEle1 = document.getElementById('tab1');
-      //     const tabEle2 = document.getElementById('tab2');
-      //     tabEle1.style.background = '#3b5998';
-      //     tabEle2.style.background = '#8C9899';
-      //     this.instructionStoreService.isUpdate = false;
-      //     this.instructionStoreService.tabNo = 1;
-      //   });
+      this.http
+        .doPost(
+          `inpatient-medical-record/delete-stat-medication/${this.statMedicationStoreService.currentSysKey}`,
+          { syskey: this.statMedicationStoreService.currentSysKey }
+        )
+        .subscribe((data) => {
+          const tabEle1 = document.getElementById('tab1');
+          const tabEle2 = document.getElementById('tab2');
+          tabEle1.style.background = '#3b5998';
+          tabEle2.style.background = '#8C9899';
+          this.statMedicationStoreService.isUpdate = false;
+          this.statMedicationStoreService.tabNo = 1;
+        });
     }
   }
 

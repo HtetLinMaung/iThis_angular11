@@ -10,6 +10,9 @@ export default class StatMedication {
     public givenBy: string = '',
     public task: string = '',
     public drRemark: string = '',
-    public stockId: string = ''
+    public stockId: string = '',
+    public remark: string = '',
+    public routeDesc: string = '',
+    public fmtTimeAdmin: string = ''
   ) {}
 }

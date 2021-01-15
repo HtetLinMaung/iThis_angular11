@@ -18,6 +18,7 @@ export class StatMedicationFormComponent implements OnInit {
     'Time Admin',
     'Given By',
     "Dr's remark",
+    'Remark',
   ];
   date = '';
 
@@ -28,7 +29,21 @@ export class StatMedicationFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchStatMedications();
+    this.bindEditData();
+  }
+
+  bindEditData() {
+    if (this.statMedicationStoreService.isUpdate) {
+      const tabEle1 = document.getElementById('tab1');
+      const tabEle2 = document.getElementById('tab2');
+      tabEle2.style.background = '#3b5998';
+      tabEle1.style.background = '#8C9899';
+      this.statMedicationStoreService.statMedications = this.statMedicationStoreService.statMedications.filter(
+        (v) => v.syskey == this.statMedicationStoreService.currentSysKey
+      );
+    } else {
+      this.fetchStatMedications();
+    }
   }
 
   fetchStatMedications() {
@@ -85,7 +100,9 @@ export class StatMedicationFormComponent implements OnInit {
                   '',
                   '',
                   v.remark,
-                  v.stockId
+                  v.stockId,
+                  '',
+                  ''
                 )
               );
             }
@@ -116,38 +133,72 @@ export class StatMedicationFormComponent implements OnInit {
   new() {}
 
   save() {
-    console.log(this.statMedicationStoreService.statMedications);
-    this.http
-      .doPost('inpatient-medical-record/save-stat-medication', {
-        statMedications: this.statMedicationStoreService.statMedications.map(
-          (v) => ({
-            pId: this.appStoreService.pId,
-            RgsNo: this.appStoreService.rgsNo,
+    if (this.statMedicationStoreService.isUpdate) {
+      const v = this.statMedicationStoreService.statMedications[0];
+      this.http
+        .doPost(
+          `inpatient-medical-record/update-stat-medication/${this.statMedicationStoreService.currentSysKey}`,
+          {
             userid: '',
             username: '',
-            parentId: v.syskey,
-            doctorId: this.appStoreService.drID,
             stockId: v.stockId,
             stockDescription: v.medication,
             timeAdmin: v.timeAdmin,
             givenBy: v.givenBy,
             drRemark: v.drRemark,
             isDoctor: this.appStoreService.isDoctorRank,
-            confirmDate: this.date,
+            moConfirmDate: this.appStoreService.isDoctorRank ? this.date : '',
+            nurseConfirmDate: !this.appStoreService.isDoctorRank
+              ? this.date
+              : '',
             routeSyskey: this.statMedicationStoreService.routes.find(
               (item) => item.value == v.route
             ).syskey,
-            doseTypeSyskey: this.statMedicationStoreService.doses.find(
-              (item) => item.value == v.doseDesc
-            ).syskey,
             doseRemarkSyskey: 0,
-          })
-        ),
-      })
-      .subscribe((data: any) => {});
+            dose: v.doseCount,
+          }
+        )
+        .subscribe((data: any) => {});
+    } else {
+      this.http
+        .doPost('inpatient-medical-record/save-stat-medication', {
+          statMedications: this.statMedicationStoreService.statMedications.map(
+            (v) => ({
+              pId: this.appStoreService.pId,
+              RgsNo: this.appStoreService.rgsNo,
+              userid: '',
+              username: '',
+              parentId: v.syskey,
+              doctorId: this.appStoreService.drID,
+              stockId: v.stockId,
+              stockDescription: v.medication,
+              timeAdmin: v.timeAdmin,
+              givenBy: v.givenBy,
+              drRemark: v.drRemark,
+              isDoctor: this.appStoreService.isDoctorRank,
+              moConfirmDate: this.appStoreService.isDoctorRank ? this.date : '',
+              nurseConfirmDate: !this.appStoreService.isDoctorRank
+                ? this.date
+                : '',
+              routeSyskey: this.statMedicationStoreService.routes.find(
+                (item) => item.value == v.route
+              ).syskey,
+              doseTypeSyskey: this.statMedicationStoreService.doses.find(
+                (item) => item.value == v.doseDesc
+              ).syskey,
+              doseRemarkSyskey: 0,
+              dose: v.doseCount,
+            })
+          ),
+        })
+        .subscribe((data: any) => {});
+    }
   }
 
-  delete() {}
+  delete() {
+    if (this.statMedicationStoreService.isUpdate)
+      this.statMedicationStoreService.deleteDialog = true;
+  }
 
   print() {}
 }
