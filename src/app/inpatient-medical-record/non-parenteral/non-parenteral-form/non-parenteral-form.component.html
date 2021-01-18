@@ -36,7 +36,14 @@
       *ngIf="!(appStoreService.isDoctorRank$ | async)"
     >
       <label class="form__label">Action</label>
-      <select class="form-control form__input"></select>
+      <select class="form-control form__input" [(ngModel)]="givenByType">
+        <option
+          *ngFor="let drugTask of nonParenteralStoreService.drugTasks$ | async"
+          [value]="drugTask.value"
+        >
+          {{ drugTask.text }}
+        </option>
+      </select>
     </div>
 
     <div
@@ -147,7 +154,7 @@
     <div class="flex-table__column">
       <select
         class="form-control form__input"
-        [(ngModel)]="nonParenteral.route"
+        [(ngModel)]="nonParenteral.routeSyskey"
       >
         <option
           *ngFor="let route of nonParenteralStoreService.routes$ | async"
@@ -166,13 +173,13 @@
     <div class="flex-table__column" style="justify-content: space-between">
       <input
         class="form-control form__input"
-        style="flex: 0 0 47%; text-align: right"
-        [(ngModel)]="nonParenteral.doseCount"
+        style="text-align: right; flex: 0 0 47%"
+        [(ngModel)]="nonParenteral.dose"
       />
       <select
         class="form-control form__input"
         style="flex: 0 0 47%"
-        [(ngModel)]="nonParenteral.doseDesc"
+        [(ngModel)]="nonParenteral.doseTypeSyskey"
       >
         <option
           *ngFor="let dose of nonParenteralStoreService.doses$ | async"
@@ -184,15 +191,9 @@
     </div>
     <div class="flex-table__column">
       <input
-        class="form-control form__input"
-        [(ngModel)]="nonParenteral.frequency"
-      />
-    </div>
-    <div class="flex-table__column">
-      <input
         type="text"
         class="form-control form__input"
-        [(ngModel)]="nonParenteral.doseDuration"
+        [(ngModel)]="nonParenteral.remark"
       />
     </div>
     <div
@@ -200,9 +201,11 @@
       *ngIf="!(appStoreService.isDoctorRank$ | async)"
     >
       <input
+        style="margin: 0 0.5rem"
+        *ngFor="let data of nonParenteral.checkList"
         type="checkbox"
         class="__checkbox"
-        [(ngModel)]="nonParenteral.nurseSign"
+        (change)="toggleCheck($event, data)"
       />
     </div>
   </div>
