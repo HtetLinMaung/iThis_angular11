@@ -7,18 +7,18 @@ export default class NonParenteral {
     public stockId = '',
     public doseTypeSyskey = 0,
     public remark = '',
-    public checkList: CheckList[] = []
+    public checkList: CheckList[] = [],
+    public routeDesc = '',
+    public doseTypeDesc = '',
+    public frequency = 0
   ) {}
 }
 
 export class CheckList {
-  constructor(public done = false, public nurseId = 0, public doneAt = '') {}
-
-  toggleDone(nurseId = 0) {
-    this.done = !this.done;
-    if (this.done) {
-      this.nurseId = nurseId;
-      this.doneAt = new Date().toISOString();
-    }
-  }
+  constructor(
+    public syskey = 0,
+    public done = false,
+    public nurseId = 0,
+    public doneAt = ''
+  ) {}
 }

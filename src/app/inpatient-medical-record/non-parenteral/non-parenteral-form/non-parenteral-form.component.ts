@@ -20,6 +20,8 @@ export class NonParenteralFormComponent implements OnInit {
   dateStart = '';
   dateOff = '';
   givenByType = 'X1';
+  moConfirmDate = '';
+  nurseConfirmDate = '';
 
   constructor(
     private http: HttpService,
@@ -28,6 +30,10 @@ export class NonParenteralFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const tabEle1 = document.getElementById('tab1');
+    const tabEle2 = document.getElementById('tab2');
+    tabEle2.style.background = '#3b5998';
+    tabEle1.style.background = '#8C9899';
     this.fetchNonParenterals();
   }
 
@@ -60,7 +66,7 @@ export class NonParenteralFormComponent implements OnInit {
         value: v.task,
         syskey: v.syskey,
       }));
-      this.fetchAllergiesByPatient(this.appStoreService.pId);
+
       this.http
         .doPost('inpatient-medical-record/non-parenterals-initial', {
           patientId: this.appStoreService.pId,
@@ -68,20 +74,49 @@ export class NonParenteralFormComponent implements OnInit {
           doctorId: this.appStoreService.drID,
         })
         .subscribe((data: any) => {
-          this.nonParenteralStoreService.nonParenterals = data.map(
-            (v) =>
-              new NonParenteral(
-                v.syskey,
-                v.routeSyskey + '',
-                v.medication,
-                v.dose,
-                v.stockId,
-                v.doseTypeSyskey,
-                '',
-                [...Array(v.qty).keys()].map((_) => new CheckList())
-              )
-          );
-          console.log(this.nonParenteralStoreService.nonParenterals);
+          const nonParenterals = data.map((v, i) => {
+            if (i == 0) {
+              for (const [key, value] of Object.entries(v)) {
+                this[key] = value;
+              }
+              this.date = this.appStoreService.isDoctorRank
+                ? v.moConfirmDate
+                : v.nurseConfirmDate;
+              this.moConfirmDate = v.moConfirmDate;
+              this.nurseConfirmDate = v.nurseConfirmDate;
+            }
+            return new NonParenteral(
+              v.syskey,
+              v.routeSyskey + '',
+              v.medication,
+              v.dose,
+              v.stockId,
+              v.doseTypeSyskey,
+              v.remark,
+              v.checkList
+                .map(
+                  (item) =>
+                    new CheckList(
+                      item.syskey,
+                      item.done,
+                      item.nurseId,
+                      item.doneAt
+                    )
+                )
+                .sort((a, b) => a.syskey - b.syskey)
+            );
+          });
+
+          if (this.nonParenteralStoreService.isUpdate) {
+            this.nonParenteralStoreService.nonParenterals = this.nonParenteralStoreService.nonParenterals.filter(
+              (v) => v.syskey == this.nonParenteralStoreService.currentSysKey
+            );
+          } else {
+            if (!this.drugAllergyTo) {
+              this.fetchAllergiesByPatient(this.appStoreService.pId);
+            }
+            this.nonParenteralStoreService.nonParenterals = nonParenterals;
+          }
         });
     });
   }
@@ -107,84 +142,133 @@ export class NonParenteralFormComponent implements OnInit {
   }
 
   toggleCheck(e, data: CheckList) {
-    data.toggleDone(e.target.checked);
+    data.done = e.target.checked;
+    if (data.done) {
+      data.doneAt = new Date().toISOString();
+      data.nurseId = 1;
+    } else {
+      data.nurseId = 0;
+      data.doneAt = '';
+    }
   }
 
   new() {}
 
   save() {
     if (this.nonParenteralStoreService.isUpdate) {
-      // const v = this.statMedicationStoreService.statMedications[0];
-      // this.http
-      //   .doPost(
-      //     `inpatient-medical-record/update-stat-medication/${this.statMedicationStoreService.currentSysKey}`,
-      //     {
-      //       userid: '',
-      //       username: '',
-      //       stockId: v.stockId,
-      //       stockDescription: v.medication,
-      //       timeAdmin: v.timeAdmin,
-      //       givenBy: v.givenBy,
-      //       drRemark: v.drRemark,
-      //       isDoctor: this.appStoreService.isDoctorRank,
-      //       moConfirmDate: this.appStoreService.isDoctorRank ? this.date : '',
-      //       nurseConfirmDate: !this.appStoreService.isDoctorRank
-      //         ? this.date
-      //         : '',
-      //       routeSyskey: this.statMedicationStoreService.routes.find(
-      //         (item) => item.value == v.route
-      //       ).syskey,
-      //       doseRemarkSyskey: 0,
-      //       dose: v.doseCount,
-      //       remark: v.remark,
-      //       prescriptionRemark: v.prescriptionRemark,
-      //     }
-      //   )
-      //   .subscribe((data: any) => {});
+      const v = this.nonParenteralStoreService.nonParenterals[0];
+      this.http
+        .doPost(
+          `inpatient-medical-record/update-non-parenteral/${this.nonParenteralStoreService.currentSysKey}`,
+          {
+            ...v,
+            userid: '',
+            username: '',
+            diagnosis: this.diagnosis,
+            drugAllergyTo: this.drugAllergyTo,
+            dateStart: this.dateStart,
+            dateOff: this.dateOff,
+            tubeFeed: this.tubeFeed,
+            liquidMedication: this.liquidMedication,
+            chronicRenalFailure: this.chronicRenalFailure,
+            pregnant: this.pregnant,
+            givenByType: this.givenByType,
+            isDoctor: this.appStoreService.isDoctorRank,
+            moConfirmDate: this.appStoreService.isDoctorRank
+              ? this.date
+              : this.moConfirmDate,
+            nurseConfirmDate: !this.appStoreService.isDoctorRank
+              ? this.date
+              : this.nurseConfirmDate,
+          }
+        )
+        .subscribe((data: any) => {});
     } else {
-      // this.http
-      //   .doPost('inpatient-medical-record/save-non-parenteral', {
-      //     statMedications: this.nonParenteralStoreService.nonParenterals.map(
-      //       (v) => ({
-      //         pId: this.appStoreService.pId,
-      //         RgsNo: this.appStoreService.rgsNo,
-      //         userid: '',
-      //         username: '',
-      //         parentId: v.syskey,
-      //         doctorId: this.appStoreService.drID,
-      //         stockId: v.stockId,
-      //         stockDescription: v.medication,
-      //         frequency: v.frequency,
-      //         doseDuration: v.doseDuration,
-      //         nurseSign: v.nurseSign,
-      //         diagnosis: this.diagnosis,
-      //         drugAllergyTo: this.drugAllergyTo,
-      //         dateStart: this.dateStart,
-      //         dateOff: this.dateOff,
-      //         tubeFeed: this.tubeFeed,
-      //         liquidMedication: this.liquidMedication,
-      //         chronicRenalFailure: this.chronicRenalFailure,
-      //         pregnant: this.pregnant,
-      //         givenByType: !this.appStoreService.isDoctorRank
-      //           ? this.givenByType
-      //           : '',
-      //         isDoctor: this.appStoreService.isDoctorRank,
-      //         moConfirmDate: this.appStoreService.isDoctorRank ? this.date : '',
-      //         nurseConfirmDate: !this.appStoreService.isDoctorRank
-      //           ? this.date
-      //           : '',
-      //         routeSyskey: this.nonParenteralStoreService.routes.find(
-      //           (item) => item.value == v.route
-      //         ).syskey,
-      //         dose: v.doseCount,
-      //       })
-      //     ),
-      //   })
-      //   .subscribe((data: any) => {});
+      this.http
+        .doPost('inpatient-medical-record/save-non-parenteral', {
+          nonParenterals: this.nonParenteralStoreService.nonParenterals.map(
+            (v) => ({
+              ...v,
+              userid: '',
+              username: '',
+              diagnosis: this.diagnosis,
+              drugAllergyTo: this.drugAllergyTo,
+              dateStart: this.dateStart,
+              dateOff: this.dateOff,
+              tubeFeed: this.tubeFeed,
+              liquidMedication: this.liquidMedication,
+              chronicRenalFailure: this.chronicRenalFailure,
+              pregnant: this.pregnant,
+              givenByType: this.givenByType,
+              isDoctor: this.appStoreService.isDoctorRank,
+              moConfirmDate: this.appStoreService.isDoctorRank
+                ? this.date
+                : this.moConfirmDate,
+              nurseConfirmDate: !this.appStoreService.isDoctorRank
+                ? this.date
+                : this.nurseConfirmDate,
+            })
+          ),
+        })
+        .subscribe((data: any) => {});
     }
   }
 
-  delete() {}
+  delete() {
+    if (this.nonParenteralStoreService.isUpdate)
+      this.nonParenteralStoreService.deleteDialog = true;
+  }
 
-  print() {}
+  print() {
+    // const doc = new jsPDF();
+    // doc.setFontSize(11);
+    // doc.text('ASIA ROYAL HOSPITAL', 105, 15, { align: 'center' });
+    // doc.text('IN-PATIENT MEDICATION RECORD - INSTRUCTION', 105, 23, {
+    //   align: 'center',
+    // });
+    // this.http
+    //   .doGet(`inpatient-medical-record/stat-medications`)
+    //   .subscribe((data: any) => {
+    //     this.printData = data.map((v) => {
+    //       return new StatMedication(
+    //         v.syskey,
+    //         this.statMedicationStoreService.routes.find(
+    //           (item) => item.syskey == v.routeSyskey
+    //         ).value,
+    //         v.stockDescription,
+    //         v.dose,
+    //         '',
+    //         v.prescriptionRemark,
+    //         v.timeAdmin,
+    //         v.givenBy,
+    //         '',
+    //         v.drRemark,
+    //         v.stockId,
+    //         v.remark,
+    //         this.statMedicationStoreService.routes.find(
+    //           (item) => item.syskey == v.routeSyskey
+    //         ).text,
+    //         this.appStoreService.isDoctorRank
+    //           ? v.moConfirmDate
+    //           : v.nurseConfirmDate
+    //       );
+    //     });
+    //     setTimeout(() => {
+    //       (doc as any).autoTable({
+    //         html: '#stat-medication__record',
+    //         startY: 35,
+    //         theme: 'grid',
+    //         headStyles: {
+    //           fillColor: '#686869',
+    //         },
+    //         styles: {
+    //           fontSize: 9,
+    //           valign: 'middle',
+    //           halign: 'center',
+    //         },
+    //       });
+    //       doc.save('stat-medication.pdf');
+    //     }, 1000);
+    //   });
+  }
 }

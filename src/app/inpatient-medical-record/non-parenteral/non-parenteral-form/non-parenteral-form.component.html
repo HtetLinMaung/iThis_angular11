@@ -205,6 +205,7 @@
         *ngFor="let data of nonParenteral.checkList"
         type="checkbox"
         class="__checkbox"
+        [(ngModel)]="data.done"
         (change)="toggleCheck($event, data)"
       />
     </div>
