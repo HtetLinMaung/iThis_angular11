@@ -3,6 +3,9 @@ import { AppStoreService } from 'src/app/app-store.service';
 import { HttpService } from 'src/app/framework/http.service';
 import { NonParenteralStoreService } from '../non-parenteral-store.service';
 import NonParenteral, { CheckList } from '../non-parenteral.model';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-non-parenteral-form',
@@ -103,7 +106,14 @@ export class NonParenteralFormComponent implements OnInit {
                       item.doneAt
                     )
                 )
-                .sort((a, b) => a.syskey - b.syskey)
+                .sort((a, b) => a.syskey - b.syskey),
+              this.nonParenteralStoreService.routes.find(
+                (route) => route.syskey == v.routeSyskey
+              ).text,
+              this.nonParenteralStoreService.doses.find(
+                (dose) => dose.syskey == v.doseTypeSyskey
+              ).text,
+              v.checkList.filter((item) => item.done).length
             );
           });
 
@@ -219,56 +229,88 @@ export class NonParenteralFormComponent implements OnInit {
       this.nonParenteralStoreService.deleteDialog = true;
   }
 
+  formatDate(dateStr: string, format: string) {
+    if (!dateStr) return '';
+    return moment(dateStr).format(format);
+  }
+
   print() {
-    // const doc = new jsPDF();
-    // doc.setFontSize(11);
-    // doc.text('ASIA ROYAL HOSPITAL', 105, 15, { align: 'center' });
-    // doc.text('IN-PATIENT MEDICATION RECORD - INSTRUCTION', 105, 23, {
-    //   align: 'center',
-    // });
-    // this.http
-    //   .doGet(`inpatient-medical-record/stat-medications`)
-    //   .subscribe((data: any) => {
-    //     this.printData = data.map((v) => {
-    //       return new StatMedication(
-    //         v.syskey,
-    //         this.statMedicationStoreService.routes.find(
-    //           (item) => item.syskey == v.routeSyskey
-    //         ).value,
-    //         v.stockDescription,
-    //         v.dose,
-    //         '',
-    //         v.prescriptionRemark,
-    //         v.timeAdmin,
-    //         v.givenBy,
-    //         '',
-    //         v.drRemark,
-    //         v.stockId,
-    //         v.remark,
-    //         this.statMedicationStoreService.routes.find(
-    //           (item) => item.syskey == v.routeSyskey
-    //         ).text,
-    //         this.appStoreService.isDoctorRank
-    //           ? v.moConfirmDate
-    //           : v.nurseConfirmDate
-    //       );
-    //     });
-    //     setTimeout(() => {
-    //       (doc as any).autoTable({
-    //         html: '#stat-medication__record',
-    //         startY: 35,
-    //         theme: 'grid',
-    //         headStyles: {
-    //           fillColor: '#686869',
-    //         },
-    //         styles: {
-    //           fontSize: 9,
-    //           valign: 'middle',
-    //           halign: 'center',
-    //         },
-    //       });
-    //       doc.save('stat-medication.pdf');
-    //     }, 1000);
-    //   });
+    const doc = new jsPDF();
+    doc.setFontSize(11);
+    doc.text('ASIA ROYAL HOSPITAL', 105, 15, { align: 'center' });
+    doc.text('NON-PARENTERAL - DOCTOR', 105, 23, {
+      align: 'center',
+    });
+
+    const pageY = 27;
+    doc.rect(14, pageY, 23, 8);
+    doc.text('Page No.', 17, pageY + 5.5);
+    doc.rect(37, pageY, 16, 8);
+
+    doc.rect(58, pageY, 23, 8);
+    doc.text('Next Page', 60, pageY + 5.5);
+    doc.rect(81, pageY, 16, 8);
+
+    doc.rect(14, pageY + 9, 83, 8 * 2.5);
+    doc.text('DIAGNOSIS', 17, pageY + 14);
+    doc.setFontSize(10);
+    doc.text(this.diagnosis + '', 16, pageY + 20);
+
+    doc.rect(14, pageY + 9 + 8 * 2.5, 83 / 2, 8 * 2);
+
+    doc.rect(16, pageY + 9 + 8 * 2.75, 4, 4);
+    doc.text('Tube Feed', 22.5, pageY + 9 + 8 * 3.15);
+    doc.rect(16, pageY + 9 + 8 * 3.5, 4, 4);
+    doc.text('Liquid Medication', 22.5, pageY + 9 + 8 * 3.9);
+
+    doc.rect(14 + 83 / 2, pageY + 9 + 8 * 2.5, 83 / 4, 6);
+    doc.rect(14 + 83 / 2 + 83 / 4, pageY + 9 + 8 * 2.5, 83 / 4, 6);
+
+    doc.rect(14 + 83 / 2, pageY + 9 + 8 * 2.5 + 6, 83 / 4, 8 * 2 - 6);
+    doc.text('Date Start', 14 + 83 / 2 + 2.5, pageY + 9 + 8 * 2.5 + 4.5);
+    doc.text('Date Off', 14 + 83 / 2 + 24, pageY + 9 + 8 * 2.5 + 4.5);
+
+    doc.text(
+      this.formatDate(this.dateStart, 'DD/MM/yyyy'),
+      14 + 83 / 2 + 1,
+      pageY + 9 + 8 * 2.5 + 12.5
+    );
+    doc.text(
+      this.formatDate(this.dateOff, 'DD/MM/yyyy'),
+      14 + 83 / 2 + 23,
+      pageY + 9 + 8 * 2.5 + 12.5
+    );
+
+    doc.rect(14 + 110, pageY + 9 + 8 * 2.5 + 10, 4, 4);
+    doc.text('Chronic Renal Failure', 14 + 116.5, pageY + 9 + 8 * 2.5 + 13);
+
+    doc.rect(14 + 155, pageY + 9 + 8 * 2.5 + 10, 4, 4);
+    doc.text('Pregnant', 14 + 161.5, pageY + 9 + 8 * 2.5 + 13);
+
+    doc.rect(14 + 83 / 2 + 83 / 4, pageY + 9 + 8 * 2.5 + 6, 83 / 4, 8 * 2 - 6);
+
+    doc.rect(14 + 84, pageY + 9, (83 * 3.2) / 5, 8 * 2.5 + 6);
+    doc.rect(14 + 84, pageY + 9, (83 * 3.2) / 5, ((8 * 2.5 + 6) * 1) / 3.5);
+
+    doc.text('DRUG ALLERGY', 14 + 95.5, pageY + 14);
+    doc.text(this.drugAllergyTo + '', 14 + 85, pageY + 20);
+    doc.rect(14 + 85 + (83 * 3.2) / 5, pageY + 9, (83 * 2.6) / 5, 8 * 2.5 + 6);
+    doc.text("Patient's Label", 14 + 85 + (83 * 3.2) / 5 + 2.5, pageY + 14);
+
+    (doc as any).autoTable({
+      html: '#non-parenteral__report',
+      startY: 75,
+      theme: 'grid',
+      headStyles: {
+        fillColor: '#686869',
+      },
+      styles: {
+        minCellWidth: 15,
+        fontSize: 8,
+        valign: 'middle',
+        halign: 'center',
+      },
+    });
+    doc.save('non-parenteral.pdf');
   }
 }

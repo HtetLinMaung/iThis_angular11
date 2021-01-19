@@ -15,7 +15,7 @@ export class NonParenteralStoreService {
   private readonly _currentSysKey = new BehaviorSubject<number>(0);
   private readonly _nonParenterals = new BehaviorSubject<NonParenteral[]>([]);
   private readonly _isUpdate = new BehaviorSubject<boolean>(false);
-  private readonly _tabNo = new BehaviorSubject<number>(1);
+  private readonly _tabNo = new BehaviorSubject<number>(2);
   private readonly _deleteDialog = new BehaviorSubject<boolean>(false);
   private readonly _routes = new BehaviorSubject<SelectType[]>([]);
   private readonly _doses = new BehaviorSubject<SelectType[]>([]);

@@ -211,3 +211,48 @@
     </div>
   </div>
 </div>
+
+<table id="non-parenteral__report" style="display: none">
+  <thead>
+    <tr>
+      <th colspan="11">ALL MEDICATIONS EXCEPT PARENTERAL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2">DATE</td>
+      <td rowspan="2">ROUTE</td>
+      <td rowspan="2">MEDICATION</td>
+      <td rowspan="2">DOSE</td>
+      <td rowspan="2">FREQUENCY</td>
+      <td rowspan="2">DR'S SIGN</td>
+      <td colspan="3">DISCONTINUE/REDOSE/TRANSCRIPT</td>
+      <td colspan="2">DISCHARGE MEDICATIONS</td>
+    </tr>
+    <tr>
+      <td>DATE</td>
+      <td>DR'S SIGN</td>
+      <td>D/R/T/</td>
+      <td></td>
+      <td>DURATION</td>
+    </tr>
+
+    <tr
+      *ngFor="
+        let nonParenteral of nonParenteralStoreService.nonParenterals$ | async
+      "
+    >
+      <td>{{ formatDate(date, "DD/MM/yyyy") }}</td>
+      <td>{{ nonParenteral.routeDesc }}</td>
+      <td>{{ nonParenteral.medication }}</td>
+      <td>{{ nonParenteral.dose }}</td>
+      <td>{{ nonParenteral.frequency }}</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
