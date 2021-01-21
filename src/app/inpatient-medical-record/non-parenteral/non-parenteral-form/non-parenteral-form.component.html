@@ -199,6 +199,7 @@
     <div
       class="flex-table__column"
       *ngIf="!(appStoreService.isDoctorRank$ | async)"
+      style="justify-content: flex-start"
     >
       <input
         style="margin: 0 0.5rem"
@@ -212,7 +213,7 @@
   </div>
 </div>
 
-<table id="non-parenteral__report" style="display: none">
+<table id="non-parenteral-doctor__report" style="display: none">
   <thead>
     <tr>
       <th colspan="11">ALL MEDICATIONS EXCEPT PARENTERAL</th>
@@ -253,6 +254,171 @@
       <td></td>
       <td></td>
       <td></td>
+    </tr>
+  </tbody>
+</table>
+
+<table id="non-parenteral-nurse__report" style="display: none">
+  <thead>
+    <tr>
+      <th colspan="32">ALL MEDICATIONS EXCEPT PARENTERAL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="8">DATE</td>
+      <td colspan="8">DATE</td>
+      <td colspan="8">DATE</td>
+      <td colspan="8">DATE</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+      <td>2</td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+
+      <td></td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+      <td>2</td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+
+      <td></td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+      <td>2</td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+
+      <td></td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+      <td>2</td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>am</td>
+      <td>am</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>am</td>
+
+      <td></td>
+      <td>am</td>
+      <td>am</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>am</td>
+
+      <td></td>
+      <td>am</td>
+      <td>am</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>am</td>
+
+      <td></td>
+      <td>am</td>
+      <td>am</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>am</td>
+    </tr>
+    <tr
+      *ngFor="
+        let item of [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ]
+      "
+    >
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="8">Checked by:</td>
+      <td colspan="8">Checked by:</td>
+      <td colspan="8">Checked by:</td>
+      <td colspan="8">Checked by:</td>
+    </tr>
+    <tr>
+      <td colspan="4">(Day)</td>
+      <td colspan="4">(Night)</td>
+      <td colspan="4">(Day)</td>
+      <td colspan="4">(Night)</td>
+      <td colspan="4">(Day)</td>
+      <td colspan="4">(Night)</td>
+      <td colspan="4">(Day)</td>
+      <td colspan="4">(Night)</td>
     </tr>
   </tbody>
 </table>

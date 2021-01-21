@@ -34,3 +34,7 @@
 #non-parenteral__form .form__input {
   font-size: 12px !important;
 }
+#non-parenteral-nurse__report td,
+th {
+  border: 1px solid black;
+}

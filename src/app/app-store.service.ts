@@ -14,7 +14,7 @@ export class AppStoreService {
   private readonly _doctor = new BehaviorSubject<Doctor>(new Doctor());
   private readonly _doctorDialog = new BehaviorSubject<boolean>(false);
   private readonly _doctors = new BehaviorSubject<Doctor[]>([]);
-  private readonly _isDoctorRank = new BehaviorSubject<boolean>(true);
+  private readonly _isDoctorRank = new BehaviorSubject<boolean>(false);
   private readonly _rgsNo = new BehaviorSubject<number>(0);
   private readonly _drID = new BehaviorSubject<number>(0);
 
