@@ -333,6 +333,7 @@ export class NonParenteralFormComponent implements OnInit {
     } else {
       doc.rect(14, pageY, 83, 8 * 2.5);
       doc.text('DRUG ALLERGY:', 17, pageY + 5);
+      doc.text(this.drugAllergyTo, 17, pageY + 10);
 
       doc.rect(14 + 98, pageY, 83, 8 * 2.5);
       doc.text("Patient's Label", 17 + 98, pageY + 5);

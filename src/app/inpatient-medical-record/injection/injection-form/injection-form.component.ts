@@ -199,79 +199,138 @@ export class InjectionFormComponent implements OnInit {
     const doc = new jsPDF();
     doc.setFontSize(11);
     doc.text('ASIA ROYAL HOSPITAL', 105, 15, { align: 'center' });
-    doc.text('NON-PARENTERAL - DOCTOR', 105, 23, {
-      align: 'center',
-    });
+    doc.text(
+      `INJECTIONS - ${this.appStoreService.isDoctorRank ? 'DOCTOR' : 'NURSE'}`,
+      105,
+      23,
+      {
+        align: 'center',
+      }
+    );
 
     const pageY = 27;
-    doc.rect(14, pageY, 23, 8);
-    doc.text('Page No.', 17, pageY + 5.5);
-    doc.rect(37, pageY, 16, 8);
+    if (this.appStoreService.isDoctorRank) {
+      doc.rect(14, pageY, 23, 8);
+      doc.text('Page No.', 17, pageY + 5.5);
+      doc.rect(37, pageY, 16, 8);
 
-    doc.rect(58, pageY, 23, 8);
-    doc.text('Next Page', 60, pageY + 5.5);
-    doc.rect(81, pageY, 16, 8);
+      doc.rect(58, pageY, 23, 8);
+      doc.text('Next Page', 60, pageY + 5.5);
+      doc.rect(81, pageY, 16, 8);
 
-    doc.rect(14, pageY + 9, 83, 8 * 2.5);
-    doc.text('DIAGNOSIS', 17, pageY + 14);
-    doc.setFontSize(10);
-    // doc.text(this.diagnosis + '', 16, pageY + 20);
+      doc.rect(14, pageY + 9, 83, 8 * 2.5);
+      doc.text('DIAGNOSIS', 17, pageY + 14);
+      doc.setFontSize(10);
+      // doc.text(this.diagnosis + '', 16, pageY + 20);
 
-    doc.rect(14, pageY + 9 + 8 * 2.5, 83 / 2, 8 * 2);
+      doc.rect(14, pageY + 9 + 8 * 2.5, 83 / 2, 8 * 2);
 
-    doc.rect(16, pageY + 9 + 8 * 2.75, 4, 4);
-    doc.text('Tube Feed', 22.5, pageY + 9 + 8 * 3.15);
-    doc.rect(16, pageY + 9 + 8 * 3.5, 4, 4);
-    doc.text('Liquid Medication', 22.5, pageY + 9 + 8 * 3.9);
+      doc.rect(16, pageY + 9 + 8 * 2.75, 4, 4);
+      doc.text('Tube Feed', 22.5, pageY + 9 + 8 * 3.15);
+      doc.rect(16, pageY + 9 + 8 * 3.5, 4, 4);
+      doc.text('Liquid Medication', 22.5, pageY + 9 + 8 * 3.9);
 
-    doc.rect(14 + 83 / 2, pageY + 9 + 8 * 2.5, 83 / 4, 6);
-    doc.rect(14 + 83 / 2 + 83 / 4, pageY + 9 + 8 * 2.5, 83 / 4, 6);
+      doc.rect(14 + 83 / 2, pageY + 9 + 8 * 2.5, 83 / 4, 6);
+      doc.rect(14 + 83 / 2 + 83 / 4, pageY + 9 + 8 * 2.5, 83 / 4, 6);
 
-    doc.rect(14 + 83 / 2, pageY + 9 + 8 * 2.5 + 6, 83 / 4, 8 * 2 - 6);
-    doc.text('Date Start', 14 + 83 / 2 + 2.5, pageY + 9 + 8 * 2.5 + 4.5);
-    doc.text('Date Off', 14 + 83 / 2 + 24, pageY + 9 + 8 * 2.5 + 4.5);
+      doc.rect(14 + 83 / 2, pageY + 9 + 8 * 2.5 + 6, 83 / 4, 8 * 2 - 6);
+      doc.text('Date Start', 14 + 83 / 2 + 2.5, pageY + 9 + 8 * 2.5 + 4.5);
+      doc.text('Date Off', 14 + 83 / 2 + 24, pageY + 9 + 8 * 2.5 + 4.5);
 
-    // doc.text(
-    //   this.formatDate(this.dateStart, 'DD/MM/yyyy'),
-    //   14 + 83 / 2 + 1,
-    //   pageY + 9 + 8 * 2.5 + 12.5
-    // );
-    // doc.text(
-    //   this.formatDate(this.dateOff, 'DD/MM/yyyy'),
-    //   14 + 83 / 2 + 23,
-    //   pageY + 9 + 8 * 2.5 + 12.5
-    // );
+      // doc.text(
+      //   this.formatDate(this.dateStart, 'DD/MM/yyyy'),
+      //   14 + 83 / 2 + 1,
+      //   pageY + 9 + 8 * 2.5 + 12.5
+      // );
+      // doc.text(
+      //   this.formatDate(this.dateOff, 'DD/MM/yyyy'),
+      //   14 + 83 / 2 + 23,
+      //   pageY + 9 + 8 * 2.5 + 12.5
+      // );
 
-    doc.rect(14 + 110, pageY + 9 + 8 * 2.5 + 10, 4, 4);
-    doc.text('Chronic Renal Failure', 14 + 116.5, pageY + 9 + 8 * 2.5 + 13);
+      doc.rect(14 + 110, pageY + 9 + 8 * 2.5 + 10, 4, 4);
+      doc.text('Chronic Renal Failure', 14 + 116.5, pageY + 9 + 8 * 2.5 + 13);
 
-    doc.rect(14 + 155, pageY + 9 + 8 * 2.5 + 10, 4, 4);
-    doc.text('Pregnant', 14 + 161.5, pageY + 9 + 8 * 2.5 + 13);
+      doc.rect(14 + 155, pageY + 9 + 8 * 2.5 + 10, 4, 4);
+      doc.text('Pregnant', 14 + 161.5, pageY + 9 + 8 * 2.5 + 13);
 
-    doc.rect(14 + 83 / 2 + 83 / 4, pageY + 9 + 8 * 2.5 + 6, 83 / 4, 8 * 2 - 6);
+      doc.rect(
+        14 + 83 / 2 + 83 / 4,
+        pageY + 9 + 8 * 2.5 + 6,
+        83 / 4,
+        8 * 2 - 6
+      );
 
-    doc.rect(14 + 84, pageY + 9, (83 * 3.2) / 5, 8 * 2.5 + 6);
-    doc.rect(14 + 84, pageY + 9, (83 * 3.2) / 5, ((8 * 2.5 + 6) * 1) / 3.5);
+      doc.rect(14 + 84, pageY + 9, (83 * 3.2) / 5, 8 * 2.5 + 6);
+      doc.rect(14 + 84, pageY + 9, (83 * 3.2) / 5, ((8 * 2.5 + 6) * 1) / 3.5);
 
-    doc.text('DRUG ALLERGY', 14 + 95.5, pageY + 14);
-    // doc.text(this.drugAllergyTo + '', 14 + 85, pageY + 20);
-    doc.rect(14 + 85 + (83 * 3.2) / 5, pageY + 9, (83 * 2.6) / 5, 8 * 2.5 + 6);
-    doc.text("Patient's Label", 14 + 85 + (83 * 3.2) / 5 + 2.5, pageY + 14);
+      doc.text('DRUG ALLERGY', 14 + 95.5, pageY + 14);
+      // doc.text(this.drugAllergyTo + '', 14 + 85, pageY + 20);
+      doc.rect(
+        14 + 85 + (83 * 3.2) / 5,
+        pageY + 9,
+        (83 * 2.6) / 5,
+        8 * 2.5 + 6
+      );
+      doc.text("Patient's Label", 14 + 85 + (83 * 3.2) / 5 + 2.5, pageY + 14);
 
-    (doc as any).autoTable({
-      html: '#non-parenteral__report',
-      startY: 75,
-      theme: 'grid',
-      headStyles: {
-        fillColor: '#686869',
-      },
-      styles: {
-        minCellWidth: 15,
-        fontSize: 8,
-        valign: 'middle',
-        halign: 'center',
-      },
-    });
-    doc.save('non-parenteral.pdf');
+      (doc as any).autoTable({
+        html: '#injection-doctor__report',
+        startY: 75,
+        theme: 'grid',
+        headStyles: {
+          fillColor: '#686869',
+        },
+        styles: {
+          minCellWidth: 15,
+          fontSize: 8,
+          valign: 'middle',
+          halign: 'center',
+        },
+      });
+      doc.save('injection-doctor.pdf');
+    } else {
+      doc.rect(14, pageY, 83, 8 * 2.5);
+      doc.text('DRUG ALLERGY:', 17, pageY + 5);
+      // doc.text(this.drugAllergyTo, 17, pageY + 10);
+
+      doc.rect(14 + 98, pageY, 83, 8 * 2.5);
+      doc.text("Patient's Label", 17 + 98, pageY + 5);
+
+      doc.setFontSize(8);
+      doc.text(
+        'If a Drug is not administered as directed, enter the appropriate code in the administration box and specify in the nursing notes if necessary.',
+        17,
+        pageY + 25
+      );
+
+      doc.setFontSize(9);
+      doc.rect(14, pageY + 27, 98 + 83, 8 * 2);
+      doc.text('X1  Drug omitted', 17, pageY + 32);
+      doc.text('X2  Patient refused', 17, pageY + 40);
+
+      doc.text('X3  Nill by mouth', 90, pageY + 32);
+      doc.text('X4  Awaiting supply', 90, pageY + 40);
+
+      doc.text('X5  Stat dose given', 143, pageY + 32);
+      doc.text('X6  Others: specify in nursing notes', 143, pageY + 40);
+
+      (doc as any).autoTable({
+        html: '#injection-nurse__report',
+        startY: 75,
+        theme: 'grid',
+        headStyles: {
+          fillColor: '#686869',
+        },
+        styles: {
+          minCellHeight: 7,
+          fontSize: 10,
+          valign: 'middle',
+          halign: 'center',
+          cellPadding: 0,
+        },
+      });
+      doc.save('injection-nurse.pdf');
+    }
   }
 }
