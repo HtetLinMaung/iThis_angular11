@@ -15,6 +15,7 @@ import Blood from '../blood.model';
 })
 export class BloodFormComponent implements OnInit {
   date = '';
+  time = '';
   givenByType = 'X1';
   moConfirmDate = '';
   nurseConfirmDate = '';
@@ -77,6 +78,27 @@ export class BloodFormComponent implements OnInit {
     }
   }
 
+  onDoseChange(e, data: Blood) {
+    switch (e.target.value) {
+      case '3':
+        data.checkList = [new CheckList(), new CheckList()];
+        break;
+      case '4':
+        data.checkList = [new CheckList(), new CheckList(), new CheckList()];
+        break;
+      case '5':
+        data.checkList = [
+          new CheckList(),
+          new CheckList(),
+          new CheckList(),
+          new CheckList(),
+        ];
+        break;
+      default:
+        data.checkList = [new CheckList()];
+    }
+  }
+
   fetchRoutes() {
     return this.http.doGet('inpatient-medical-record/routes').toPromise();
   }
@@ -100,7 +122,13 @@ export class BloodFormComponent implements OnInit {
     }
   }
 
-  new() {}
+  new() {
+    this.bloodStoreService.isUpdate = false;
+    this.date = '';
+    this.time = '';
+    this.givenByType = 'X1';
+    this.bloodStoreService.bloods = [new Blood()];
+  }
 
   save() {
     if (this.bloodStoreService.isUpdate) {

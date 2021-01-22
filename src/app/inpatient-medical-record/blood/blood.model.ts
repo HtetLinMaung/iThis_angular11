@@ -9,7 +9,7 @@ export default class Blood {
     public stockId = '',
     public doseTypeSyskey = '1',
     public remark = '',
-    public checkList: CheckList[] = [],
+    public checkList: CheckList[] = [new CheckList()],
     public routeDesc = '',
     public doseTypeDesc = '',
     public frequency = 0,

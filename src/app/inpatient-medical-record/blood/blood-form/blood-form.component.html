@@ -20,14 +20,13 @@
   </div>
 
   <div class="flex__row">
-    <div class="p__5" style="flex: 0 0 20%">
+    <div class="p__5" style="flex: 0 0 10%">
       <label class="form__label">Date</label>
-      <input
-        type="datetime-local"
-        step="1"
-        class="form-control form__input"
-        [(ngModel)]="date"
-      />
+      <input type="date" class="form-control form__input" [(ngModel)]="date" />
+    </div>
+    <div class="p__5" style="flex: 0 0 10%">
+      <label class="form__label">Time</label>
+      <input type="time" class="form-control form__input" [(ngModel)]="time" />
     </div>
 
     <div
@@ -36,7 +35,14 @@
       *ngIf="!(appStoreService.isDoctorRank$ | async)"
     >
       <label class="form__label">Action</label>
-      <select class="form-control form__input"></select>
+      <select class="form-control form__input" [(ngModel)]="givenByType">
+        <option
+          *ngFor="let drugTask of bloodStoreService.drugTasks$ | async"
+          [value]="drugTask.value"
+        >
+          {{ drugTask.text }}
+        </option>
+      </select>
     </div>
   </div>
 
@@ -90,6 +96,7 @@
         class="form-control form__input"
         style="flex: 0 0 47%"
         [(ngModel)]="injection.doseTypeSyskey"
+        (change)="onDoseChange($event, injection)"
       >
         <option
           *ngFor="let dose of bloodStoreService.doses$ | async"
