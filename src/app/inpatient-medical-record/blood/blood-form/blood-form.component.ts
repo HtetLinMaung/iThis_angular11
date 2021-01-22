@@ -19,6 +19,8 @@ export class BloodFormComponent implements OnInit {
   givenByType = 'X1';
   moConfirmDate = '';
   nurseConfirmDate = '';
+  moConfirmTime = '';
+  nurseConfirmTime = '';
 
   constructor(
     private http: HttpService,
@@ -148,24 +150,32 @@ export class BloodFormComponent implements OnInit {
             nurseConfirmDate: !this.appStoreService.isDoctorRank
               ? this.date
               : this.nurseConfirmDate,
+            moConfirmTime: this.appStoreService.isDoctorRank
+              ? this.time
+              : this.moConfirmTime,
+            nurseConfirmTime: !this.appStoreService.isDoctorRank
+              ? this.time
+              : this.nurseConfirmTime,
           }
         )
         .subscribe((data: any) => {});
     } else {
       this.http
         .doPost('inpatient-medical-record/save-blood', {
-          injections: this.bloodStoreService.bloods.map((v) => ({
+          bloods: this.bloodStoreService.bloods.map((v) => ({
             ...v,
             userid: '',
             username: '',
             givenByType: this.givenByType,
             isDoctor: this.appStoreService.isDoctorRank,
-            moConfirmDate: this.appStoreService.isDoctorRank
-              ? this.date
-              : this.moConfirmDate,
+            moConfirmDate: this.appStoreService.isDoctorRank ? this.date : '',
             nurseConfirmDate: !this.appStoreService.isDoctorRank
               ? this.date
-              : this.nurseConfirmDate,
+              : '',
+            moConfirmTime: this.appStoreService.isDoctorRank ? this.time : '',
+            nurseConfirmTime: !this.appStoreService.isDoctorRank
+              ? this.time
+              : '',
           })),
         })
         .subscribe((data: any) => {});
