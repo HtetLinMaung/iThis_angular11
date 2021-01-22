@@ -18,17 +18,6 @@ export class BloodComponent implements OnInit {
   ngOnInit(): void {}
 
   tabClickHandler(n: number) {
-    const tabEle1 = document.getElementById('tab1');
-    const tabEle2 = document.getElementById('tab2');
-    switch (n) {
-      case 1:
-        tabEle1.style.background = '#3b5998';
-        tabEle2.style.background = '#8C9899';
-        break;
-      default:
-        tabEle2.style.background = '#3b5998';
-        tabEle1.style.background = '#8C9899';
-    }
     this.bloodStoreService.tabNo = n;
   }
 

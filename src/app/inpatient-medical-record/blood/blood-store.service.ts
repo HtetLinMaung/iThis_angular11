@@ -1,21 +1,34 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import Blood from './blood.model';
+
+interface SelectType {
+  value: string;
+  text: string;
+  syskey: number;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class BloodStoreService {
   private readonly _currentSysKey = new BehaviorSubject<number>(0);
-  // private readonly _instructions = new BehaviorSubject<Instruction[]>([]);
+  private readonly _bloods = new BehaviorSubject<Blood[]>([new Blood(1)]);
   private readonly _isUpdate = new BehaviorSubject<boolean>(false);
   private readonly _tabNo = new BehaviorSubject<number>(2);
   private readonly _deleteDialog = new BehaviorSubject<boolean>(false);
+  private readonly _routes = new BehaviorSubject<SelectType[]>([]);
+  private readonly _doses = new BehaviorSubject<SelectType[]>([]);
+  private readonly _drugTasks = new BehaviorSubject<SelectType[]>([]);
 
   readonly currentSysKey$ = this._currentSysKey.asObservable();
-  // readonly instructions$ = this._instructions.asObservable();
+  readonly bloods$ = this._bloods.asObservable();
   readonly isUpdate$ = this._isUpdate.asObservable();
   readonly tabNo$ = this._tabNo.asObservable();
   readonly deleteDialog$ = this._deleteDialog.asObservable();
+  readonly routes$ = this._routes.asObservable();
+  readonly doses$ = this._doses.asObservable();
+  readonly drugTasks$ = this._drugTasks.asObservable();
 
   constructor() {}
 
@@ -23,9 +36,9 @@ export class BloodStoreService {
     this._currentSysKey.next(v);
   }
 
-  // set instructions(v: Instruction[]) {
-  //   this._instructions.next(v);
-  // }
+  set bloods(v: Blood[]) {
+    this._bloods.next(v);
+  }
 
   set tabNo(v: number) {
     this._tabNo.next(v);
@@ -39,6 +52,18 @@ export class BloodStoreService {
     this._deleteDialog.next(v);
   }
 
+  set routes(v: SelectType[]) {
+    this._routes.next(v);
+  }
+
+  set doses(v: SelectType[]) {
+    this._doses.next(v);
+  }
+
+  set drugTasks(v: SelectType[]) {
+    this._drugTasks.next(v);
+  }
+
   get isUpdate(): boolean {
     return this._isUpdate.getValue();
   }
@@ -47,9 +72,9 @@ export class BloodStoreService {
     return this._tabNo.getValue();
   }
 
-  // get instructions(): Instruction[] {
-  //   return this._instructions.getValue();
-  // }
+  get bloods(): Blood[] {
+    return this._bloods.getValue();
+  }
 
   get currentSysKey(): number {
     return this._currentSysKey.getValue();
@@ -57,5 +82,17 @@ export class BloodStoreService {
 
   get deleteDialog(): boolean {
     return this._deleteDialog.getValue();
+  }
+
+  get routes(): SelectType[] {
+    return this._routes.getValue();
+  }
+
+  get doses(): SelectType[] {
+    return this._doses.getValue();
+  }
+
+  get drugTasks(): SelectType[] {
+    return this._drugTasks.getValue();
   }
 }

@@ -7,6 +7,7 @@ import { PaginationComponent } from '../framework/pagination/pagination.componen
 import { DeleteDialogComponent } from '../framework/delete-dialog/delete-dialog.component';
 import { AdvanceSearchComponent } from '../framework/advance-search/advance-search.component';
 import { DoctorDialogComponent } from '../framework/doctor-dialog/doctor-dialog.component';
+import { IconButtonComponent } from '../framework/icon-button/icon-button.component';
 
 @NgModule({
   exports: [
@@ -18,6 +19,7 @@ import { DoctorDialogComponent } from '../framework/doctor-dialog/doctor-dialog.
     DeleteDialogComponent,
     AdvanceSearchComponent,
     DoctorDialogComponent,
+    IconButtonComponent,
   ],
   declarations: [
     PatientHeaderComponent,
@@ -26,6 +28,7 @@ import { DoctorDialogComponent } from '../framework/doctor-dialog/doctor-dialog.
     DeleteDialogComponent,
     AdvanceSearchComponent,
     DoctorDialogComponent,
+    IconButtonComponent,
   ],
   imports: [CommonModule, FormsModule],
 })
