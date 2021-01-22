@@ -7,3 +7,7 @@
 #blood__form .form__input {
   font-size: 12px !important;
 }
+.flex-table__column:nth-child(1),
+.flex-table__column:nth-last-child(1) {
+  flex: 0 0 5%;
+}

@@ -13,7 +13,7 @@ interface SelectType {
 })
 export class BloodStoreService {
   private readonly _currentSysKey = new BehaviorSubject<number>(0);
-  private readonly _bloods = new BehaviorSubject<Blood[]>([new Blood(1)]);
+  private readonly _bloods = new BehaviorSubject<Blood[]>([new Blood()]);
   private readonly _isUpdate = new BehaviorSubject<boolean>(false);
   private readonly _tabNo = new BehaviorSubject<number>(2);
   private readonly _deleteDialog = new BehaviorSubject<boolean>(false);

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-icon-button',
@@ -6,14 +6,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
   styleUrls: ['./icon-button.component.css'],
 })
 export class IconButtonComponent implements OnInit {
-  @Input() width = '35px';
-  @Input() height = '35px';
-  @ViewChild('iconBtn') iconBtn: ElementRef;
   constructor() {}
 
   ngOnInit(): void {}
-
-  clickHandler(e) {
-    console.log(e);
-  }
 }

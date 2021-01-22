@@ -6,6 +6,7 @@ import { BloodStoreService } from '../blood-store.service';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import * as moment from 'moment';
+import Blood from '../blood.model';
 
 @Component({
   selector: 'app-blood-form',
@@ -34,9 +35,9 @@ export class BloodFormComponent implements OnInit {
 
   getHeaders() {
     if (this.appStoreService.isDoctorRank) {
-      return ['Route', 'Medication', 'Dose', 'Remark'];
+      return ['', 'Route', 'Medication', 'Dose', 'Remark', ''];
     } else {
-      return ['Route', 'Medication', 'Dose', 'Remark', 'Frequency'];
+      return ['', 'Route', 'Medication', 'Dose', 'Remark', 'Frequency', ''];
     }
   }
 
@@ -62,6 +63,18 @@ export class BloodFormComponent implements OnInit {
         syskey: v.syskey,
       }));
     });
+  }
+
+  addRow() {
+    this.bloodStoreService.bloods.push(new Blood());
+  }
+
+  removeRow(key: string) {
+    if (this.bloodStoreService.bloods.length > 1) {
+      this.bloodStoreService.bloods = this.bloodStoreService.bloods.filter(
+        (blood) => blood.key !== key
+      );
+    }
   }
 
   fetchRoutes() {

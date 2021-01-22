@@ -1,5 +1,11 @@
 .icon__btn {
-  transition: all 0.3s;
+  transition: all 0.2s;
   width: 25px;
   height: 25px;
+  border: 0;
+  outline: none;
+}
+
+.icon__btn:active {
+  transform: scale(0.75);
 }

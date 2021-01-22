@@ -55,8 +55,8 @@
     style="margin: 1rem 0; align-items: center"
     *ngFor="let injection of bloodStoreService.bloods$ | async"
   >
-    <div style="padding: 1rem">
-      <app-icon-button width="25px" height="25px">
+    <div class="flex-table__column">
+      <app-icon-button (click)="addRow()">
         <i class="fa fa-plus" aria-hidden="true" style="font-size: 11px"></i>
       </app-icon-button>
     </div>
@@ -119,6 +119,11 @@
         [(ngModel)]="data.done"
         (change)="toggleCheck($event, data)"
       />
+    </div>
+    <div class="flex-table__column">
+      <app-icon-button (click)="removeRow(injection.key)">
+        <i class="fas fa-minus" style="font-size: 11px"></i>
+      </app-icon-button>
     </div>
   </div>
 </div>
