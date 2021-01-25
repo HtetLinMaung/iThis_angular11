@@ -59,7 +59,7 @@
   <div
     class="flex-table__row"
     style="margin: 1rem 0; align-items: center"
-    *ngFor="let injection of bloodStoreService.bloods$ | async"
+    *ngFor="let injection of bloods"
   >
     <div class="flex-table__column">
       <app-icon-button (click)="addRow()">
@@ -134,3 +134,218 @@
     </div>
   </div>
 </div>
+
+<table id="blood-doctor__report" style="display: none">
+  <thead>
+    <tr>
+      <th colspan="11">ALL MEDICATIONS EXCEPT PARENTERAL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2">DATE</td>
+      <td rowspan="2">ROUTE</td>
+      <td rowspan="2">MEDICATION</td>
+      <td rowspan="2">DOSE</td>
+      <td rowspan="2">FREQUENCY</td>
+      <td rowspan="2">DR'S SIGN</td>
+      <td colspan="3">DISCONTINUE/REDOSE/TRANSCRIPT</td>
+      <td colspan="2">DISCHARGE MEDICATIONS</td>
+    </tr>
+    <tr>
+      <td>DATE</td>
+      <td>DR'S SIGN</td>
+      <td>D/R/T/</td>
+      <td></td>
+      <td>DURATION</td>
+    </tr>
+
+    <tr *ngFor="let nonParenteral of bloodStoreService.bloods$ | async">
+      <td>
+        {{
+          formatDate(
+            appStoreService.isDoctorRank
+              ? nonParenteral.moConfirmDate
+              : nonParenteral.nurseConfirmDate,
+            "DD/MM/yyyy"
+          )
+        }}
+      </td>
+      <td>{{ nonParenteral.routeDesc }}</td>
+      <td>{{ nonParenteral.medication }}</td>
+      <td>{{ nonParenteral.dose }}</td>
+      <td>{{ nonParenteral.frequency }}</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+<table id="blood-nurse__report" style="display: none">
+  <thead>
+    <tr>
+      <th colspan="32">ALL MEDICATIONS EXCEPT PARENTERAL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="8">DATE</td>
+      <td colspan="8">DATE</td>
+      <td colspan="8">DATE</td>
+      <td colspan="8">DATE</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+      <td>2</td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+
+      <td></td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+      <td>2</td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+
+      <td></td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+      <td>2</td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+
+      <td></td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+      <td>2</td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>am</td>
+      <td>am</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>am</td>
+
+      <td></td>
+      <td>am</td>
+      <td>am</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>am</td>
+
+      <td></td>
+      <td>am</td>
+      <td>am</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>am</td>
+
+      <td></td>
+      <td>am</td>
+      <td>am</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>am</td>
+    </tr>
+    <tr
+      *ngFor="
+        let item of [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ]
+      "
+    >
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="8">Checked by:</td>
+      <td colspan="8">Checked by:</td>
+      <td colspan="8">Checked by:</td>
+      <td colspan="8">Checked by:</td>
+    </tr>
+    <tr>
+      <td colspan="4">(Day)</td>
+      <td colspan="4">(Night)</td>
+      <td colspan="4">(Day)</td>
+      <td colspan="4">(Night)</td>
+      <td colspan="4">(Day)</td>
+      <td colspan="4">(Night)</td>
+      <td colspan="4">(Day)</td>
+      <td colspan="4">(Night)</td>
+    </tr>
+  </tbody>
+</table>

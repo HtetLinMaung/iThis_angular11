@@ -21,6 +21,7 @@ export class BloodFormComponent implements OnInit {
   nurseConfirmDate = '';
   moConfirmTime = '';
   nurseConfirmTime = '';
+  bloods = [new Blood()];
 
   constructor(
     private http: HttpService,
@@ -33,6 +34,7 @@ export class BloodFormComponent implements OnInit {
     const tabEle2 = document.getElementById('tab2');
     tabEle2.style.background = '#3b5998';
     tabEle1.style.background = '#8C9899';
+    this.new();
     this.fetchData();
   }
 
@@ -41,6 +43,22 @@ export class BloodFormComponent implements OnInit {
       return ['', 'Route', 'Medication', 'Dose', 'Remark', ''];
     } else {
       return ['', 'Route', 'Medication', 'Dose', 'Remark', 'Frequency', ''];
+    }
+  }
+
+  bindEditData() {
+    if (this.bloodStoreService.isUpdate) {
+      const blood = this.bloodStoreService.bloods.find(
+        (v) => v.syskey == this.bloodStoreService.currentSysKey
+      );
+      this.time = this.appStoreService.isDoctorRank
+        ? blood.moConfirmTime
+        : blood.nurseConfirmTime;
+      this.date = this.appStoreService.isDoctorRank
+        ? blood.moConfirmDate
+        : blood.nurseConfirmDate;
+      this.givenByType = blood.givenByType;
+      this.bloods = [blood];
     }
   }
 
@@ -65,18 +83,17 @@ export class BloodFormComponent implements OnInit {
         value: v.task,
         syskey: v.syskey,
       }));
+      this.bindEditData();
     });
   }
 
   addRow() {
-    this.bloodStoreService.bloods.push(new Blood());
+    this.bloods.push(new Blood());
   }
 
   removeRow(key: string) {
-    if (this.bloodStoreService.bloods.length > 1) {
-      this.bloodStoreService.bloods = this.bloodStoreService.bloods.filter(
-        (blood) => blood.key !== key
-      );
+    if (this.bloods.length > 1) {
+      this.bloods = this.bloods.filter((blood) => blood.key !== key);
     }
   }
 
@@ -129,7 +146,7 @@ export class BloodFormComponent implements OnInit {
     this.date = '';
     this.time = '';
     this.givenByType = 'X1';
-    this.bloodStoreService.bloods = [new Blood()];
+    this.bloods = [new Blood()];
   }
 
   save() {
@@ -162,7 +179,7 @@ export class BloodFormComponent implements OnInit {
     } else {
       this.http
         .doPost('inpatient-medical-record/save-blood', {
-          bloods: this.bloodStoreService.bloods.map((v) => ({
+          bloods: this.bloods.map((v) => ({
             ...v,
             userid: '',
             username: '',
@@ -178,7 +195,9 @@ export class BloodFormComponent implements OnInit {
               : '',
           })),
         })
-        .subscribe((data: any) => {});
+        .subscribe((data: any) => {
+          this.bloodStoreService.tabNo = 1;
+        });
     }
   }
 
@@ -197,7 +216,9 @@ export class BloodFormComponent implements OnInit {
     doc.setFontSize(11);
     doc.text('ASIA ROYAL HOSPITAL', 105, 15, { align: 'center' });
     doc.text(
-      `INJECTIONS - ${this.appStoreService.isDoctorRank ? 'DOCTOR' : 'NURSE'}`,
+      `BLOOD, BLOOD PRODUCTS AND TPN - ${
+        this.appStoreService.isDoctorRank ? 'DOCTOR' : 'NURSE'
+      }`,
       105,
       23,
       {
@@ -272,7 +293,7 @@ export class BloodFormComponent implements OnInit {
       doc.text("Patient's Label", 14 + 85 + (83 * 3.2) / 5 + 2.5, pageY + 14);
 
       (doc as any).autoTable({
-        html: '#injection-doctor__report',
+        html: '#blood-doctor__report',
         startY: 75,
         theme: 'grid',
         headStyles: {
@@ -285,7 +306,7 @@ export class BloodFormComponent implements OnInit {
           halign: 'center',
         },
       });
-      doc.save('injection-doctor.pdf');
+      doc.save('blood-doctor.pdf');
     } else {
       doc.rect(14, pageY, 83, 8 * 2.5);
       doc.text('DRUG ALLERGY:', 17, pageY + 5);
@@ -313,7 +334,7 @@ export class BloodFormComponent implements OnInit {
       doc.text('X6  Others: specify in nursing notes', 143, pageY + 40);
 
       (doc as any).autoTable({
-        html: '#injection-nurse__report',
+        html: '#blood-nurse__report',
         startY: 75,
         theme: 'grid',
         headStyles: {
@@ -327,7 +348,7 @@ export class BloodFormComponent implements OnInit {
           cellPadding: 0,
         },
       });
-      doc.save('injection-nurse.pdf');
+      doc.save('blood-nurse.pdf');
     }
   }
 }

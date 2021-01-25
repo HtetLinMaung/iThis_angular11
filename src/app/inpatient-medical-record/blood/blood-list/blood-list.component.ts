@@ -112,11 +112,7 @@ export class BloodListComponent implements OnInit {
       }));
 
       this.http
-        .doPost(`inpatient-medical-record/injections-initial`, {
-          patientId: this.appStoreService.pId,
-          rgsno: this.appStoreService.rgsNo,
-          doctorId: this.appStoreService.drID,
-        })
+        .doGet(`inpatient-medical-record/bloods`)
         .subscribe((data: any) => {
           this.bloodStoreService.bloods = data.map(
             (v) =>
@@ -145,7 +141,12 @@ export class BloodListComponent implements OnInit {
                 this.bloodStoreService.doses.find(
                   (dose) => dose.syskey == v.doseTypeSyskey
                 ).text,
-                v.checkList.filter((item) => item.done).length
+                v.checkList.filter((item) => item.done).length,
+                v.moConfirmDate,
+                v.moConfirmTime,
+                v.nurseConfirmDate,
+                v.nurseConfirmTime,
+                v.givenByType
               )
           );
 
@@ -185,8 +186,7 @@ export class BloodListComponent implements OnInit {
           this.page++;
           this.end = this.page * this.perPage;
           if (this.page == this.totalPage) {
-            this.end =
-              this.injectionStoreService.injections.length - this.start;
+            this.end = this.bloodStoreService.bloods.length - this.start;
           }
           this.start = (this.page - 1) * this.perPage;
         }
@@ -199,27 +199,26 @@ export class BloodListComponent implements OnInit {
         } else {
           this.start = (this.page - 1) * this.perPage;
           this.end = this.perPage;
-          if (this.injectionStoreService.injections.length < this.perPage) {
-            this.end = this.injectionStoreService.injections.length;
+          if (this.bloodStoreService.bloods.length < this.perPage) {
+            this.end = this.bloodStoreService.bloods.length;
           }
         }
       case 3:
         this.page = 1;
         this.start = (this.page - 1) * this.perPage;
         this.end = this.perPage;
-        if (this.injectionStoreService.injections.length < this.perPage) {
-          this.end = this.injectionStoreService.injections.length;
+        if (this.bloodStoreService.bloods.length < this.perPage) {
+          this.end = this.bloodStoreService.bloods.length;
         }
         break;
       default:
         this.page = this.totalPage;
         this.start = (this.page - 1) * this.perPage;
-        if (this.injectionStoreService.injections.length % this.perPage === 0) {
+        if (this.bloodStoreService.bloods.length % this.perPage === 0) {
           this.end = this.page * this.perPage;
         } else {
           this.end =
-            this.start +
-            (this.injectionStoreService.injections.length % this.perPage);
+            this.start + (this.bloodStoreService.bloods.length % this.perPage);
         }
     }
   }
@@ -233,56 +232,50 @@ export class BloodListComponent implements OnInit {
   }
 
   advanceSearch(filters) {
-    this.injectionStoreService.injections = this.injections.filter(
-      (instruction) => {
-        let flag = true;
-        for (const filter of filters) {
-          const key = this.fields.find((field) => field.value == filter.field)
-            ?.key;
-          switch (filter.condition) {
-            case '1':
-              flag = flag && filter.search == instruction[key];
-              break;
-            case '2':
-              flag =
-                flag && instruction[key].toString().includes(filter.search);
-              break;
-            case '3':
-              flag =
-                flag && instruction[key].toString().startsWith(filter.search);
-              break;
-            default:
-              flag =
-                flag && instruction[key].toString().endsWith(filter.search);
-          }
+    this.bloodStoreService.bloods = this.bloods.filter((instruction) => {
+      let flag = true;
+      for (const filter of filters) {
+        const key = this.fields.find((field) => field.value == filter.field)
+          ?.key;
+        switch (filter.condition) {
+          case '1':
+            flag = flag && filter.search == instruction[key];
+            break;
+          case '2':
+            flag = flag && instruction[key].toString().includes(filter.search);
+            break;
+          case '3':
+            flag =
+              flag && instruction[key].toString().startsWith(filter.search);
+            break;
+          default:
+            flag = flag && instruction[key].toString().endsWith(filter.search);
         }
-        return flag;
       }
-    );
-    this.initPagination(this.injectionStoreService.injections);
+      return flag;
+    });
+    this.initPagination(this.bloodStoreService.bloods);
   }
 
   normalSearch() {
     if (this.search) {
       const searchKeys = this.fields.map((field) => field.key);
-      this.injectionStoreService.injections = this.injections.filter(
-        (instruction) => {
-          let flag = false;
-          for (const key in instruction) {
-            if (searchKeys.includes(key)) {
-              flag = flag || instruction[key].toString().includes(this.search);
-            }
+      this.bloodStoreService.bloods = this.bloods.filter((instruction) => {
+        let flag = false;
+        for (const key in instruction) {
+          if (searchKeys.includes(key)) {
+            flag = flag || instruction[key].toString().includes(this.search);
           }
-          return flag;
         }
-      );
+        return flag;
+      });
     }
 
-    this.initPagination(this.injectionStoreService.injections);
+    this.initPagination(this.bloodStoreService.bloods);
   }
 
   showAll() {
-    this.fetchAllInjections();
+    this.fetchAllBloods();
   }
 
   clearSearch() {

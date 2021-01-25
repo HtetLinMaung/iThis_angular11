@@ -46,7 +46,7 @@
 
   <div style="display: flex; margin: 0.5rem 0">
     <app-pagination
-      [total]="(injectionStoreService.injections$ | async)?.length"
+      [total]="(bloodStoreService.bloods$ | async)?.length"
       [perPage]="perPage"
       [start]="start"
       [end]="end"
@@ -64,7 +64,7 @@
     <tr
       class="__raised"
       *ngFor="
-        let nonParenteral of (injectionStoreService.injections$ | async).slice(
+        let nonParenteral of (bloodStoreService.bloods$ | async).slice(
           start,
           end
         )

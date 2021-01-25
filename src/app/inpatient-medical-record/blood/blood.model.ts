@@ -13,6 +13,11 @@ export default class Blood {
     public routeDesc = '',
     public doseTypeDesc = '',
     public frequency = 0,
+    public moConfirmDate = '',
+    public moConfirmTime = '',
+    public nurseConfirmDate = '',
+    public nurseConfirmTime = '',
+    public givenByType = '',
     public key = new Date().toISOString()
   ) {}
 }
