@@ -1,0 +1,131 @@
+<div style="flex: 1">
+    <div style="display: flex; margin-top: 1rem; margin-bottom: 2rem">
+        <button class="btn btn-primary btn__crud" (click)="goNew()">New</button>
+        <button class="btn btn-success  btn__crud" (click)="save()">{{_obj.syskey=='' || _obj.syskey=='0'? 'Save':'Update' }}</button>
+        <button class="btn btn-danger btn__crud" [disabled]="this._obj.syskey==''" (click)="goDelete()">Delete</button>
+        <button class="btn btn-primary btn__crud" (click)="print()">Print</button>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 20%">
+            <label class="form__label">Date</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 20%">
+            <input type="datetime-local" class="form-control form__input" [(ngModel)]="this._obj.t9" />
+        </div>
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="checkbox-inline">
+                <input type="radio" [checked]="parentcheck" id="day"  
+                    (click)="checkDayNight(1)" name="dayNight" value="1" >
+                Day
+            </label>
+        </div>
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="checkbox-inline">
+                <input type="radio" [checked]="childcheck" id="night" 
+                    (click)="checkDayNight(2)" name="dayNight" value="2">
+                Night
+            </label>
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 20%">
+            <label class="form__label">Care Plan Reviewed</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="checkbox-inline">
+                <input type="radio" [checked]="parentcheck1" id="carelineyes" (click)="checkCare(1)" name="careline"
+                    value="1" [(ngModel)]="this._obj.n6">
+                Yes
+            </label>
+        </div>
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="checkbox-inline">
+                <input type="radio" [checked]="childcheck1" id="carelineno" (click)="checkCare(0)" name="careline"
+                    value="0" [(ngModel)]="this._obj.n6">
+                No
+            </label>
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 20%">
+            <label class="form__label">Specific Instruction/Mention:</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="checkbox-inline">
+                <input type="radio" [checked]="parentcheck2" id="specificyes" (click)="checkRadio(1)" name="specific"
+                    value="1" checked>
+                Yes
+            </label>
+        </div>
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="checkbox-inline">
+                <input type="radio" [checked]="childcheck2" id="specificno" (click)="checkRadio(0)" name="specific"
+                    value="0">
+                No
+            </label>
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 20%">
+            <label class="form__label"></label>
+        </div>
+        <div class="p__5" style="flex: 0 0 50%">
+            <input type="text" class="select_control form-control" [disabled]="this._obj.n7==0" [(ngModel)]="_obj.t1"
+                name="specificNote" placeholder="Specific Instruction/Mention" />
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 20%">
+            <label class="form__label">Vital (Last Record)</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 50%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.t2" name="vital"
+                placeholder="Vital (Last Record)" />
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 20%">
+            <label class="form__label">General Condition</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 50%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.t3" name="general condition"
+                placeholder="General Condition" />
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 20%">
+            <label class="form__label">Intake/Output:(Special Mention)</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 50%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.t4" name="intake/output"
+                placeholder="Intake/Output:(Special Mention)" />
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 20%">
+            <label class="form__label">Problem(Nursing):</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 50%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.t5" name="problem"
+                placeholder="Problem(Nursing)" />
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 20%">
+            <label class="form__label">Intervention</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 50%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.t6" name="intervention"
+                placeholder="Intervention" />
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 20%">
+            <label class="form__label">Evaluation</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 50%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.t7" name="evaluation"
+                placeholder="Evaluation" />
+        </div>
+    </div>
+</div>

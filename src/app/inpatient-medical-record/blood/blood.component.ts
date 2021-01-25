@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppStoreService } from 'src/app/app-store.service';
 import { HttpService } from 'src/app/framework/http.service';
+
 import { BloodStoreService } from './blood-store.service';
 
 @Component({
@@ -13,9 +14,11 @@ export class BloodComponent implements OnInit {
     public appStoreService: AppStoreService,
     public bloodStoreService: BloodStoreService,
     private http: HttpService
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.tabClickHandler(1);
+  }
 
   tabClickHandler(n: number) {
     const tabEle1 = document.getElementById('tab1');

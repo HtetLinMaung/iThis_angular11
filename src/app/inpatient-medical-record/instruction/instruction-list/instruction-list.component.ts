@@ -58,7 +58,7 @@ export class InstructionListComponent implements OnInit {
   constructor(
     public instructionStoreService: InstructionStoreService,
     private http: HttpService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.fetchAllInstructions();

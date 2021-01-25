@@ -32,12 +32,20 @@ export class LoginComponent implements OnInit {
       case 7:
         this.router.navigate(['/inpatient-medication-record/diet']);
         break;
+
     }
   }
   navigate1(n: number) {
     switch (n) {
       case 1:
-        this.router.navigate(['/nurseshiftsummary']);
+        this.router.navigate(['/nurse-shift-summary']);
+        break;
+    }
+  }
+  navigate2(n: number) {
+    switch (n) {
+      case 1:
+        this.router.navigate(['/nursing-care-record']);
         break;
     }
   }

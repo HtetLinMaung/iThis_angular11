@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { jsPDF } from 'jspdf';
+import * as moment from 'moment';
 import { AppStoreService } from 'src/app/app-store.service';
 import { Doctor } from 'src/app/framework/doctor-dialog/doctor.model';
 import { HttpService } from 'src/app/framework/http.service';
+
 import { NurseActivityWorkListStoreService } from '../../nurse-activity-work-list-store.service';
-import * as moment from 'moment';
-import { jsPDF } from 'jspdf';
+
 import 'jspdf-autotable';
 
 @Component({
@@ -31,7 +33,7 @@ export class NursingActivityWorklistFormComponent implements OnInit {
     public appStoreService: AppStoreService,
     public nurseActivityWorkListStoreService: NurseActivityWorkListStoreService,
     private http: HttpService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.appStoreService.doctor = new Doctor();
@@ -86,10 +88,9 @@ export class NursingActivityWorklistFormComponent implements OnInit {
   save() {
     this.http
       .doPost(
-        `nurse-activity-worklist/${
-          !this.nurseActivityWorkListStoreService.isUpdate
-            ? 'save'
-            : `update/${this.nurseActivityWorkListStoreService.currentSysKey}`
+        `nurse-activity-worklist/${!this.nurseActivityWorkListStoreService.isUpdate
+          ? 'save'
+          : `update/${this.nurseActivityWorkListStoreService.currentSysKey}`
         }`,
         {
           pId: this.appStoreService.pId,
@@ -118,8 +119,8 @@ export class NursingActivityWorklistFormComponent implements OnInit {
           }
           this.nurseActivityWorkListStoreService.isUpdate = true;
         },
-        (error) => {},
-        () => {}
+        (error) => { },
+        () => { }
       );
   }
 
@@ -291,10 +292,11 @@ export class NursingActivityWorklistFormComponent implements OnInit {
 
         doc.save('nurse activity.pdf');
       },
-      (error) => {},
-      () => {}
+      (error) => { },
+      () => { }
     );
   }
+
 
   browseDoctor() {
     this.appStoreService.doctorDialog = true;

@@ -1,0 +1,318 @@
+<div style="flex: 1">
+    <div style="display: flex; margin-top: 1rem; margin-bottom: 2rem">
+        <button class="btn btn-primary btn__crud" (click)="goNew()">New</button>
+        <button class="btn btn-success  btn__crud" (click)="save()">{{_obj.syskey=='' || _obj.syskey=='0'?
+            'Save':'Update' }}</button>
+        <button class="btn btn-danger btn__crud" [disabled]="this._obj.syskey==''" (click)="goDelete()">Delete</button>
+        <button class="btn btn-primary btn__crud" (click)="print()">Print</button>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 35%">
+            <label class="form__label">Non-Drug Allergies(Food,Skin,Others)Pls specify</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 50%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.t10" name="non-drug"
+                placeholder="Non-Drug Allergies(Food,Skin,Others)Pls specify" />
+        </div>
+    </div>
+    <div class="p__5" style="flex: 0 0 20%">
+        <label class="form__label">Person to contact in Emergency</label>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="form__label">Name in full :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 35%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.t1" name="name1"
+                placeholder="Name in full" />
+        </div>
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="form__label">Relationship :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 35%">
+            <select name="relationship" class="custom-select custom-select-sm" [(ngModel)]="_obj.n1" id="did"
+                (change)="statechange()">
+                <option [value]="i.syskey" *ngFor="let i of _rsobj">{{i.t2}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="form__label">Phone(Res):</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 20%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.phone1" name="phone1"
+                placeholder="Phone(Res)" />
+        </div>
+        <div class="p__5" style="flex: 0 0 8%">
+            <label class="form__label">(Off) :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 15%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.phone2" name="phone2"
+                placeholder="off" />
+        </div>
+        <div class="p__5" style="flex: 0 0 5%">
+            <label class="form__label">(HP):</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 15%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.phone3" name="phone3"
+                placeholder="(HP)" />
+        </div>
+        <div class="p__5" style="flex: 0 0 8%">
+            <label class="form__label">(HP) :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 15%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.phone4" name="phone4"
+                placeholder="(HP)" />
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="form__label">Name in full :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 35%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.t2" name="name2"
+                placeholder="Name in full" />
+        </div>
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="form__label">Relationship :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 35%">
+            <select name="relationship" class="custom-select custom-select-sm" [(ngModel)]="_obj.n2" id="did"
+                (change)="statechange()">
+                <option [value]="i.syskey" *ngFor="let i of _rsobj">{{i.t2}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 5 5 10%">
+            <label class="form__label">Phone(Res) :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 20%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.phone5" name="phone5"
+                placeholder="Phone(Res)" />
+        </div>
+        <div class="p__5" style="flex: 5 5 8%">
+            <label class="form__label">(Off) :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 15%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.phone6" name="phone6"
+                placeholder="off" />
+        </div>
+        <div class="p__5" style="flex: 0 0 8%">
+            <label class="form__label">(HP) :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 15%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.phone7" name="phone7"
+                placeholder="(HP)" />
+        </div>
+        <div class="p__5" style="flex: 0 0 8%">
+            <label class="form__label">(HP) :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 15%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.phone8" name="phone8"
+                placeholder="(HP)" />
+        </div>
+    </div>
+    <div class="p__5" style="flex: 0 0 20%">
+        <label class="form__label">Primary Decision Maker</label>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="form__label">Name in full :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 35%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.t3" name="name3"
+                placeholder="Name in full" />
+        </div>
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="form__label">Relationship :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 35%">
+            <select name="relationship" class="custom-select custom-select-sm" [(ngModel)]="_obj.n3" id="did"
+                (change)="statechange()">
+                <option [value]="i.syskey" *ngFor="let i of _rsobj">{{i.t2}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 5 5 10%">
+            <label class="form__label">Phone(Res) :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 20%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.phone9" name="phone9"
+                placeholder="Phone(Res)" />
+        </div>
+        <div class="p__5" style="flex: 5 5 8%">
+            <label class="form__label">(Off) :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 15%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.phone10" name="phone10"
+                placeholder="off" />
+        </div>
+        <div class="p__5" style="flex: 0 0 8%">
+            <label class="form__label">(HP) :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 15%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.phone11" name="phone11"
+                placeholder="(HP)" />
+        </div>
+        <div class="p__5" style="flex: 0 0 8%">
+            <label class="form__label">(HP) :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 15%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.phone12" name="phone12"
+                placeholder="(HP)" />
+        </div>
+    </div>
+    <div class="p__5" style="flex: 0 0 20%">
+        <label class="form__label">Secondary Decision Maker</label>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="form__label">Name in full :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 35%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.t4" name="name4"
+                placeholder="Name in full" />
+        </div>
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="form__label">Relationship :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 35%">
+            <select name="relationship" class="custom-select custom-select-sm" [(ngModel)]="_obj.n4" id="did"
+                (change)="statechange()">
+                <option [value]="i.syskey" *ngFor="let i of _rsobj">{{i.t2}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 5 5 10%">
+            <label class="form__label">Phone(Res) :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 20%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.phone13" name="phone13"
+                placeholder="Phone(Res)" />
+        </div>
+        <div class="p__5" style="flex: 5 5 8%">
+            <label class="form__label">(Off) :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 15%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.phone14" name="phone14"
+                placeholder="off" />
+        </div>
+        <div class="p__5" style="flex: 0 0 8%">
+            <label class="form__label">(HP) :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 15%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.phone15" name="phone15"
+                placeholder="(HP)" />
+        </div>
+        <div class="p__5" style="flex: 0 0 8%">
+            <label class="form__label">(HP) :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 15%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.phone16" name="phone16"
+                placeholder="(HP)" />
+        </div>
+    </div>
+    <div class="p__5" style="flex: 0 0 20%">
+        <label class="form__label">Admission Assessment</label>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 20%">
+            <label class="form__label">Patient Admitted from :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 8%">
+            <label class="checkbox-inline">
+                <input type="radio" [checked]="patientcheck1" id="a&e" (click)="checkRadio(1)"
+                    name="patientadmittedfrom" value="1" checked>
+                A&E
+            </label>
+        </div>
+        <div class="p__5" style="flex: 0 0 8%">
+            <label class="checkbox-inline">
+                <input type="radio" [checked]="patientcheck2" id="opd" (click)="checkRadio(2)"
+                    name="patientadmittedfrom" value="2">
+                OPD
+            </label>
+        </div>
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="checkbox-inline">
+                <input type="radio" [checked]="patientcheck3" id="trolley" (click)="checkRadio(3)"
+                    name="patientadmittedfrom" value="3" checked>
+                Trolley
+            </label>
+        </div>
+        <div class="p__5" style="flex: 0 0 13%">
+            <label class="checkbox-inline">
+                <input type="radio" [checked]="patientcheck4" id="wheel chair" (click)="checkRadio(4)"
+                    name="patientadmittedfrom" value="4">
+                Wheel chair
+            </label>
+        </div>
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="checkbox-inline">
+                <input type="radio" [checked]="patientcheck5" id="walking" (click)="checkRadio(5)"
+                    name="patientadmittedfrom" value="5" checked>
+                Walking
+            </label>
+        </div>
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="checkbox-inline">
+                <input type="radio" [checked]="patientcheck6" id="other1" (click)="checkRadio(6)"
+                    name="patientadmittedfrom" value="6">
+                Others:
+            </label>
+        </div>
+        <div class="p__5" style="flex: 0 0 20%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.t8" name="Off1"
+                placeholder="others" />
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="form__label">Arrival time :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 25%">
+            <input type="datetime-local" class="form-control form__input" [(ngModel)]="this._obj.t5" />
+        </div>
+        <div class="p__5" style="flex: 0 0 15%">
+            <label class="form__label">Accompanied By :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 25%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.t6" name="accompanied"
+                placeholder="Accompanied By" />
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 15%">
+            <label class="form__label">Condition on Arrival :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 25%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.t7" name="name1"
+                placeholder="Condition on Arrival" />
+        </div>
+        <div class="p__5" style="flex: 0 0 20%">
+            <label class="form__label">Information Received From :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="checkbox-inline">
+                <input type="radio" [checked]="checkpatient1" id="patient" (click)="checkpatient(1)"
+                    name="informationreceived" value="1" checked>
+                Patient
+            </label>
+        </div>
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="checkbox-inline">
+                <input type="radio" [checked]="checkpatient2" id="other2" (click)="checkpatient(2)"
+                    name="informationreceived" value="2">
+                Others:
+            </label>
+        </div>
+        <div class="p__5" style="flex: 0 0 20%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.t9" name="Off1"
+                placeholder="others" />
+        </div>
+    </div>
+</div>

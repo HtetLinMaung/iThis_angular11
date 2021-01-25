@@ -1,24 +1,29 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { LoginComponent } from './login/login.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
+
+import { AppComponent } from './app.component';
 import { InpatientMedicalRecordModule } from './inpatient-medical-record/inpatient-medical-record.module';
-import { NurseshiftsummaryComponent } from './nurseshiftsummary/nurseshiftsummary.component';
+import { LoginComponent } from './login/login.component';
+import { NurseShiftSummaryModule } from './nurse-shift-summary/nurse-shift-summary.module';
 import { NursingActivityWorklistModule } from './nursing-activity-worklist/nursing-activity-worklist.module';
+import { NursingCareRecordModule } from './nursing-care-record/nursing-care-record.module';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, NurseshiftsummaryComponent],
+  declarations: [AppComponent, LoginComponent,],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     InpatientMedicalRecordModule,
     NursingActivityWorklistModule,
+    NurseShiftSummaryModule,
     SharedModule,
+    NursingCareRecordModule,
+
     RouterModule.forRoot([
       {
         path: '',
