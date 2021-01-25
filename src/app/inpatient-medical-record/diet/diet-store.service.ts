@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import Diet from './diet.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DietStoreService {
   private readonly _currentSysKey = new BehaviorSubject<number>(0);
-  // private readonly _instructions = new BehaviorSubject<Instruction[]>([]);
+  private readonly _diets = new BehaviorSubject<Diet[]>([]);
   private readonly _isUpdate = new BehaviorSubject<boolean>(false);
-  private readonly _tabNo = new BehaviorSubject<number>(2);
+  private readonly _tabNo = new BehaviorSubject<number>(1);
   private readonly _deleteDialog = new BehaviorSubject<boolean>(false);
 
   readonly currentSysKey$ = this._currentSysKey.asObservable();
-  // readonly instructions$ = this._instructions.asObservable();
+  readonly diets$ = this._diets.asObservable();
   readonly isUpdate$ = this._isUpdate.asObservable();
   readonly tabNo$ = this._tabNo.asObservable();
   readonly deleteDialog$ = this._deleteDialog.asObservable();
@@ -23,9 +24,9 @@ export class DietStoreService {
     this._currentSysKey.next(v);
   }
 
-  // set instructions(v: Instruction[]) {
-  //   this._instructions.next(v);
-  // }
+  set diets(v: Diet[]) {
+    this._diets.next(v);
+  }
 
   set tabNo(v: number) {
     this._tabNo.next(v);
@@ -47,9 +48,9 @@ export class DietStoreService {
     return this._tabNo.getValue();
   }
 
-  // get instructions(): Instruction[] {
-  //   return this._instructions.getValue();
-  // }
+  get diets(): Diet[] {
+    return this._diets.getValue();
+  }
 
   get currentSysKey(): number {
     return this._currentSysKey.getValue();

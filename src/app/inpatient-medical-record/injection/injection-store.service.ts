@@ -5,6 +5,7 @@ import Injection from './Injection.model';
 interface SelectType {
   value: string;
   text: string;
+  syskey: number;
 }
 
 @Injectable({
@@ -14,10 +15,11 @@ export class InjectionStoreService {
   private readonly _currentSysKey = new BehaviorSubject<number>(0);
   private readonly _injections = new BehaviorSubject<Injection[]>([]);
   private readonly _isUpdate = new BehaviorSubject<boolean>(false);
-  private readonly _tabNo = new BehaviorSubject<number>(2);
+  private readonly _tabNo = new BehaviorSubject<number>(1);
   private readonly _deleteDialog = new BehaviorSubject<boolean>(false);
   private readonly _routes = new BehaviorSubject<SelectType[]>([]);
   private readonly _doses = new BehaviorSubject<SelectType[]>([]);
+  private readonly _drugTasks = new BehaviorSubject<SelectType[]>([]);
 
   readonly currentSysKey$ = this._currentSysKey.asObservable();
   readonly injections$ = this._injections.asObservable();
@@ -26,6 +28,7 @@ export class InjectionStoreService {
   readonly deleteDialog$ = this._deleteDialog.asObservable();
   readonly routes$ = this._routes.asObservable();
   readonly doses$ = this._doses.asObservable();
+  readonly drugTasks$ = this._drugTasks.asObservable();
 
   constructor() {}
 
@@ -57,6 +60,10 @@ export class InjectionStoreService {
     this._doses.next(v);
   }
 
+  set drugTasks(v: SelectType[]) {
+    this._drugTasks.next(v);
+  }
+
   get isUpdate(): boolean {
     return this._isUpdate.getValue();
   }
@@ -83,5 +90,9 @@ export class InjectionStoreService {
 
   get doses(): SelectType[] {
     return this._doses.getValue();
+  }
+
+  get drugTasks(): SelectType[] {
+    return this._drugTasks.getValue();
   }
 }

@@ -19,7 +19,7 @@
     <button class="btn btn-primary btn__crud" (click)="print()">Print</button>
   </div>
 
-  <div class="flex__row" style="align-items: flex-end">
+  <div class="flex__row">
     <div class="p__5" style="flex: 0 0 20%">
       <label class="form__label">Date</label>
       <input
@@ -30,55 +30,32 @@
       />
     </div>
 
-    <div class="p__5" style="flex: 0 0 30%"></div>
-
     <div
-      class="p__5 flex__row"
-      style="flex: 0 0 50%"
-      *ngIf="appStoreService.isDoctorRank$ | async"
+      class="p__5"
+      style="flex: 0 0 20%"
+      *ngIf="!(appStoreService.isDoctorRank$ | async)"
     >
-      <div class="flex__row p__5">
-        <input type="checkbox" class="__checkbox" [(ngModel)]="tubeFeed" />
-        <div class="checkbox__label">Tube Feed</div>
-      </div>
-      <div class="flex__row p__5">
-        <input
-          type="checkbox"
-          class="__checkbox"
-          [(ngModel)]="liquidMedication"
-        />
-        <div class="checkbox__label">Liquid Medication</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="flex__row">
-    <div class="p__5" style="flex: 0 0 21.1%">
-      <label class="form__label">Diagnosis</label>
-      <input
-        type="text"
-        class="form-control form__input"
-        [(ngModel)]="diagnosis"
-      />
+      <label class="form__label">Action</label>
+      <select class="form-control form__input" [(ngModel)]="givenByType">
+        <option
+          *ngFor="let drugTask of nonParenteralStoreService.drugTasks$ | async"
+          [value]="drugTask.value"
+        >
+          {{ drugTask.text }}
+        </option>
+      </select>
     </div>
 
     <div
       class="p__5"
-      style="flex: 0 0 21.1%"
       *ngIf="!(appStoreService.isDoctorRank$ | async)"
-    >
-      <label class="form__label">Action</label>
-      <select class="form-control form__input"></select>
-    </div>
-
-    <div
-      style="flex: 0 0 8.9%"
-      *ngIf="!(appStoreService.isDoctorRank$ | async)"
+      style="flex: 0 0 10%"
     ></div>
 
     <div
-      style="flex: 0 0 30%"
+      class="p__5"
       *ngIf="appStoreService.isDoctorRank$ | async"
+      style="flex: 0 0 30%"
     ></div>
 
     <div
@@ -108,36 +85,52 @@
     </div>
   </div>
 
-  <div class="flex__row">
-    <div style="flex: 0 0 45%" class="p__5">
-      <label class="form__label">Drug Allergy To</label>
-      <div
-        *ngIf="!drugAllergyTo"
-        class="tag__box"
-        style="justify-content: center"
-      >
-        <div>No Known Drug Allergy</div>
-      </div>
-      <div *ngIf="drugAllergyTo" class="tag__box">
-        <div class="__chip" *ngFor="let allergy of drugAllergyTo.split(',')">
-          {{ allergy.trim() }}
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="flex__row" *ngIf="appStoreService.isDoctorRank$ | async">
-    <div class="flex__row p__5">
+  <div class="flex__row" style="align-items: flex-end">
+    <div class="p__5" style="flex: 0 0 20%">
+      <label class="form__label">Diagnosis</label>
       <input
-        type="checkbox"
-        class="__checkbox"
-        [(ngModel)]="chronicRenalFailure"
+        type="text"
+        class="form-control form__input"
+        [(ngModel)]="diagnosis"
       />
-      <div class="checkbox__label">Chronic Renal failure</div>
     </div>
-    <div class="flex__row p__5">
-      <input type="checkbox" class="__checkbox" [(ngModel)]="pregnant" />
-      <div class="checkbox__label">Pregnant</div>
+
+    <div class="p__5" style="flex: 0 0 20%">
+      <label class="form__label">Drug Allergy To</label>
+      <input class="form-control form__input" [(ngModel)]="drugAllergyTo" />
+    </div>
+
+    <div style="flex: 0 0 10%"></div>
+
+    <div
+      class="p__5 flex__row"
+      style="flex: 0 0 50%"
+      *ngIf="appStoreService.isDoctorRank$ | async"
+    >
+      <div class="flex__row p__5">
+        <input type="checkbox" class="__checkbox" [(ngModel)]="tubeFeed" />
+        <div class="checkbox__label">Tube Feed</div>
+      </div>
+      <div class="flex__row p__5">
+        <input
+          type="checkbox"
+          class="__checkbox"
+          [(ngModel)]="liquidMedication"
+        />
+        <div class="checkbox__label">Liquid Medication</div>
+      </div>
+      <div class="flex__row p__5">
+        <input
+          type="checkbox"
+          class="__checkbox"
+          [(ngModel)]="chronicRenalFailure"
+        />
+        <div class="checkbox__label">Chronic Renal failure</div>
+      </div>
+      <div class="flex__row p__5">
+        <input type="checkbox" class="__checkbox" [(ngModel)]="pregnant" />
+        <div class="checkbox__label">Pregnant</div>
+      </div>
     </div>
   </div>
 
@@ -161,7 +154,7 @@
     <div class="flex-table__column">
       <select
         class="form-control form__input"
-        [(ngModel)]="nonParenteral.route"
+        [(ngModel)]="nonParenteral.routeSyskey"
       >
         <option
           *ngFor="let route of nonParenteralStoreService.routes$ | async"
@@ -180,13 +173,13 @@
     <div class="flex-table__column" style="justify-content: space-between">
       <input
         class="form-control form__input"
-        style="flex: 0 0 47%; text-align: right"
-        [(ngModel)]="nonParenteral.doseCount"
+        style="text-align: right; flex: 0 0 47%"
+        [(ngModel)]="nonParenteral.dose"
       />
       <select
         class="form-control form__input"
         style="flex: 0 0 47%"
-        [(ngModel)]="nonParenteral.doseDesc"
+        [(ngModel)]="nonParenteral.doseTypeSyskey"
       >
         <option
           *ngFor="let dose of nonParenteralStoreService.doses$ | async"
@@ -198,26 +191,234 @@
     </div>
     <div class="flex-table__column">
       <input
-        class="form-control form__input"
-        [(ngModel)]="nonParenteral.frequency"
-      />
-    </div>
-    <div class="flex-table__column">
-      <input
         type="text"
         class="form-control form__input"
-        [(ngModel)]="nonParenteral.doseDuration"
+        [(ngModel)]="nonParenteral.remark"
       />
     </div>
     <div
       class="flex-table__column"
       *ngIf="!(appStoreService.isDoctorRank$ | async)"
+      style="justify-content: flex-start"
     >
       <input
+        style="margin: 0 0.5rem"
+        *ngFor="let data of nonParenteral.checkList"
         type="checkbox"
         class="__checkbox"
-        [(ngModel)]="nonParenteral.nurseSign"
+        [(ngModel)]="data.done"
+        (change)="toggleCheck($event, data)"
       />
     </div>
   </div>
 </div>
+
+<table id="non-parenteral-doctor__report" style="display: none">
+  <thead>
+    <tr>
+      <th colspan="11">ALL MEDICATIONS EXCEPT PARENTERAL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2">DATE</td>
+      <td rowspan="2">ROUTE</td>
+      <td rowspan="2">MEDICATION</td>
+      <td rowspan="2">DOSE</td>
+      <td rowspan="2">FREQUENCY</td>
+      <td rowspan="2">DR'S SIGN</td>
+      <td colspan="3">DISCONTINUE/REDOSE/TRANSCRIPT</td>
+      <td colspan="2">DISCHARGE MEDICATIONS</td>
+    </tr>
+    <tr>
+      <td>DATE</td>
+      <td>DR'S SIGN</td>
+      <td>D/R/T/</td>
+      <td></td>
+      <td>DURATION</td>
+    </tr>
+
+    <tr
+      *ngFor="
+        let nonParenteral of nonParenteralStoreService.nonParenterals$ | async
+      "
+    >
+      <td>{{ formatDate(date, "DD/MM/yyyy") }}</td>
+      <td>{{ nonParenteral.routeDesc }}</td>
+      <td>{{ nonParenteral.medication }}</td>
+      <td>{{ nonParenteral.dose }}</td>
+      <td>{{ nonParenteral.frequency }}</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+<table id="non-parenteral-nurse__report" style="display: none">
+  <thead>
+    <tr>
+      <th colspan="32">ALL MEDICATIONS EXCEPT PARENTERAL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="8">DATE</td>
+      <td colspan="8">DATE</td>
+      <td colspan="8">DATE</td>
+      <td colspan="8">DATE</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+      <td>2</td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+
+      <td></td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+      <td>2</td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+
+      <td></td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+      <td>2</td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+
+      <td></td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+      <td>2</td>
+      <td>6</td>
+      <td>10</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>am</td>
+      <td>am</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>am</td>
+
+      <td></td>
+      <td>am</td>
+      <td>am</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>am</td>
+
+      <td></td>
+      <td>am</td>
+      <td>am</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>am</td>
+
+      <td></td>
+      <td>am</td>
+      <td>am</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>pm</td>
+      <td>am</td>
+    </tr>
+    <tr
+      *ngFor="
+        let item of [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ]
+      "
+    >
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="8">Checked by:</td>
+      <td colspan="8">Checked by:</td>
+      <td colspan="8">Checked by:</td>
+      <td colspan="8">Checked by:</td>
+    </tr>
+    <tr>
+      <td colspan="4">(Day)</td>
+      <td colspan="4">(Night)</td>
+      <td colspan="4">(Day)</td>
+      <td colspan="4">(Night)</td>
+      <td colspan="4">(Day)</td>
+      <td colspan="4">(Night)</td>
+      <td colspan="4">(Day)</td>
+      <td colspan="4">(Night)</td>
+    </tr>
+  </tbody>
+</table>

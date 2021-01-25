@@ -21,36 +21,21 @@ export class BloodComponent implements OnInit {
   }
 
   tabClickHandler(n: number) {
-    const tabEle1 = document.getElementById('tab1');
-    const tabEle2 = document.getElementById('tab2');
-    switch (n) {
-      case 1:
-        tabEle1.style.background = '#3b5998';
-        tabEle2.style.background = '#8C9899';
-        break;
-      default:
-        tabEle2.style.background = '#3b5998';
-        tabEle1.style.background = '#8C9899';
-    }
     this.bloodStoreService.tabNo = n;
   }
 
   deleteData() {
     this.bloodStoreService.deleteDialog = false;
     if (this.bloodStoreService.isUpdate) {
-      // this.http
-      //   .doPost(
-      //     `inpatient-medical-record/delete-instruction/${this.instructionStoreService.currentSysKey}`,
-      //     { syskey: this.instructionStoreService.currentSysKey }
-      //   )
-      //   .subscribe((data) => {
-      //     const tabEle1 = document.getElementById('tab1');
-      //     const tabEle2 = document.getElementById('tab2');
-      //     tabEle1.style.background = '#3b5998';
-      //     tabEle2.style.background = '#8C9899';
-      //     this.instructionStoreService.isUpdate = false;
-      //     this.instructionStoreService.tabNo = 1;
-      //   });
+      this.http
+        .doPost(
+          `inpatient-medical-record/delete-blood/${this.bloodStoreService.currentSysKey}`,
+          { syskey: this.bloodStoreService.currentSysKey }
+        )
+        .subscribe((data) => {
+          this.bloodStoreService.isUpdate = false;
+          this.bloodStoreService.tabNo = 1;
+        });
     }
   }
 
