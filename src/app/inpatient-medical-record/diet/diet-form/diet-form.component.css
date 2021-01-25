@@ -1,6 +1,14 @@
-.flex-table__column:nth-child(1) {
-  flex: 0 0 120px;
+#diet__form .form__input {
+  font-size: 12px !important;
+}
+.flex-table__column:nth-child(1),
+.flex-table__column:nth-last-child(1) {
+  flex: 0 0 5%;
 }
 .flex-table__column:nth-child(2) {
-  flex-basis: 200px;
+  flex: 0 0 10%;
+}
+#diet__report td,
+th {
+  border: 1px solid black;
 }

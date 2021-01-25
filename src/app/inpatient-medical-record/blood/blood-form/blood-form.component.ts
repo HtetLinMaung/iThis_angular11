@@ -34,7 +34,7 @@ export class BloodFormComponent implements OnInit {
     const tabEle2 = document.getElementById('tab2');
     tabEle2.style.background = '#3b5998';
     tabEle1.style.background = '#8C9899';
-    this.new();
+
     this.fetchData();
   }
 
@@ -59,6 +59,8 @@ export class BloodFormComponent implements OnInit {
         : blood.nurseConfirmDate;
       this.givenByType = blood.givenByType;
       this.bloods = [blood];
+    } else {
+      this.new();
     }
   }
 
@@ -88,10 +90,12 @@ export class BloodFormComponent implements OnInit {
   }
 
   addRow() {
+    if (this.bloodStoreService.isUpdate) return;
     this.bloods.push(new Blood());
   }
 
   removeRow(key: string) {
+    if (this.bloodStoreService.isUpdate) return;
     if (this.bloods.length > 1) {
       this.bloods = this.bloods.filter((blood) => blood.key !== key);
     }
@@ -151,7 +155,7 @@ export class BloodFormComponent implements OnInit {
 
   save() {
     if (this.bloodStoreService.isUpdate) {
-      const v = this.bloodStoreService.bloods[0];
+      const v = this.bloods[0];
       this.http
         .doPost(
           `inpatient-medical-record/update-blood/${this.bloodStoreService.currentSysKey}`,

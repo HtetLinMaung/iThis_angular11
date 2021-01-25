@@ -1,4 +1,4 @@
-<div style="flex: 1">
+<div style="flex: 1" id="diet__form">
   <div style="display: flex; margin-top: 1rem; margin-bottom: 2rem">
     <button class="btn btn-primary btn__crud" (click)="new()">New</button>
     <button
@@ -20,14 +20,13 @@
   </div>
 
   <div class="flex__row">
-    <div class="p__5" style="flex: 0 0 20%">
+    <div class="p__5" style="flex: 0 0 10%">
       <label class="form__label">Date</label>
-      <input
-        type="datetime-local"
-        step="1"
-        class="form-control form__input"
-        [(ngModel)]="date"
-      />
+      <input type="date" class="form-control form__input" [(ngModel)]="date" />
+    </div>
+    <div class="p__5" style="flex: 0 0 10%">
+      <label class="form__label">Time</label>
+      <input type="time" class="form-control form__input" [(ngModel)]="time" />
     </div>
   </div>
 
@@ -41,21 +40,73 @@
     </div>
   </div>
 
-  <div class="flex-table__row">
+  <div
+    class="flex-table__row"
+    style="margin: 1rem 0; align-items: center"
+    *ngFor="let diet of diets"
+  >
     <div class="flex-table__column">
-      <input class="form-control form__input" />
+      <app-icon-button (click)="addRow()">
+        <i class="fa fa-plus" aria-hidden="true" style="font-size: 11px"></i>
+      </app-icon-button>
     </div>
     <div class="flex-table__column">
-      <input class="form-control form__input" />
+      <input class="form-control form__input" [(ngModel)]="diet.no" />
     </div>
     <div class="flex-table__column">
-      <input class="form-control form__input" />
+      <input
+        class="form-control form__input"
+        [(ngModel)]="diet.dietEnteralFeed"
+      />
     </div>
     <div class="flex-table__column">
+      <input class="form-control form__input" [(ngModel)]="diet.notedBy" />
+    </div>
+    <!-- <div class="flex-table__column">
       <select class="form-control form__input"></select>
+    </div> -->
+    <div class="flex-table__column">
+      <input
+        type="text"
+        class="form-control form__input"
+        [(ngModel)]="diet.remark"
+      />
     </div>
     <div class="flex-table__column">
-      <input type="text" class="form-control form__input" />
+      <app-icon-button (click)="removeRow(diet.key)">
+        <i class="fas fa-minus" style="font-size: 11px"></i>
+      </app-icon-button>
     </div>
   </div>
 </div>
+
+<table id="diet__report" style="display: none">
+  <tbody>
+    <tr>
+      <td rowspan="2">DATE</td>
+      <td rowspan="2">DIET AND ENTERAL FEEDS</td>
+      <td rowspan="2">DR'S SIGN</td>
+      <td rowspan="2">NOTED BY</td>
+      <td colspan="3">DISCONTINUE/RE-DOSE/TRANSCRIPT</td>
+      <td rowspan="2">REMARKS</td>
+    </tr>
+    <tr>
+      <td>DATE</td>
+      <td>DR'S SIGN</td>
+      <td>D/R/T/</td>
+    </tr>
+
+    <tr *ngFor="let nonParenteral of dietStoreService.diets$ | async">
+      <td>
+        {{ formatDate(nonParenteral.date, "DD/MM/yyyy") }}
+      </td>
+      <td>{{ nonParenteral.dietEnteralFeed }}</td>
+      <td></td>
+      <td>{{ nonParenteral.notedBy }}</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>{{ nonParenteral.remark }}</td>
+    </tr>
+  </tbody>
+</table>

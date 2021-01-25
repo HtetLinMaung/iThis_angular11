@@ -18,36 +18,21 @@ export class DietComponent implements OnInit {
   ngOnInit(): void {}
 
   tabClickHandler(n: number) {
-    const tabEle1 = document.getElementById('tab1');
-    const tabEle2 = document.getElementById('tab2');
-    switch (n) {
-      case 1:
-        tabEle1.style.background = '#3b5998';
-        tabEle2.style.background = '#8C9899';
-        break;
-      default:
-        tabEle2.style.background = '#3b5998';
-        tabEle1.style.background = '#8C9899';
-    }
     this.dietStoreService.tabNo = n;
   }
 
   deleteData() {
     this.dietStoreService.deleteDialog = false;
     if (this.dietStoreService.isUpdate) {
-      // this.http
-      //   .doPost(
-      //     `inpatient-medical-record/delete-instruction/${this.instructionStoreService.currentSysKey}`,
-      //     { syskey: this.instructionStoreService.currentSysKey }
-      //   )
-      //   .subscribe((data) => {
-      //     const tabEle1 = document.getElementById('tab1');
-      //     const tabEle2 = document.getElementById('tab2');
-      //     tabEle1.style.background = '#3b5998';
-      //     tabEle2.style.background = '#8C9899';
-      //     this.instructionStoreService.isUpdate = false;
-      //     this.instructionStoreService.tabNo = 1;
-      //   });
+      this.http
+        .doPost(
+          `inpatient-medical-record/delete-diet/${this.dietStoreService.currentSysKey}`,
+          { syskey: this.dietStoreService.currentSysKey }
+        )
+        .subscribe((data) => {
+          this.dietStoreService.isUpdate = false;
+          this.dietStoreService.tabNo = 1;
+        });
     }
   }
 
