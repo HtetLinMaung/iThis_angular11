@@ -1,12 +1,15 @@
 <div style="flex: 1">
-  <div class="flex__row">
+  <div class="flex__row" style="flex-wrap: wrap; justify-content: space-around">
     <div
       class="card __raised gw__card"
       *ngFor="let data of formData"
       style="flex: 0 0 48%"
     >
       <div class="__title">
-        <i class="fas fa-lungs" style="font-size: 2rem; margin-right: 1rem"></i>
+        <i
+          [class]="['fas', data.icon]"
+          style="font-size: 2rem; margin-right: 1rem"
+        ></i>
         <span
           style="
             background-color: #eceef1;
@@ -23,34 +26,77 @@
         <div class="flex__item">Outcome Met</div>
       </div>
       <hr />
-      <div class="flex__row" *ngFor="let innerData of data.items">
+      <div
+        class="flex__row"
+        *ngFor="let innerData of data.items; let innerIndex = index"
+      >
         <div class="flex__item">
-          <input type="text" class="form-control form__input" />
+          <input
+            [readonly]="innerData.readonly"
+            *ngIf="innerData.interventions.length == 1"
+            type="text"
+            class="form-control form__input"
+            [(ngModel)]="innerData.interventions[0]"
+          />
+          <select
+            *ngIf="innerData.interventions.length != 1"
+            class="form-control form__input"
+            [(ngModel)]="innerData.selectedInterventions"
+          >
+            <option
+              *ngFor="
+                let intervention of innerData.interventions;
+                let i = index
+              "
+              [value]="i + ''"
+            >
+              {{ intervention }}
+            </option>
+          </select>
         </div>
         <div class="flex__item">
-          <input type="date" class="form-control form__input" />
+          <input
+            style="width: 140px"
+            type="date"
+            class="form-control form__input"
+          />
         </div>
         <div
           class="flex__item flex__row"
           style="align-items: center; justify-content: center"
         >
-          <input type="checkbox" />
+          <input type="checkbox" [(ngModel)]="innerData.dayNurse" />
           <div style="font-size: 12px; padding: 0 7px">day</div>
-          <input type="checkbox" />
+          <input type="checkbox" [(ngModel)]="innerData.nightNurse" />
           <div style="font-size: 12px; padding: 0 7px">night</div>
         </div>
         <div
           class="flex__item flex__row"
           style="align-items: center; justify-content: center"
         >
-          <input type="radio" />
+          <input
+            type="radio"
+            [name]="'radio' + innerIndex"
+            [(ngModel)]="innerData.outcomeMet"
+            value="y"
+          />
           <div style="font-size: 12px; padding: 0 7px">Yes</div>
-          <input type="radio" />
+          <input
+            type="radio"
+            [name]="'radio' + innerIndex"
+            [(ngModel)]="innerData.outcomeMet"
+            value="n"
+          />
           <div style="font-size: 12px; padding: 0 7px">No</div>
         </div>
       </div>
       <div class="flex__row" style="justify-content: center">
-        <button class="btn btn-outline-secondary btn__more">Add More</button>
+        <button
+          (click)="addRow(data.items)"
+          class="btn btn-outline-secondary btn__more"
+        >
+          Add More
+        </button>
       </div>
     </div>
   </div>

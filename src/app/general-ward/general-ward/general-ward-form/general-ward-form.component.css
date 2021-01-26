@@ -10,12 +10,14 @@
   padding: 1rem;
   border-radius: 25px;
   transition: all 0.2s;
+  margin-bottom: 2rem;
 }
 .gw__card .form__input {
-  font-size: 12px !important;
+  font-size: 10px !important;
 }
-.gw__card .flex__item:nth-child(2) {
-  flex: 0 0 33%;
+
+.gw__card .flex__item:nth-child(1) {
+  flex: 0 0 35%;
 }
 .header__row {
   font-size: 13px;
