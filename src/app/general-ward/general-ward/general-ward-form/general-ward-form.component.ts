@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AppStoreService } from 'src/app/app-store.service';
+import { GeneralWardStoreService } from '../../general-ward-store.service';
 
 @Component({
   selector: 'app-general-ward-form',
@@ -6,8 +8,6 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./general-ward-form.component.css'],
 })
 export class GeneralWardFormComponent implements OnInit {
-  constructor() {}
-
   formData = [
     {
       icon: 'fa-lungs',
@@ -92,6 +92,11 @@ export class GeneralWardFormComponent implements OnInit {
     },
   ];
 
+  constructor(
+    public appStoreService: AppStoreService,
+    public generalWardStoreService: GeneralWardStoreService
+  ) {}
+
   ngOnInit(): void {
     const tabEle1 = document.getElementById('tab1');
     const tabEle2 = document.getElementById('tab2');
@@ -112,4 +117,12 @@ export class GeneralWardFormComponent implements OnInit {
       readonly: false,
     });
   }
+
+  new() {}
+
+  save() {}
+
+  delete() {}
+
+  print() {}
 }
