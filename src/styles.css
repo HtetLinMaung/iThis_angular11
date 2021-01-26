@@ -90,3 +90,9 @@
   height: 35px;
   font-size: 14px;
 }
+.btn {
+  transition: all 0.3s !important;
+}
+.btn:active {
+  transform: scale(0.8);
+}

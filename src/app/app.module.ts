@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
+import { GeneralWardModule } from './general-ward/general-ward.module';
 import { InpatientMedicalRecordModule } from './inpatient-medical-record/inpatient-medical-record.module';
 import { LoginComponent } from './login/login.component';
 import { NurseShiftSummaryModule } from './nurse-shift-summary/nurse-shift-summary.module';
@@ -13,7 +14,7 @@ import { NursingCareRecordModule } from './nursing-care-record/nursing-care-reco
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent,],
+  declarations: [AppComponent, LoginComponent],
   imports: [
     BrowserModule,
     FormsModule,
@@ -23,7 +24,7 @@ import { SharedModule } from './shared/shared.module';
     NurseShiftSummaryModule,
     SharedModule,
     NursingCareRecordModule,
-
+    GeneralWardModule,
     RouterModule.forRoot([
       {
         path: '',
@@ -34,4 +35,4 @@ import { SharedModule } from './shared/shared.module';
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

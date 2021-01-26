@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   navigate(n: number) {
     switch (n) {
@@ -32,7 +32,8 @@ export class LoginComponent implements OnInit {
       case 7:
         this.router.navigate(['/inpatient-medication-record/diet']);
         break;
-
+      case 8:
+        this.router.navigate(['/general-ward']);
     }
   }
   navigate1(n: number) {
@@ -50,6 +51,5 @@ export class LoginComponent implements OnInit {
     }
   }
 
-
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

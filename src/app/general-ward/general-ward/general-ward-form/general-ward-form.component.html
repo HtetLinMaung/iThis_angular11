@@ -1,0 +1,57 @@
+<div style="flex: 1">
+  <div class="flex__row">
+    <div
+      class="card __raised gw__card"
+      *ngFor="let data of formData"
+      style="flex: 0 0 48%"
+    >
+      <div class="__title">
+        <i class="fas fa-lungs" style="font-size: 2rem; margin-right: 1rem"></i>
+        <span
+          style="
+            background-color: #eceef1;
+            padding: 0.5rem 1rem;
+            border-radius: 1.5rem;
+          "
+          >{{ data.problemName }}</span
+        >
+      </div>
+      <div class="flex__row header__row">
+        <div class="flex__item">Interventions</div>
+        <div class="flex__item">Initial Date</div>
+        <div class="flex__item">Nurse</div>
+        <div class="flex__item">Outcome Met</div>
+      </div>
+      <hr />
+      <div class="flex__row" *ngFor="let innerData of data.items">
+        <div class="flex__item">
+          <input type="text" class="form-control form__input" />
+        </div>
+        <div class="flex__item">
+          <input type="date" class="form-control form__input" />
+        </div>
+        <div
+          class="flex__item flex__row"
+          style="align-items: center; justify-content: center"
+        >
+          <input type="checkbox" />
+          <div style="font-size: 12px; padding: 0 7px">day</div>
+          <input type="checkbox" />
+          <div style="font-size: 12px; padding: 0 7px">night</div>
+        </div>
+        <div
+          class="flex__item flex__row"
+          style="align-items: center; justify-content: center"
+        >
+          <input type="radio" />
+          <div style="font-size: 12px; padding: 0 7px">Yes</div>
+          <input type="radio" />
+          <div style="font-size: 12px; padding: 0 7px">No</div>
+        </div>
+      </div>
+      <div class="flex__row" style="justify-content: center">
+        <button class="btn btn-outline-secondary btn__more">Add More</button>
+      </div>
+    </div>
+  </div>
+</div>

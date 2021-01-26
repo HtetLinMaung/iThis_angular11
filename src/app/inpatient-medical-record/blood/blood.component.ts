@@ -14,11 +14,9 @@ export class BloodComponent implements OnInit {
     public appStoreService: AppStoreService,
     public bloodStoreService: BloodStoreService,
     private http: HttpService
-  ) { }
+  ) {}
 
-  ngOnInit(): void {
-    this.tabClickHandler(1);
-  }
+  ngOnInit(): void {}
 
   tabClickHandler(n: number) {
     this.bloodStoreService.tabNo = n;
