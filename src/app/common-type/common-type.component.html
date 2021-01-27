@@ -1,0 +1,21 @@
+<div style="width: 100%; padding: 2rem 3rem">
+    <app-patient-header></app-patient-header>
+    <div style="display: flex">
+      <div class="tab__list-item" style="background: #3b5998" (click)="tabClickHandler(1)" id="tab1">
+        List
+      </div>
+      <div class="tab__list-item" (click)="tabClickHandler(2)" id="tab2">
+        Common Type
+      </div>
+    </div>
+    
+    <div style="display: flex">
+      <div class="card tab__body">
+        <app-common-type-list *ngIf="(instructionStoreService.tabNo$ | async) == 1">
+        </app-common-type-list>
+        <app-common-type-form *ngIf="(instructionStoreService.tabNo$ | async) == 2">
+        </app-common-type-form>
+      </div>
+    </div>
+  </div>
+  

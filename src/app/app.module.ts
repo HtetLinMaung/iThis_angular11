@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
+import { CommonTypeModule } from './common-type/common-type.module';
 import { GeneralWardModule } from './general-ward/general-ward.module';
 import { InpatientMedicalRecordModule } from './inpatient-medical-record/inpatient-medical-record.module';
 import { LoginComponent } from './login/login.component';
@@ -24,6 +25,7 @@ import { SharedModule } from './shared/shared.module';
     NurseShiftSummaryModule,
     SharedModule,
     NursingCareRecordModule,
+    CommonTypeModule,
     GeneralWardModule,
     RouterModule.forRoot([
       {
@@ -35,4 +37,4 @@ import { SharedModule } from './shared/shared.module';
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

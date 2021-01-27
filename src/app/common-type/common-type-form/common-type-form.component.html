@@ -1,0 +1,28 @@
+<p>common-type-form works!</p>
+<div style="flex: 1">
+    <div style="display: flex; margin-top: 1rem; margin-bottom: 2rem">
+        <button class="btn btn-primary btn__crud" (click)="goNew()">New</button>
+        <button class="btn btn-success  btn__crud" (click)="save()">{{_obj.syskey=='' || _obj.syskey=='0'?
+            'Save':'Update' }}</button>
+        <button class="btn btn-danger btn__crud" [disabled]="this._obj.syskey==''" (click)="goDelete()">Delete</button>
+        <button class="btn btn-primary btn__crud" (click)="print()">Print</button>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="form__label">Code :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 35%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.code" name="name1"
+                placeholder="Code" />
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="form__label">Description :</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 35%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.description" name="name2"
+            placeholder="Description" />
+        </div>
+    </div>
+</div>
