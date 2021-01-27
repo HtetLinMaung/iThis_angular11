@@ -50,9 +50,11 @@ export class GeneralWardFormComponent implements OnInit {
       this.formData = [...new Set(data.map((v) => v.type))].map(
         (type: number) => ({
           ...this.Type[type],
+          type,
           items: data
             .filter((v) => v.type == type)
             .map((v) => ({
+              typeId: v.parentId,
               interventions: v.headerDesc.split('/'),
               selectedInterventions: '0',
               initialDate: '',
