@@ -28,6 +28,7 @@
         <i
           [class]="['fas', data.icon]"
           style="font-size: 2rem; margin-right: 1rem"
+          *ngIf="data.icon"
         ></i>
         <span
           style="
@@ -95,14 +96,14 @@
         >
           <input
             type="radio"
-            [name]="'radio' + innerIndex"
+            [name]="data.problemName + innerIndex"
             [(ngModel)]="innerData.outcomeMet"
             value="y"
           />
           <div style="font-size: 12px; padding: 0 7px">Yes</div>
           <input
             type="radio"
-            [name]="'radio' + innerIndex"
+            [name]="data.problemName + innerIndex"
             [(ngModel)]="innerData.outcomeMet"
             value="n"
           />
