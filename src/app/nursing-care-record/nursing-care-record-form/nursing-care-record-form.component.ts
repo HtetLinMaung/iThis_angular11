@@ -45,13 +45,16 @@ export class NursingCareRecordFormComponent implements OnInit {
       this.patientcheck5 = true;
     else
       this.patientcheck6 = true;
+    this._obj.t8 = "";
     this._obj.n5 = +myRadio;
   }
   checkpatient(myRadio) {
     if (myRadio == '1')
       this.checkpatient1 = true;
+
     else
       this.checkpatient2 = true;
+    this._obj.t9 = "";
     this._obj.n6 = +myRadio;
   }
   getRsObj() {
@@ -226,57 +229,75 @@ export class NursingCareRecordFormComponent implements OnInit {
     doc.text('PERSON TO CONTACT IN EMERGENCY', 105, 167, { align: 'center' });
     doc.text('Name in Full:', 6, 175);
     doc.line(28, 175, 95, 175);
+    doc.text(this._obj.t1, 33, 175);
     doc.text('Relationship:', 100, 175);
     doc.line(122, 175, 202, 175);
     doc.text('Phone(Res):', 6, 180);
+    doc.text(this._obj.phone1, 30, 180);
     doc.line(28, 180, 67, 180);
     doc.text('(Off)', 72, 180);
+    doc.text(this._obj.phone2, 82, 180);
     doc.line(80, 180, 112, 180);
     doc.text('(HP)', 117, 180);
+    doc.text(this._obj.phone3, 127, 180);
     doc.line(125, 180, 157, 180);
     doc.text('(HP)', 162, 180);
+    doc.text(this._obj.phone4, 172, 180);
     doc.line(170, 180, 202, 180);
     doc.text('Name:', 6, 185);
+    doc.text(this._obj.t2, 23, 185);
     doc.line(18, 185, 95, 185);
     doc.text('Relationship:', 100, 185);
     doc.line(122, 185, 202, 185);
     doc.text('Phone(Res):', 6, 190);
+    doc.text(this._obj.phone5, 30, 190);
     doc.line(28, 190, 67, 190);
     doc.text('(Off)', 72, 190);
+    doc.text(this._obj.phone6, 82, 190);
     doc.line(80, 190, 112, 190);
     doc.text('(HP)', 117, 190);
+    doc.text(this._obj.phone7, 127, 190);
     doc.line(125, 190, 157, 190);
     doc.text('(HP)', 162, 190);
+    doc.text(this._obj.phone8, 172, 190);
     doc.line(170, 190, 202, 190);
-
     doc.rect(5, 193, 200, 8);
     doc.text('PRIMARY DECISION MAKER', 105, 198, { align: 'center' });
     doc.text('Name:', 6, 206);
+    doc.text(this._obj.t3, 23, 206);
     doc.line(18, 206, 95, 206);
     doc.text('Relationship:', 100, 206);
     doc.line(122, 206, 202, 206);
     doc.text('Phone(Res):', 6, 211);
+    doc.text(this._obj.phone9, 30, 211);
     doc.line(28, 211, 67, 211);
     doc.text('(Off)', 72, 211);
+    doc.text(this._obj.phone10, 82, 211);
     doc.line(80, 211, 112, 211);
     doc.text('(HP)', 117, 211);
+    doc.text(this._obj.phone11, 127, 211);
     doc.line(125, 211, 157, 211);
     doc.text('(HP)', 162, 211);
+    doc.text(this._obj.phone12, 172, 211);
     doc.line(170, 211, 202, 211);
-
     doc.rect(5, 214, 200, 8);
     doc.text('SECONDARY DECISION MAKER', 105, 219, { align: 'center' });
     doc.text('Name:', 6, 227);
+    doc.text(this._obj.t4, 23, 227);
     doc.line(18, 227, 95, 227);
     doc.text('Relationship:', 100, 227);
     doc.line(122, 227, 202, 227);
     doc.text('Phone(Res):', 6, 232);
+    doc.text(this._obj.phone13, 30, 232);
     doc.line(28, 232, 67, 232);
     doc.text('(Off)', 72, 232);
+    doc.text(this._obj.phone14, 82, 232);
     doc.line(80, 232, 112, 232);
     doc.text('(HP)', 117, 232);
+    doc.text(this._obj.phone15, 127, 232);
     doc.line(125, 232, 157, 232);
     doc.text('(HP)', 162, 232);
+    doc.text(this._obj.phone16, 172, 232);
     doc.line(170, 232, 202, 232);
     doc.rect(5, 235, 200, 8);
     doc.text('ADMISSION ASSESSMENT', 105, 240, { align: 'center' });
@@ -294,12 +315,16 @@ export class NursingCareRecordFormComponent implements OnInit {
     doc.rect(45, 250, 6, 4);
     doc.text('Others', 53, 253);
     doc.line(70, 253, 155, 253);
+    doc.text(this._obj.t8, 75, 253);
     doc.text('Please Specify', 120, 257);
     doc.text('Arrival Time:', 6, 265);
+    doc.text(this._obj.t5, 30, 265);
     doc.line(26, 265, 95, 265);
     doc.text('Accompanied By:', 100, 265);
+    doc.text(this._obj.t6, 137, 265);
     doc.line(130, 265, 202, 265);
     doc.text('Condition On Arrial:', 6, 270);
+    doc.text(this._obj.t7, 49, 270);
     doc.line(45, 270, 202, 270);
     doc.text('Information Received From:', 6, 275);
     doc.rect(50, 272, 6, 4);
@@ -307,8 +332,95 @@ export class NursingCareRecordFormComponent implements OnInit {
     doc.rect(78, 272, 6, 4);
     doc.text('Others', 87, 275);
     doc.line(110, 275, 202, 275);
+    doc.text(this._obj.t9, 115, 275);
     doc.text('Please Dpecify', 120, 279);
     doc.text('Page 1 of 14', 200, 290, { align: 'right' });
+    if (this._obj.n6 == 1) {
+      doc.rect(50, 272, 6, 4, "F");
+    } else if (this._obj.n6 == 2) {
+      doc.rect(78, 272, 6, 4, "F");
+    }
+    if (this._obj.n5 == 1) {
+      doc.rect(45, 245, 6, 4, "F");
+    } else if (this._obj.n5 == 2) {
+      doc.rect(65, 245, 6, 4, "F");
+    } else if (this._obj.n5 == 3) {
+      doc.rect(85, 245, 6, 4, "F");
+    } else if (this._obj.n5 == 4) {
+      doc.rect(111, 245, 6, 4, "F");
+    } else if (this._obj.n5 == 5) {
+      doc.rect(144, 245, 6, 4, "F");
+    } else if (this._obj.n5 == 6) {
+      doc.rect(45, 250, 6, 4, "F");
+    }
+    if (this._obj.n1 == 1) {
+      doc.text("Father", 127, 175);
+    } else if (this._obj.n1 == 2) {
+      doc.text("Mother", 127, 175);
+    } else if (this._obj.n1 == 3) {
+      doc.text("Husband", 127, 175);
+    } else if (this._obj.n1 == 4) {
+      doc.text("Wife", 127, 175);
+    } else if (this._obj.n1 == 5) {
+      doc.text("Son", 127, 175);
+    } else if (this._obj.n1 == 6) {
+      doc.text("Daughter", 127, 175);
+    } else if (this._obj.n1 == 7) {
+      doc.text("Sister", 127, 175);
+    } else if (this._obj.n1 == 8) {
+      doc.text("Brother", 127, 175);
+    }
+    if (this._obj.n2 == 1) {
+      doc.text("Father", 127, 185);
+    } else if (this._obj.n2 == 2) {
+      doc.text("Mother", 127, 185);
+    } else if (this._obj.n2 == 3) {
+      doc.text("Husband", 127, 185);
+    } else if (this._obj.n2 == 4) {
+      doc.text("Wife", 127, 185);
+    } else if (this._obj.n2 == 5) {
+      doc.text("Son", 127, 185);
+    } else if (this._obj.n2 == 6) {
+      doc.text("Daughter", 127, 185);
+    } else if (this._obj.n2 == 7) {
+      doc.text("Sister", 127, 185);
+    } else if (this._obj.n2 == 8) {
+      doc.text("Brother", 127, 185);
+    }
+    if (this._obj.n3 == 1) {
+      doc.text("Father", 127, 206);
+    } else if (this._obj.n3 == 2) {
+      doc.text("Mother", 127, 206);
+    } else if (this._obj.n3 == 3) {
+      doc.text("Husband", 127, 206);
+    } else if (this._obj.n3 == 4) {
+      doc.text("Wife", 127, 206);
+    } else if (this._obj.n3 == 5) {
+      doc.text("Son", 127, 206);
+    } else if (this._obj.n3 == 6) {
+      doc.text("Daughter", 127, 206);
+    } else if (this._obj.n3 == 7) {
+      doc.text("Sister", 127, 206);
+    } else if (this._obj.n3 == 8) {
+      doc.text("Brother", 127, 206);
+    }
+    if (this._obj.n4 == 1) {
+      doc.text("Father", 127, 227);
+    } else if (this._obj.n4 == 2) {
+      doc.text("Mother", 127, 227);
+    } else if (this._obj.n4 == 3) {
+      doc.text("Husband", 127, 227);
+    } else if (this._obj.n4 == 4) {
+      doc.text("Wife", 127, 227);
+    } else if (this._obj.n4 == 5) {
+      doc.text("Son", 127, 227);
+    } else if (this._obj.n4 == 6) {
+      doc.text("Daughter", 127, 227);
+    } else if (this._obj.n4 == 7) {
+      doc.text("Sister", 127, 227);
+    } else if (this._obj.n4 == 8) {
+      doc.text("Brother", 127, 227);
+    }
     doc.save('nursingcarerecord.pdf');
   }
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from 'src/app/framework/http.service';
 import { NursingCareRecordService } from '../nursing-care-record.service';
-
+import * as moment from 'moment';
 @Component({
   selector: 'app-nursing-care-record-list',
   templateUrl: './nursing-care-record-list.component.html',
@@ -26,6 +26,9 @@ export class NursingCareRecordListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getNurse();
+  }
+  formatDate(dateStr: string, format: string) {
+    return moment(dateStr).format(format);
   }
   initPagination(data) {
     this.start = 0;

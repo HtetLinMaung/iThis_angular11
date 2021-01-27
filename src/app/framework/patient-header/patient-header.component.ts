@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppStoreService } from 'src/app/app-store.service';
 import { Patient } from 'src/app/patient.model';
+
 import { HttpService } from '../http.service';
 
 @Component({
@@ -22,10 +23,12 @@ export class PatientHeaderComponent implements OnInit {
   speciality = '';
   patientType = '';
 
+
+
   constructor(
     private http: HttpService,
     public appStoreService: AppStoreService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.fetchPatientInfoById();
@@ -89,8 +92,8 @@ export class PatientHeaderComponent implements OnInit {
             this.appStoreService.drID = data[0].drID;
           }
         },
-        (error) => {},
-        () => {}
+        (error) => { },
+        () => { }
       );
   }
 }
