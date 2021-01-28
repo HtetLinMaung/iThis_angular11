@@ -116,6 +116,7 @@ export class InjectionListComponent implements OnInit {
           patientId: this.appStoreService.pId,
           rgsno: this.appStoreService.rgsNo,
           doctorId: this.appStoreService.drID,
+          all: true,
         })
         .subscribe((data: any) => {
           this.injectionStoreService.injections = data.map(

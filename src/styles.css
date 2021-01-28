@@ -96,3 +96,7 @@
 .btn:active {
   transform: scale(0.8);
 }
+.__checkbox {
+  width: 18px;
+  height: 18px;
+}
