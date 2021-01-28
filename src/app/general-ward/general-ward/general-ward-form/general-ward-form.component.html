@@ -79,15 +79,43 @@
             style="width: 140px"
             type="date"
             class="form-control form__input"
+            [(ngModel)]="
+              innerData.interventionData[innerData.selectedInterventions]
+                .initialDate
+            "
           />
         </div>
         <div
           class="flex__item flex__row"
           style="align-items: center; justify-content: center"
         >
-          <input type="checkbox" [(ngModel)]="innerData.dayNurse" />
+          <input
+            type="checkbox"
+            (change)="
+              dayHandler(
+                $event,
+                innerData.interventionData[innerData.selectedInterventions]
+              )
+            "
+            [(ngModel)]="
+              innerData.interventionData[innerData.selectedInterventions]
+                .dayNurse
+            "
+          />
           <div style="font-size: 12px; padding: 0 7px">day</div>
-          <input type="checkbox" [(ngModel)]="innerData.nightNurse" />
+          <input
+            type="checkbox"
+            (change)="
+              nightHandler(
+                $event,
+                innerData.interventionData[innerData.selectedInterventions]
+              )
+            "
+            [(ngModel)]="
+              innerData.interventionData[innerData.selectedInterventions]
+                .nightNurse
+            "
+          />
           <div style="font-size: 12px; padding: 0 7px">night</div>
         </div>
         <div
@@ -97,14 +125,20 @@
           <input
             type="radio"
             [name]="data.problemName + innerIndex"
-            [(ngModel)]="innerData.outcomeMet"
+            [(ngModel)]="
+              innerData.interventionData[innerData.selectedInterventions]
+                .outcomeMet
+            "
             value="y"
           />
           <div style="font-size: 12px; padding: 0 7px">Yes</div>
           <input
             type="radio"
             [name]="data.problemName + innerIndex"
-            [(ngModel)]="innerData.outcomeMet"
+            [(ngModel)]="
+              innerData.interventionData[innerData.selectedInterventions]
+                .outcomeMet
+            "
             value="n"
           />
           <div style="font-size: 12px; padding: 0 7px">No</div>

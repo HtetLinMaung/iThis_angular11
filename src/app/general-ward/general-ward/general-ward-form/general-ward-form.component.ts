@@ -45,48 +45,149 @@ export class GeneralWardFormComponent implements OnInit {
     this.fetchFormData();
   }
 
+  dayHandler(e, obj) {
+    if (e.target.checked) {
+      obj.dayNurseAt = new Date().toISOString();
+    } else {
+      obj.dayNurseAt = '';
+    }
+  }
+
+  nightHandler(e, obj) {
+    if (e.target.checked) {
+      obj.nightNurseAt = new Date().toISOString();
+    } else {
+      obj.nightNurseAt = '';
+    }
+  }
+
   fetchFormData() {
-    this.http.doGet('general-ward/initials').subscribe((data: any[]) => {
-      this.formData = [...new Set(data.map((v) => v.type))].map(
-        (type: number) => ({
-          ...this.Type[type],
-          type,
-          items: data
-            .filter((v) => v.type == type)
-            .map((v) => ({
-              typeId: v.parentId,
-              interventions: v.headerDesc.split('/'),
-              selectedInterventions: '0',
-              initialDate: '',
-              dayNurse: false,
-              nightNurse: false,
-              dayNurseAt: '',
-              nightNurseAt: '',
-              outcomeMet: 'y',
-              readonly: true,
-            })),
-        })
-      );
-    });
+    this.http
+      .doPost('general-ward/initials', { patientId: this.appStoreService.pId })
+      .subscribe((data: any[]) => {
+        const parentIdList = [...new Set(data.map((v) => v.parentId))];
+
+        if (data.length) {
+          if (!data[0].generalWardLength) {
+            this.formData = [...new Set(data.map((v) => v.type))].map(
+              (type: number) => ({
+                ...this.Type[type],
+                type,
+                items: data
+                  .filter((v) => v.type == type)
+                  .map((v) => ({
+                    typeId: v.parentId,
+                    interventions: v.headerDesc.split('/'),
+                    selectedInterventions: '0',
+                    interventionData: v.headerDesc.split('/').map((_) => ({
+                      initialDate: '',
+                      dayNurse: false,
+                      nightNurse: false,
+                      dayNurseAt: '',
+                      nightNurseAt: '',
+                      outcomeMet: 'n',
+                    })),
+                    readonly: true,
+                  })),
+              })
+            );
+          } else {
+            const newData = [];
+            for (const parentId of parentIdList) {
+              let element = { interventionData: [] };
+              for (const item of data.filter((v) => v.parentId == parentId)) {
+                element = {
+                  ...item,
+                  interventionData: [
+                    ...element.interventionData,
+                    {
+                      syskey: item.syskey,
+                      initialDate: item.initialDate,
+                      dayNurse: false,
+                      nightNurse: false,
+                      dayNurseAt: '',
+                      nightNurseAt: '',
+                      outcomeMet: item.outcomeMet ? 'y' : 'n',
+                    },
+                  ],
+                };
+              }
+              newData.push(element);
+            }
+
+            this.formData = [...new Set(newData.map((v) => v.type))]
+              .map((type: number) => ({
+                ...this.Type[type],
+                type,
+                items: newData
+                  .filter((v) => v.type == type)
+                  .map((v) => ({
+                    typeId: v.parentId,
+                    interventions: v.headerDesc.split('/'),
+                    selectedInterventions: '0',
+                    interventionData: v.interventionData,
+                    readonly: true,
+                  })),
+              }))
+              .sort((a, b) => a.type - b.type);
+          }
+        }
+      });
   }
 
   addRow(items) {
     items.push({
+      syskey: 0,
       interventions: [''],
       selectedInterventions: '0',
-      initialDate: '',
-      dayNurse: false,
-      nightNurse: false,
-      dayNurseAt: '',
-      nightNurseAt: '',
-      outcomeMet: 'y',
+      interventionData: [''].map((_) => ({
+        initialDate: '',
+        dayNurse: false,
+        nightNurse: false,
+        dayNurseAt: '',
+        nightNurseAt: '',
+        outcomeMet: 'n',
+      })),
       readonly: false,
     });
   }
 
   new() {}
 
-  save() {}
+  save() {
+    const generalWards = [];
+    for (const item of this.formData) {
+      for (const innerItem of item.items) {
+        for (const [index, intervention] of innerItem.interventions.entries()) {
+          generalWards.push({
+            ...innerItem.interventionData[index],
+            syskey: innerItem.interventionData[index].syskey,
+            pId: this.appStoreService.pId,
+            parentId: innerItem.typeId,
+            doctorId: this.appStoreService.drID,
+            RgsNo: this.appStoreService.rgsNo,
+            userid: '',
+            username: '',
+            type: item.type,
+            outcomeMet:
+              innerItem.interventionData[index].outcomeMet == 'y'
+                ? true
+                : false,
+            headerDesc: intervention,
+            selectedInterventions: index,
+          });
+        }
+      }
+    }
+
+    this.http
+      .doPost('general-ward/save', {
+        generalWards,
+      })
+      .subscribe((data) => {
+        this.fetchFormData();
+      });
+  }
 
   delete() {}
 
