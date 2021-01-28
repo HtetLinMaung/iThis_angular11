@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import GeneralWard from './general-ward/general-ward.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GeneralWardStoreService {
   private readonly _currentSysKey = new BehaviorSubject<number>(0);
-  // private readonly _bloods = new BehaviorSubject<Blood[]>([]);
+  private readonly _generalWards = new BehaviorSubject<GeneralWard[]>([]);
   private readonly _isUpdate = new BehaviorSubject<boolean>(false);
-  private readonly _tabNo = new BehaviorSubject<number>(2);
+  private readonly _tabNo = new BehaviorSubject<number>(1);
   private readonly _deleteDialog = new BehaviorSubject<boolean>(false);
 
   readonly currentSysKey$ = this._currentSysKey.asObservable();
-  // readonly bloods$ = this._bloods.asObservable();
+  readonly generalWards$ = this._generalWards.asObservable();
   readonly isUpdate$ = this._isUpdate.asObservable();
   readonly tabNo$ = this._tabNo.asObservable();
   readonly deleteDialog$ = this._deleteDialog.asObservable();
@@ -23,9 +24,9 @@ export class GeneralWardStoreService {
     this._currentSysKey.next(v);
   }
 
-  // set bloods(v: Blood[]) {
-  //   this._bloods.next(v);
-  // }
+  set generalWards(v: GeneralWard[]) {
+    this._generalWards.next(v);
+  }
 
   set tabNo(v: number) {
     this._tabNo.next(v);
@@ -47,9 +48,9 @@ export class GeneralWardStoreService {
     return this._tabNo.getValue();
   }
 
-  // get bloods(): Blood[] {
-  //   return this._bloods.getValue();
-  // }
+  get generalWards(): GeneralWard[] {
+    return this._generalWards.getValue();
+  }
 
   get currentSysKey(): number {
     return this._currentSysKey.getValue();
