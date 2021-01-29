@@ -204,6 +204,7 @@ export class NonParenteralListComponent implements OnInit {
             this.end = this.nonParenteralStoreService.nonParenterals.length;
           }
         }
+        break;
       case 3:
         this.page = 1;
         this.start = (this.page - 1) * this.perPage;

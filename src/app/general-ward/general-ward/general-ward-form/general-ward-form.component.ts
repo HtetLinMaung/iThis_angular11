@@ -9,6 +9,7 @@ import { GeneralWardStoreService } from '../../general-ward-store.service';
   styleUrls: ['./general-ward-form.component.css'],
 })
 export class GeneralWardFormComponent implements OnInit {
+  date = new Date().toISOString().slice(0, 10);
   Type = {
     50: { problemName: 'Breathing', icon: 'fa-lungs' },
     51: { problemName: 'Circulation', icon: 'fa-heartbeat' },
@@ -47,91 +48,94 @@ export class GeneralWardFormComponent implements OnInit {
 
   dayHandler(e, obj) {
     if (e.target.checked) {
-      obj.dayNurseAt = new Date().toISOString();
+      obj.dayNurseAt = this.date + new Date().toISOString().slice(10);
+      obj.dayNurseId = '1';
+      obj.dayNurseName = 'Su Su';
     } else {
       obj.dayNurseAt = '';
+      obj.dayNurseId = '';
+      obj.dayNurseName = '';
     }
   }
 
   nightHandler(e, obj) {
     if (e.target.checked) {
-      obj.nightNurseAt = new Date().toISOString();
+      obj.nightNurseAt = this.date + new Date().toISOString().slice(10);
+      obj.nightNurseId = '1';
+      obj.nightNurseName = 'Mya Mya';
     } else {
       obj.nightNurseAt = '';
+      obj.nightNurseId = '';
+      obj.nightNurseName = '';
     }
+  }
+
+  handleDateChange(e) {
+    this.fetchFormData();
   }
 
   fetchFormData() {
     this.http
-      .doPost('general-ward/initials', { patientId: this.appStoreService.pId })
+      .doPost('general-ward/initials', {
+        patientId: this.appStoreService.pId,
+        date: this.date,
+      })
       .subscribe((data: any[]) => {
         const parentIdList = [...new Set(data.map((v) => v.parentId))];
-
-        if (data.length) {
-          if (!data[0].generalWardLength) {
-            this.formData = [...new Set(data.map((v) => v.type))].map(
-              (type: number) => ({
-                ...this.Type[type],
-                type,
-                items: data
-                  .filter((v) => v.type == type)
-                  .map((v) => ({
-                    typeId: v.parentId,
-                    interventions: v.headerDesc.split('/'),
-                    selectedInterventions: '0',
-                    interventionData: v.headerDesc.split('/').map((_) => ({
-                      initialDate: '',
-                      dayNurse: false,
-                      nightNurse: false,
-                      dayNurseAt: '',
-                      nightNurseAt: '',
-                      outcomeMet: 'n',
-                    })),
-                    readonly: true,
-                  })),
-              })
-            );
+        const newData = [...data.filter((v) => !v.parentId)];
+        for (const parentId of parentIdList) {
+          const filteredList = data.filter(
+            (v) => v.parentId == parentId && !v.outcomeMet
+          );
+          if (!filteredList.length) {
+            newData.push({
+              ...data.find((v) => v.parentId == parentId),
+              typeId: parentId,
+              syskey: 0,
+              interventions: [''],
+              selectedInterventions: '0',
+              initialDate: '',
+              dayNurse: false,
+              nightNurse: false,
+              dayNurseAt: '',
+              nightNurseAt: '',
+              outcomeMet: false,
+              dayNurseId: '',
+              dayNurseName: '',
+              nightNurseId: '',
+              nightNurseName: '',
+              readonly: false,
+            });
           } else {
-            const newData = [];
-            for (const parentId of parentIdList) {
-              let element = { interventionData: [] };
-              for (const item of data.filter((v) => v.parentId == parentId)) {
-                element = {
-                  ...item,
-                  interventionData: [
-                    ...element.interventionData,
-                    {
-                      syskey: item.syskey,
-                      initialDate: item.initialDate,
-                      dayNurse: false,
-                      nightNurse: false,
-                      dayNurseAt: '',
-                      nightNurseAt: '',
-                      outcomeMet: item.outcomeMet ? 'y' : 'n',
-                    },
-                  ],
-                };
-              }
-              newData.push(element);
-            }
-
-            this.formData = [...new Set(newData.map((v) => v.type))]
-              .map((type: number) => ({
-                ...this.Type[type],
-                type,
-                items: newData
-                  .filter((v) => v.type == type)
-                  .map((v) => ({
-                    typeId: v.parentId,
-                    interventions: v.headerDesc.split('/'),
-                    selectedInterventions: '0',
-                    interventionData: v.interventionData,
-                    readonly: true,
-                  })),
-              }))
-              .sort((a, b) => a.type - b.type);
+            newData.push(filteredList[0]);
           }
         }
+        newData.sort((a, b) => a.type - b.type);
+        this.formData = [...new Set(newData.map((v) => v.type))].map(
+          (type: number) => ({
+            ...this.Type[type],
+            type,
+            items: newData
+              .filter((v) => v.type == type)
+              .map((v) => ({
+                syskey: v.syskey || 0,
+                typeId: v.parentId,
+                interventions: v.headerDesc.split('/'),
+                selectedInterventions: v.selectedInterventions || '0',
+                initialDate: v.initialDate || '',
+                dayNurse: v.dayNurse == null ? false : v.dayNurse,
+                nightNurse: v.nightNurse == null ? false : v.nightNurse,
+                dayNurseAt: v.dayNurseAt || '',
+                dayNurseId: v.dayNurseId || '',
+                dayNurseName: v.dayNurseName || '',
+                nightNurseId: v.nightNurseId || '',
+                nightNurseName: v.nightNurseName || '',
+                nightNurseAt: v.nightNurseAt || '',
+                outcomeMet: v.outcomeMet || false,
+                readonly: true,
+              })),
+          })
+        );
       });
   }
 
@@ -140,14 +144,16 @@ export class GeneralWardFormComponent implements OnInit {
       syskey: 0,
       interventions: [''],
       selectedInterventions: '0',
-      interventionData: [''].map((_) => ({
-        initialDate: '',
-        dayNurse: false,
-        nightNurse: false,
-        dayNurseAt: '',
-        nightNurseAt: '',
-        outcomeMet: 'n',
-      })),
+      initialDate: '',
+      dayNurse: false,
+      nightNurse: false,
+      dayNurseAt: '',
+      nightNurseAt: '',
+      outcomeMet: false,
+      dayNurseId: '',
+      dayNurseName: '',
+      nightNurseId: '',
+      nightNurseName: '',
       readonly: false,
     });
   }
@@ -158,31 +164,24 @@ export class GeneralWardFormComponent implements OnInit {
     const generalWards = [];
     for (const item of this.formData) {
       for (const innerItem of item.items) {
-        for (const [index, intervention] of innerItem.interventions.entries()) {
-          generalWards.push({
-            ...innerItem.interventionData[index],
-            syskey: innerItem.interventionData[index].syskey,
-            pId: this.appStoreService.pId,
-            parentId: innerItem.typeId,
-            doctorId: this.appStoreService.drID,
-            RgsNo: this.appStoreService.rgsNo,
-            userid: '',
-            username: '',
-            type: item.type,
-            outcomeMet:
-              innerItem.interventionData[index].outcomeMet == 'y'
-                ? true
-                : false,
-            headerDesc: intervention,
-            selectedInterventions: index,
-          });
-        }
+        generalWards.push({
+          ...innerItem,
+          pId: this.appStoreService.pId,
+          parentId: innerItem.typeId,
+          doctorId: this.appStoreService.drID,
+          RgsNo: this.appStoreService.rgsNo,
+          userid: '',
+          username: '',
+          type: item.type,
+          headerDesc: innerItem.interventions[innerItem.selectedInterventions],
+        });
       }
     }
 
     this.http
       .doPost('general-ward/save', {
         generalWards,
+        date: this.date,
       })
       .subscribe((data) => {
         this.fetchFormData();

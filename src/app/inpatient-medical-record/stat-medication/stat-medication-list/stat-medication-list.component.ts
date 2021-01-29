@@ -208,6 +208,7 @@ export class StatMedicationListComponent implements OnInit {
             this.end = this.statMedicationStoreService.statMedications.length;
           }
         }
+        break;
       case 3:
         this.page = 1;
         this.start = (this.page - 1) * this.perPage;

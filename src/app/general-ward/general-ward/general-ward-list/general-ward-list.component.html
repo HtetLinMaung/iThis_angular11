@@ -75,15 +75,12 @@
       </td>
       <td>{{ nonParenteral.problemName }}</td>
       <td>
-        {{
-          nonParenteral.initialDate
-            ? formatDate(nonParenteral.initialDate, "DD/MM/yyyy")
-            : ""
-        }}
+        {{ nonParenteral.fmtInitialDate }}
       </td>
-      <td>{{ nonParenteral.outcomeMet }}</td>
-      <td>{{ nonParenteral.dayNurseFrequency }}</td>
-      <td>{{ nonParenteral.nightNurseFrequency }}</td>
+      <td>{{ nonParenteral.patientName }}</td>
+      <td>{{ nonParenteral.fmtOutcomeMet }}</td>
+      <td>{{ nonParenteral.fmtDayAt }}</td>
+      <td>{{ nonParenteral.fmtNightAt }}</td>
     </tr>
   </app-table>
 </div>

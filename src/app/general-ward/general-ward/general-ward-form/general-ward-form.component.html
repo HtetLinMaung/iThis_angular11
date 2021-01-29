@@ -17,6 +17,15 @@
     </button>
     <button class="btn btn-danger btn__crud" (click)="delete()">Delete</button>
     <button class="btn btn-primary btn__crud" (click)="print()">Print</button>
+    <div style="flex: 1"></div>
+    <div>
+      <input
+        type="date"
+        [(ngModel)]="date"
+        class="form-control form__input"
+        (change)="handleDateChange($event)"
+      />
+    </div>
   </div>
   <div class="flex__row" style="flex-wrap: wrap; justify-content: space-around">
     <div
@@ -79,10 +88,7 @@
             style="width: 140px"
             type="date"
             class="form-control form__input"
-            [(ngModel)]="
-              innerData.interventionData[innerData.selectedInterventions]
-                .initialDate
-            "
+            [(ngModel)]="innerData.initialDate"
           />
         </div>
         <div
@@ -91,30 +97,14 @@
         >
           <input
             type="checkbox"
-            (change)="
-              dayHandler(
-                $event,
-                innerData.interventionData[innerData.selectedInterventions]
-              )
-            "
-            [(ngModel)]="
-              innerData.interventionData[innerData.selectedInterventions]
-                .dayNurse
-            "
+            (change)="dayHandler($event, innerData)"
+            [(ngModel)]="innerData.dayNurse"
           />
           <div style="font-size: 12px; padding: 0 7px">day</div>
           <input
             type="checkbox"
-            (change)="
-              nightHandler(
-                $event,
-                innerData.interventionData[innerData.selectedInterventions]
-              )
-            "
-            [(ngModel)]="
-              innerData.interventionData[innerData.selectedInterventions]
-                .nightNurse
-            "
+            (change)="nightHandler($event, innerData)"
+            [(ngModel)]="innerData.nightNurse"
           />
           <div style="font-size: 12px; padding: 0 7px">night</div>
         </div>
@@ -122,26 +112,21 @@
           class="flex__item flex__row"
           style="align-items: center; justify-content: center"
         >
-          <input
+          <!-- <input
             type="radio"
             [name]="data.problemName + innerIndex"
-            [(ngModel)]="
-              innerData.interventionData[innerData.selectedInterventions]
-                .outcomeMet
-            "
+            [(ngModel)]="innerData.outcomeMet"
             value="y"
           />
           <div style="font-size: 12px; padding: 0 7px">Yes</div>
           <input
             type="radio"
             [name]="data.problemName + innerIndex"
-            [(ngModel)]="
-              innerData.interventionData[innerData.selectedInterventions]
-                .outcomeMet
-            "
+            [(ngModel)]="innerData.outcomeMet"
             value="n"
           />
-          <div style="font-size: 12px; padding: 0 7px">No</div>
+          <div style="font-size: 12px; padding: 0 7px">No</div> -->
+          <input type="checkbox" [(ngModel)]="innerData.outcomeMet" />
         </div>
       </div>
       <div class="flex__row" style="justify-content: center">

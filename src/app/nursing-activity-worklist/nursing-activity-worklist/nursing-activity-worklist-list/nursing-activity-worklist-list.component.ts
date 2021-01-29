@@ -148,6 +148,7 @@ export class NursingActivityWorklistListComponent implements OnInit {
             this.end = this.nurseActivityWorkListStoreService.activities.length;
           }
         }
+        break;
       case 3:
         this.page = 1;
         this.start = (this.page - 1) * this.perPage;

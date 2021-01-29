@@ -58,7 +58,7 @@ export class InstructionListComponent implements OnInit {
   constructor(
     public instructionStoreService: InstructionStoreService,
     private http: HttpService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.fetchAllInstructions();
@@ -142,6 +142,7 @@ export class InstructionListComponent implements OnInit {
             this.end = this.instructionStoreService.instructions.length;
           }
         }
+        break;
       case 3:
         this.page = 1;
         this.start = (this.page - 1) * this.perPage;

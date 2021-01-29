@@ -204,6 +204,7 @@ export class InjectionListComponent implements OnInit {
             this.end = this.injectionStoreService.injections.length;
           }
         }
+        break;
       case 3:
         this.page = 1;
         this.start = (this.page - 1) * this.perPage;

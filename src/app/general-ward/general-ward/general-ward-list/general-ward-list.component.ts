@@ -34,9 +34,10 @@ export class GeneralWardListComponent implements OnInit {
     'Intervention',
     'Type',
     'Initial Date',
+    'Patient',
     'Outcome Met',
-    'Day Nurse Frequency',
-    'Night Nurse Frequency',
+    'Day Nurse Approved at',
+    'Night Nurse Approved at',
   ];
   page = 1;
   totalPage = 0;
@@ -64,21 +65,25 @@ export class GeneralWardListComponent implements OnInit {
       key: 'initialDate',
     },
     {
+      text: 'Patient',
+      key: 'patientName',
+    },
+    {
       text: 'Outcome Met',
       value: '4',
-      key: 'outcomeMet',
+      key: 'fmtOutcomeMet',
     },
     {
-      text: 'Day Nurse Frequency',
+      text: 'Day Nurse Approved at',
       value: '5',
-      key: 'dayNurseFrequency',
+      key: 'fmtDayAt',
     },
     {
-      text: 'Night Nurse Frequency',
+      text: 'Night Nurse Approved at',
       value: '6',
-      key: 'nightNurseFrequency',
+      key: 'fmtNightAt',
     },
-  ];
+  ].map((v, i) => ({ ...v, value: ++i }));
   search = '';
 
   constructor(
@@ -116,20 +121,24 @@ export class GeneralWardListComponent implements OnInit {
 
   fetchAllGeneralWards() {
     this.http.doGet('general-ward/').subscribe((data: any) => {
-      this.generalWards = data.map(
-        (v) =>
-          new GeneralWard(
-            v.syskey,
-            v.headerDesc,
-            this.Type[v.type].problemName,
-            v.initialDate,
-            v.outcomeMet ? 'Yes' : 'No',
-            v.detailList,
-            v.type,
-            v.detailList.filter((detail) => detail.dayNurse).length,
-            v.detailList.filter((detail) => detail.nightNurse).length
-          )
-      );
+      data.sort((a, b) => a.type - b.type);
+      data.map;
+      this.generalWards = data.map((v) => ({
+        ...v,
+        intervention: v.headerDesc,
+        problemName: this.Type[v.type].problemName,
+        patientName: '',
+        fmtOutcomeMet: v.outcomeMet ? 'Yes' : 'No',
+        fmtDayAt: v.dayNurseAt
+          ? moment(v.dayNurseAt).format('DD/MM/yyyy h:mm:ss a')
+          : '',
+        fmtNightAt: v.nightNurseAt
+          ? moment(v.nightNurseAt).format('DD/MM/yyyy h:mm:ss a')
+          : '',
+        fmtInitialDate: v.initialDate
+          ? moment(v.initialDate).format('DD/MM/yyyy')
+          : '',
+      }));
 
       this.generalWardStoreService.generalWards = [...this.generalWards];
 
@@ -155,17 +164,29 @@ export class GeneralWardListComponent implements OnInit {
           this.page++;
           this.end = this.page * this.perPage;
           if (this.page == this.totalPage) {
-            this.end =
-              this.generalWardStoreService.generalWards.length - this.start;
+            this.start = (this.page - 1) * this.perPage;
+            if (
+              this.generalWardStoreService.generalWards.length %
+                this.perPage ===
+              0
+            ) {
+              this.end = this.page * this.perPage;
+            } else {
+              this.end =
+                this.start +
+                (this.generalWardStoreService.generalWards.length %
+                  this.perPage);
+            }
           }
           this.start = (this.page - 1) * this.perPage;
         }
         break;
       case 2:
-        if (this.page !== 1) {
+        if (this.page > 1) {
           this.page--;
-          this.end = this.page * this.perPage;
+          console.log(this.page);
           this.start = (this.page - 1) * this.perPage;
+          this.end = this.page * this.perPage;
         } else {
           this.start = (this.page - 1) * this.perPage;
           this.end = this.perPage;
@@ -173,6 +194,7 @@ export class GeneralWardListComponent implements OnInit {
             this.end = this.generalWardStoreService.generalWards.length;
           }
         }
+        break;
       case 3:
         this.page = 1;
         this.start = (this.page - 1) * this.perPage;

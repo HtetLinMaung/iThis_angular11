@@ -133,6 +133,7 @@ export class DietListComponent implements OnInit {
             this.end = this.dietStoreService.diets.length;
           }
         }
+        break;
       case 3:
         this.page = 1;
         this.start = (this.page - 1) * this.perPage;
