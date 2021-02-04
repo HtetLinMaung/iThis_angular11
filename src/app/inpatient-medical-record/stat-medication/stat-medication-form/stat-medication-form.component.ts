@@ -264,6 +264,8 @@ export class StatMedicationFormComponent implements OnInit {
               halign: 'center',
             },
           });
+          // doc.autoPrint();
+          doc.autoPrint({ variant: 'non-conform' });
           doc.save('stat-medication.pdf');
         }, 1000);
       });

@@ -122,7 +122,7 @@ export class GeneralWardListComponent implements OnInit {
   fetchAllGeneralWards() {
     this.http.doGet('general-ward/').subscribe((data: any) => {
       data.sort((a, b) => a.type - b.type);
-      data.map;
+
       this.generalWards = data.map((v) => ({
         ...v,
         intervention: v.headerDesc,
@@ -147,6 +147,7 @@ export class GeneralWardListComponent implements OnInit {
   }
 
   goToList({ syskey }: { syskey: number }) {
+    console.log(syskey);
     this.generalWardStoreService.currentSysKey = syskey;
     this.generalWardStoreService.isUpdate = true;
     this.generalWardStoreService.tabNo = 2;

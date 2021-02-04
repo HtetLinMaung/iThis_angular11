@@ -16,9 +16,11 @@
       Save
     </button>
     <button class="btn btn-danger btn__crud" (click)="delete()">Delete</button>
-    <button class="btn btn-primary btn__crud" (click)="print()">Print</button>
+    <button class="btn btn-primary btn__crud" (click)="openPrintDialog()">
+      Print
+    </button>
     <div style="flex: 1"></div>
-    <div>
+    <div *ngIf="!(generalWardStoreService.isUpdate$ | async)">
       <input
         type="date"
         [(ngModel)]="date"
@@ -27,7 +29,11 @@
       />
     </div>
   </div>
-  <div class="flex__row" style="flex-wrap: wrap; justify-content: space-around">
+  <div
+    class="flex__row"
+    style="flex-wrap: wrap; justify-content: space-around"
+    *ngIf="!(generalWardStoreService.isUpdate$ | async)"
+  >
     <div
       class="card __raised gw__card"
       *ngFor="let data of formData"
@@ -112,21 +118,11 @@
           class="flex__item flex__row"
           style="align-items: center; justify-content: center"
         >
-          <!-- <input
-            type="radio"
-            [name]="data.problemName + innerIndex"
-            [(ngModel)]="innerData.outcomeMet"
-            value="y"
-          />
-          <div style="font-size: 12px; padding: 0 7px">Yes</div>
           <input
-            type="radio"
-            [name]="data.problemName + innerIndex"
+            type="checkbox"
             [(ngModel)]="innerData.outcomeMet"
-            value="n"
+            (change)="outcomeHandler($event, innerData)"
           />
-          <div style="font-size: 12px; padding: 0 7px">No</div> -->
-          <input type="checkbox" [(ngModel)]="innerData.outcomeMet" />
         </div>
       </div>
       <div class="flex__row" style="justify-content: center">
@@ -139,4 +135,129 @@
       </div>
     </div>
   </div>
+  <div *ngIf="generalWardStoreService.isUpdate$ | async">
+    <div class="flex__row" style="align-items: flex-end">
+      <div class="p__5">
+        <div class="form__label">Intervention</div>
+        <input
+          readonly="true"
+          type="text"
+          [(ngModel)]="updateForm.intervention"
+          class="form-control form__input"
+        />
+      </div>
+      <div class="p__5">
+        <div class="form__label">Initial Date</div>
+        <input
+          type="date"
+          [(ngModel)]="updateForm.initialDate"
+          class="form-control form__input"
+        />
+      </div>
+    </div>
+    <div class="flex__row">
+      <div class="p__5 flex__row" style="align-items: center">
+        <input
+          type="checkbox"
+          [(ngModel)]="updateForm.outcomeMet"
+          (change)="outcomeHandler($event, updateForm)"
+        />
+        <div style="font-size: 12px; padding-left: 0.5rem">Outcome met</div>
+      </div>
+      <div class="p__5 flex__row" style="align-items: center">
+        <input
+          type="checkbox"
+          [(ngModel)]="updateForm.dayNurse"
+          (change)="dayHandler($event, updateForm)"
+        />
+        <div style="font-size: 12px; padding-left: 0.5rem">Day Nurse</div>
+      </div>
+      <div class="p__5 flex__row" style="align-items: center">
+        <input
+          type="checkbox"
+          [(ngModel)]="updateForm.nightNurse"
+          (change)="nightHandler($event, updateForm)"
+        />
+        <div style="font-size: 12px; padding-left: 0.5rem">Night Nurse</div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<table id="general-ward__report" style="display: none">
+  <tbody>
+    <tr>
+      <td>GOAL FOR PROBLEM(S) IDENTIFIED</td>
+      <td>INTERVENTION(S)</td>
+      <td></td>
+      <td>DATE OF INITIATION</td>
+    </tr>
+    <tr
+      *ngFor="
+        let item of generalWardStoreService.printData$ | async;
+        let i = index
+      "
+    >
+      <td>{{ item.problemName }}</td>
+      <td>{{ item.headerDesc }}</td>
+      <td>{{ i + 1 }}</td>
+      <td>{{ item.initialDate }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<table id="general-ward__report2" style="display: none">
+  <tbody>
+    <tr>
+      <td colspan="2">DATE</td>
+      <td
+        *ngFor="let date of generalWardStoreService.printDates$ | async"
+        colspan="2"
+      >
+        {{ date }}
+      </td>
+      <td colspan="4" rowspan="2">OUTCOME MET</td>
+    </tr>
+    <tr>
+      <td colspan="2">SIGN</td>
+    </tr>
+    <tr>
+      <td colspan="2">SHIFT</td>
+      <td>D</td>
+      <td>N</td>
+      <td>D</td>
+      <td>N</td>
+      <td>D</td>
+      <td>N</td>
+      <td>D</td>
+      <td>N</td>
+      <td>D</td>
+      <td>N</td>
+      <td>D</td>
+      <td>N</td>
+      <td>D</td>
+      <td>N</td>
+      <td>D</td>
+      <td>N</td>
+      <td colspan="2">Date</td>
+      <td colspan="2">Sign</td>
+    </tr>
+    <tr
+      *ngFor="
+        let item of generalWardStoreService.printData$ | async;
+        let i = index
+      "
+    >
+      <td colspan="2">{{ i + 1 }}</td>
+      <td *ngFor="let check of item.checkList">
+        {{ check ? "C" : "" }}
+      </td>
+      <td colspan="2">
+        {{
+          item.outcomeMetAt ? formatDate(item.outcomeMetAt, "DD/MM/yyyy") : ""
+        }}
+      </td>
+      <td colspan="2"></td>
+    </tr>
+  </tbody>
+</table>
