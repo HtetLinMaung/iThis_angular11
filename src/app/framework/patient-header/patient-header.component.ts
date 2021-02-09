@@ -23,12 +23,10 @@ export class PatientHeaderComponent implements OnInit {
   speciality = '';
   patientType = '';
 
-
-
   constructor(
     private http: HttpService,
     public appStoreService: AppStoreService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.fetchPatientInfoById();
@@ -63,6 +61,11 @@ export class PatientHeaderComponent implements OnInit {
     dialogEle.style.display = 'none';
   }
 
+  browsePatients() {
+    console.log('browse');
+    this.appStoreService.patientDialog = true;
+  }
+
   fetchPatientInfoById() {
     this.http
       .doGet(`nurse-activity-worklist/patient-info/${this.appStoreService.pId}`)
@@ -92,8 +95,8 @@ export class PatientHeaderComponent implements OnInit {
             this.appStoreService.drID = data[0].drID;
           }
         },
-        (error) => { },
-        () => { }
+        (error) => {},
+        () => {}
       );
   }
 }

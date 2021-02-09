@@ -1,5 +1,9 @@
 <div style="display: flex; align-items: center; margin-bottom: 1rem">
-  <img src="assets/images/find1.jpg" style="width: 25px; height: 25px" />
+  <img
+    src="assets/images/find1.jpg"
+    style="width: 25px; height: 25px"
+    (click)="browsePatients()"
+  />
   <div style="flex-basis: 100px; padding-left: 7px" class="patient__label">
     {{ patientId }}
   </div>

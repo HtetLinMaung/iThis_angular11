@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Doctor } from './framework/doctor-dialog/doctor.model';
+import PatientData from './framework/patient-dialog/patient.model';
 import { Patient } from './patient.model';
 
 @Injectable({
@@ -17,6 +18,8 @@ export class AppStoreService {
   private readonly _isDoctorRank = new BehaviorSubject<boolean>(true);
   private readonly _rgsNo = new BehaviorSubject<number>(0);
   private readonly _drID = new BehaviorSubject<number>(0);
+  private readonly _patientDialog = new BehaviorSubject<boolean>(false);
+  private readonly _patients = new BehaviorSubject<PatientData[]>([]);
 
   readonly pId$ = this._pId.asObservable();
   readonly patientInfo$ = this._patientInfo.asObservable();
@@ -26,6 +29,8 @@ export class AppStoreService {
   readonly isDoctorRank$ = this._isDoctorRank.asObservable();
   readonly rgsNo$ = this._rgsNo.asObservable();
   readonly drID$ = this._drID.asObservable();
+  readonly patientDialog$ = this._patientDialog.asObservable();
+  readonly patients$ = this._patients.asObservable();
 
   constructor() {}
 
@@ -91,5 +96,21 @@ export class AppStoreService {
 
   get drID(): number {
     return this._drID.getValue();
+  }
+
+  set patientDialog(v: boolean) {
+    this._patientDialog.next(v);
+  }
+
+  get patientDialog(): boolean {
+    return this._doctorDialog.getValue();
+  }
+
+  set patients(v: PatientData[]) {
+    this._patients.next(v);
+  }
+
+  get patients(): PatientData[] {
+    return this._patients.getValue();
   }
 }
