@@ -34,6 +34,10 @@
   (onCancel)="cancelDelete()"
 ></app-delete-dialog>
 
+<app-patient-dialog
+  *ngIf="appStoreService.patientDialog$ | async"
+></app-patient-dialog>
+
 <!-- this is for dev only -->
 <button
   (click)="toggleRank()"

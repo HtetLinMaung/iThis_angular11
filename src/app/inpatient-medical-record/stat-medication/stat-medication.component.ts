@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppStoreService } from 'src/app/app-store.service';
 import { HttpService } from 'src/app/framework/http.service';
 import { StatMedicationStoreService } from './stat-medication-store.service';
 
@@ -9,6 +10,7 @@ import { StatMedicationStoreService } from './stat-medication-store.service';
 })
 export class StatMedicationComponent implements OnInit {
   constructor(
+    public appStoreService: AppStoreService,
     public statMedicationStoreService: StatMedicationStoreService,
     private http: HttpService
   ) {}
