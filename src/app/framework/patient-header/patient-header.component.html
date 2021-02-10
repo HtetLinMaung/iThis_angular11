@@ -5,20 +5,23 @@
     (click)="browsePatients()"
   />
   <div style="flex-basis: 100px; padding-left: 7px" class="patient__label">
-    {{ patientId }}
+    {{ appStoreService.patientDetail.patientId }}
   </div>
   <div style="flex-basis: 250px; padding-left: 7px" class="patient__label">
-    {{ patientName }}
+    {{ appStoreService.patientDetail.patientName }}
   </div>
   <div style="flex-basis: 100px; padding-right: 12px">AD No.</div>
   <div style="flex-basis: 150px">
     <select
       class="form-control"
       style="width: 100%"
-      [(ngModel)]="adNo"
+      [(ngModel)]="appStoreService.patientDetail.adNo"
       (change)="onAdNoChanged($event)"
     >
-      <option *ngFor="let item of adNos" [value]="item.value">
+      <option
+        *ngFor="let item of appStoreService.patientDetail.adNos"
+        [value]="item.value"
+      >
         {{ item.text }}
       </option>
     </select>
@@ -57,36 +60,50 @@
 
   <div class="flex__row">
     <div style="flex-basis: 25%">Name</div>
-    <div style="flex-basis: 75%">: {{ patientName }}</div>
+    <div style="flex-basis: 75%">
+      : {{ appStoreService.patientDetail.patientName }}
+    </div>
   </div>
 
   <div class="flex__row">
     <div style="flex-basis: 25%">Age</div>
-    <div style="flex-basis: 75%">: {{ patientAge }} Yrs</div>
+    <div style="flex-basis: 75%">
+      : {{ appStoreService.patientDetail.patientAge }} Yrs
+    </div>
   </div>
 
   <div class="flex__row">
     <div style="flex-basis: 25%">AD Date</div>
-    <div style="flex-basis: 75%">: {{ ADDate }}</div>
+    <div style="flex-basis: 75%">
+      : {{ appStoreService.patientDetail.ADDate }}
+    </div>
   </div>
 
   <div class="flex__row">
     <div style="flex-basis: 25%">Room</div>
-    <div style="flex-basis: 75%">: {{ room }}</div>
+    <div style="flex-basis: 75%">
+      : {{ appStoreService.patientDetail.room }}
+    </div>
   </div>
 
   <div class="flex__row">
     <div style="flex-basis: 25%">Doctor</div>
-    <div style="flex-basis: 75%">: {{ doctor }}</div>
+    <div style="flex-basis: 75%">
+      : {{ appStoreService.patientDetail.doctor }}
+    </div>
   </div>
 
   <div class="flex__row">
     <div style="flex-basis: 25%">Speciality</div>
-    <div style="flex-basis: 75%">: {{ speciality }}</div>
+    <div style="flex-basis: 75%">
+      : {{ appStoreService.patientDetail.speciality }}
+    </div>
   </div>
 
   <div class="flex__row">
     <div style="flex-basis: 25%">Type</div>
-    <div style="flex-basis: 75%">: {{ patientType }}</div>
+    <div style="flex-basis: 75%">
+      : {{ appStoreService.patientDetail.patientType }}
+    </div>
   </div>
 </div>

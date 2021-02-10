@@ -8,7 +8,7 @@ import { Patient } from './patient.model';
   providedIn: 'root',
 })
 export class AppStoreService {
-  private readonly _pId = new BehaviorSubject<number>(300268449);
+  private readonly _pId = new BehaviorSubject<number>(0);
   private readonly _patientInfo = new BehaviorSubject<Patient>(
     new Patient('', '', '')
   );
@@ -20,6 +20,20 @@ export class AppStoreService {
   private readonly _drID = new BehaviorSubject<number>(0);
   private readonly _patientDialog = new BehaviorSubject<boolean>(false);
   private readonly _patients = new BehaviorSubject<PatientData[]>([]);
+  private readonly _patientDetail = new BehaviorSubject<any>({
+    patientId: '',
+    patientName: '',
+    adNos: [{ value: 0, text: '20-A0010' }],
+    adNo: 0,
+    headerData: [],
+    infoDialog: false,
+    patientAge: 0,
+    ADDate: '',
+    room: '',
+    doctor: '',
+    speciality: '',
+    patientType: '',
+  });
 
   readonly pId$ = this._pId.asObservable();
   readonly patientInfo$ = this._patientInfo.asObservable();
@@ -31,6 +45,7 @@ export class AppStoreService {
   readonly drID$ = this._drID.asObservable();
   readonly patientDialog$ = this._patientDialog.asObservable();
   readonly patients$ = this._patients.asObservable();
+  readonly patientDetail$ = this._patientDetail.asObservable();
 
   constructor() {}
 
@@ -112,5 +127,13 @@ export class AppStoreService {
 
   get patients(): PatientData[] {
     return this._patients.getValue();
+  }
+
+  set patientDetail(v: any) {
+    this._patientDetail.next(v);
+  }
+
+  get patientDetail(): any {
+    return this._patientDetail.getValue();
   }
 }
