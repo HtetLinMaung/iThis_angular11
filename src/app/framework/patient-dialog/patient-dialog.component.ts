@@ -91,6 +91,31 @@ export class PatientDialogComponent implements OnInit {
   ];
   search = '';
   open = false;
+  rgsStatus = 0;
+  patientType = 0;
+  patientTypes = [];
+  patientStatusList = [
+    {
+      value: 0,
+      text: 'Active',
+    },
+    {
+      value: 1,
+      text: 'Discharge',
+    },
+    {
+      value: 3,
+      text: 'Rm  Transfer',
+    },
+    {
+      value: 4,
+      text: 'Ep. Transfer',
+    },
+    {
+      value: 5,
+      text: 'Inactive',
+    },
+  ];
 
   constructor(
     private http: HttpService,
@@ -98,7 +123,7 @@ export class PatientDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchPatients();
+    this.fetchInitialData();
   }
 
   fetchPatientInfoById() {
@@ -158,9 +183,22 @@ export class PatientDialogComponent implements OnInit {
     this.total = data.length;
   }
 
+  fetchInitialData() {
+    this.http
+      .doGet('nurse-activity-worklist/patient-types')
+      .subscribe((data: any) => {
+        this.patientTypes = data.patientTypeList;
+        this.patientType = data.currentPatientType;
+        this.fetchPatients();
+      });
+  }
+
   fetchPatients() {
     this.http
-      .doPost('nurse-activity-worklist/patients', { date: '' })
+      .doPost('nurse-activity-worklist/patients', {
+        patientType: this.patientType,
+        rgsStatus: this.rgsStatus,
+      })
       .subscribe(
         (data: PatientData[]) => {
           this.appStoreService.patients = [...data];
@@ -170,6 +208,10 @@ export class PatientDialogComponent implements OnInit {
         (error) => {},
         () => {}
       );
+  }
+
+  handleChange() {
+    this.fetchPatients();
   }
 
   handlePerPageChanged(perPage) {

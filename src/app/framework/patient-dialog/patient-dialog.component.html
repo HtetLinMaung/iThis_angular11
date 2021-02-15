@@ -1,6 +1,6 @@
 <div class="dialog__wrapper" (click)="closeDialog()">
   <div class="dialog__content" (click)="preventBubble($event)">
-    <div style="display: flex; margin: 1rem 0">
+    <div style="display: flex; margin: 1rem 0; align-items: center">
       <div
         style="
           display: flex;
@@ -34,6 +34,34 @@
         <div class="__fab __raised" title="Export">
           <i class="fas fa-file-export"></i>
         </div>
+      </div>
+      <div style="display: flex; flex: 1"></div>
+      <div class="flex__item" style="flex: 0 0 23%">
+        <select
+          class="form-control form__input"
+          [(ngModel)]="patientType"
+          style="font-size: 12px !important"
+          (change)="handleChange()"
+        >
+          <option *ngFor="let type of patientTypes" [value]="type.value">
+            {{ type.text }}
+          </option>
+        </select>
+      </div>
+      <div class="flex__item">
+        <select
+          class="form-control form__input"
+          [(ngModel)]="rgsStatus"
+          style="font-size: 12px !important"
+          (change)="handleChange()"
+        >
+          <option
+            *ngFor="let status of patientStatusList"
+            [value]="status.value"
+          >
+            {{ status.text }}
+          </option>
+        </select>
       </div>
     </div>
 
