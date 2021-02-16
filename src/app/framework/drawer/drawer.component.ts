@@ -6,22 +6,28 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./drawer.component.css'],
 })
 export class DrawerComponent implements OnInit {
-  items = [
+  drawers = [
     {
-      title: 'Parameters',
-      action: () => {
-        console.log('action');
-      },
+      key: '1',
+      title: 'Setup',
       items: [
         {
-          title: 'Menu',
+          title: 'Parameters',
           action: () => {
-            console.log('inner action');
+            console.log('action');
           },
-        },
-        {
-          title: 'Button',
-          action: () => {},
+          items: [
+            {
+              title: 'Menu',
+              action: () => {
+                console.log('inner action');
+              },
+            },
+            {
+              title: 'Button',
+              action: () => {},
+            },
+          ],
         },
       ],
     },

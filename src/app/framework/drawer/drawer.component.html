@@ -1,4 +1,8 @@
 <div class="__drawer __raised">
-  <app-list-item key="1" title="Setup" [items]="items"></app-list-item>
-  <!-- <app-list-item key="2"></app-list-item> -->
+  <app-list-item
+    *ngFor="let drawer of drawers"
+    [key]="drawer.key"
+    [title]="drawer.title"
+    [items]="drawer.items"
+  ></app-list-item>
 </div>
