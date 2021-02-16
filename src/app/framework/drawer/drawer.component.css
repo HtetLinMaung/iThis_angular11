@@ -1,0 +1,7 @@
+.__drawer {
+  height: 100vh;
+  width: 250px;
+  overflow: auto;
+  padding-top: 4rem;
+  /* background-color: #f4f5f7; */
+}

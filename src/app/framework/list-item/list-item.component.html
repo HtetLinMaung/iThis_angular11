@@ -1,0 +1,13 @@
+<div class="list__parent" (click)="handleParentClick()">Setup</div>
+<div class="list__group" [id]="key">
+  <div class="list__item __raised" (click)="handleInnerClick()">Parameters</div>
+  <div class="list__group" [id]="'inner-' + key">
+    <div class="list__item __raised">Menu</div>
+    <div class="list__item __raised">Button</div>
+  </div>
+  <!-- <div class="list__item __raised">References</div>
+  <div class="list__group">
+    <div class="list__item __raised">Menu</div>
+    <div class="list__item __raised">Button</div>
+  </div> -->
+</div>

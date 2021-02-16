@@ -13,9 +13,12 @@ import { NurseShiftSummaryModule } from './nurse-shift-summary/nurse-shift-summa
 import { NursingActivityWorklistModule } from './nursing-activity-worklist/nursing-activity-worklist.module';
 import { NursingCareRecordModule } from './nursing-care-record/nursing-care-record.module';
 import { SharedModule } from './shared/shared.module';
+import { NavBarComponent } from './framework/nav-bar/nav-bar.component';
+import { DrawerComponent } from './framework/drawer/drawer.component';
+import { ListItemComponent } from './framework/list-item/list-item.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent],
+  declarations: [AppComponent, LoginComponent, NavBarComponent, DrawerComponent, ListItemComponent],
   imports: [
     BrowserModule,
     FormsModule,

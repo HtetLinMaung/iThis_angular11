@@ -1,5 +1,9 @@
 <div>
-  <!-- <h1>App component</h1> -->
-  
-  <router-outlet> </router-outlet>
+  <app-nav-bar></app-nav-bar>
+  <div style="display: flex">
+    <app-drawer></app-drawer>
+    <div class="page__container">
+      <router-outlet> </router-outlet>
+    </div>
+  </div>
 </div>

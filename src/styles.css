@@ -100,3 +100,6 @@
   width: 18px;
   height: 18px;
 }
+router-outlet + * {
+  flex: 1;
+}
