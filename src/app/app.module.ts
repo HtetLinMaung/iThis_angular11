@@ -16,9 +16,16 @@ import { SharedModule } from './shared/shared.module';
 import { NavBarComponent } from './framework/nav-bar/nav-bar.component';
 import { DrawerComponent } from './framework/drawer/drawer.component';
 import { ListItemComponent } from './framework/list-item/list-item.component';
+import { MenuModule } from './menu/menu.module';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, NavBarComponent, DrawerComponent, ListItemComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    NavBarComponent,
+    DrawerComponent,
+    ListItemComponent,
+  ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -30,6 +37,7 @@ import { ListItemComponent } from './framework/list-item/list-item.component';
     NursingCareRecordModule,
     CommonTypeModule,
     GeneralWardModule,
+    MenuModule,
     RouterModule.forRoot([
       {
         path: '',

@@ -19,9 +19,9 @@ export class ListItemComponent implements OnInit {
     ele.classList.toggle('__active');
   }
 
-  handleInnerClick(action = () => {}) {
+  handleInnerClick(path = '') {
     const ele = document.getElementById('inner-' + this.key);
     ele.classList.toggle('__active');
-    action();
+    
   }
 }

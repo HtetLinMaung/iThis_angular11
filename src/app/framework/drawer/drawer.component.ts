@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-drawer',
@@ -19,9 +20,7 @@ export class DrawerComponent implements OnInit {
           items: [
             {
               title: 'Menu',
-              action: () => {
-                console.log('inner action');
-              },
+              action: () => this.router.navigate(['/menu/menu']),
             },
             {
               title: 'Button',
@@ -33,7 +32,7 @@ export class DrawerComponent implements OnInit {
     },
   ];
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
 }
