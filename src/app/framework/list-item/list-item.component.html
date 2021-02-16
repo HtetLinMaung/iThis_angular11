@@ -1,13 +1,17 @@
-<div class="list__parent" (click)="handleParentClick()">Setup</div>
+<div class="list__parent" (click)="handleParentClick()">{{ title }}</div>
 <div class="list__group" [id]="key">
-  <div class="list__item __raised" (click)="handleInnerClick()">Parameters</div>
-  <div class="list__group" [id]="'inner-' + key">
-    <div class="list__item __raised">Menu</div>
-    <div class="list__item __raised">Button</div>
+  <div *ngFor="let item of items">
+    <div class="list__item __raised" (click)="handleInnerClick(item.action)">
+      {{ item.title }}
+    </div>
+    <div class="list__group" [id]="'inner-' + key">
+      <div
+        class="list__item __raised"
+        *ngFor="let innerItem of item.items"
+        (click)="innerItem.action()"
+      >
+        {{ innerItem.title }}
+      </div>
+    </div>
   </div>
-  <!-- <div class="list__item __raised">References</div>
-  <div class="list__group">
-    <div class="list__item __raised">Menu</div>
-    <div class="list__item __raised">Button</div>
-  </div> -->
 </div>

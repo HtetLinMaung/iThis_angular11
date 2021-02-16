@@ -7,6 +7,8 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ListItemComponent implements OnInit {
   @Input() key = '';
+  @Input() items = [];
+  @Input() title = '';
 
   constructor() {}
 
@@ -17,8 +19,9 @@ export class ListItemComponent implements OnInit {
     ele.classList.toggle('__active');
   }
 
-  handleInnerClick() {
+  handleInnerClick(action = () => {}) {
     const ele = document.getElementById('inner-' + this.key);
     ele.classList.toggle('__active');
+    action();
   }
 }
