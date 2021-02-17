@@ -24,7 +24,7 @@
       <input
         type="text"
         class="form-control form__input"
-        [readonly]="(menuStoreService.isUpdate$ | async) ? true : false"
+        [readonly]="(buttonStoreService.isUpdate$ | async) ? true : false"
         [(ngModel)]="code"
       />
     </div>
