@@ -1,4 +1,14 @@
-<div class="list__parent" (click)="handleParentClick()">{{ title }}</div>
+<div
+  class="list__parent"
+  (click)="handleParentClick()"
+  [style]="{
+    background: isParentCollapse ? '#ebf5ff' : '#fff',
+    color: isParentCollapse ? '#3b99ff' : 'black'
+  }"
+>
+  {{ title }}
+</div>
+
 <div class="list__group" [id]="key">
   <div *ngFor="let item of items">
     <div class="list__item __raised" (click)="handleInnerClick(item.action)">

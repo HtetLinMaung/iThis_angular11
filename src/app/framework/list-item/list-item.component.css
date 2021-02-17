@@ -2,13 +2,15 @@
   transition: all 0.3s;
   display: flex;
   align-items: center;
-  padding-left: 1rem;
+  padding: 0.5rem 2rem;
+  padding-left: 2rem;
   cursor: pointer;
-  margin: 0.3rem;
-  font-size: 16px;
+  margin: 0.3rem 1rem;
+  font-size: 13px;
+  border-radius: 35px;
 }
 .list__parent:hover {
-  transform: scale(1.03);
+  background-color: #ebf5ff !important;
 }
 .list__group {
   overflow: hidden;
@@ -22,8 +24,8 @@
   background-color: #fff;
   border-radius: 10px;
   padding: 0.5rem 2rem;
-  margin: 0.5rem;
-  font-size: 13px;
+  margin: 0.5rem 1rem;
+  font-size: 11px;
   cursor: pointer;
 }
 .list__item:hover {

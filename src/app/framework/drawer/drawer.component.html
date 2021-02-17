@@ -1,8 +1,8 @@
 <div class="__drawer __raised">
   <app-list-item
-    *ngFor="let drawer of drawers"
-    [key]="drawer.key"
-    [title]="drawer.title"
-    [items]="drawer.items"
+    *ngFor="let menu of appStoreService.menus$ | async"
+    [key]="menu.key"
+    [title]="menu.title"
+    [items]="menu.items"
   ></app-list-item>
 </div>

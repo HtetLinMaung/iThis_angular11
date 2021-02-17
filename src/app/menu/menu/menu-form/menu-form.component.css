@@ -9,6 +9,11 @@
   cursor: pointer;
   transition: all 0.3s;
 }
+.__chip:hover {
+  background-color: #c36c89 !important;
+  border-color: #c36c89 !important;
+  color: #fff !important;
+}
 .chip__container {
   display: flex;
   flex-wrap: wrap;

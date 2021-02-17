@@ -9,6 +9,7 @@ export class ListItemComponent implements OnInit {
   @Input() key = '';
   @Input() items = [];
   @Input() title = '';
+  isParentCollapse = false;
 
   constructor() {}
 
@@ -17,11 +18,11 @@ export class ListItemComponent implements OnInit {
   handleParentClick() {
     const ele = document.getElementById(this.key);
     ele.classList.toggle('__active');
+    this.isParentCollapse = !this.isParentCollapse;
   }
 
   handleInnerClick(path = '') {
     const ele = document.getElementById('inner-' + this.key);
     ele.classList.toggle('__active');
-    
   }
 }
