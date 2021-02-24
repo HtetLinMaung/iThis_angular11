@@ -63,7 +63,7 @@ export class InstructionListComponent implements OnInit {
     {
       text: 'Patient Name',
       value: '7',
-      key: 'patientId',
+      key: 'patientName',
     },
     {
       text: 'Ad No',

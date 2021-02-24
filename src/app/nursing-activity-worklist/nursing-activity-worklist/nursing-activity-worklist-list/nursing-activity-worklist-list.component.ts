@@ -20,6 +20,9 @@ export class NursingActivityWorklistListComponent implements OnInit {
     'Marking',
     'External Length',
     'Doctor Name',
+    'Patient ID',
+    'Patient Name',
+    'Ad No',
   ];
   page = 1;
   totalPage = 0;
@@ -75,6 +78,21 @@ export class NursingActivityWorklistListComponent implements OnInit {
       text: 'Doctor Name',
       value: '9',
       key: 'doctorName',
+    },
+    {
+      text: 'Patient ID',
+      value: '10',
+      key: 'patientId',
+    },
+    {
+      text: 'Patient Name',
+      value: '11',
+      key: 'patientName',
+    },
+    {
+      text: 'Ad No',
+      value: '12',
+      key: 'adNo',
     },
   ];
   search = '';
@@ -289,7 +307,10 @@ export class NursingActivityWorklistListComponent implements OnInit {
               v.size + v.sizeUnit,
               v.site + v.siteUnit,
               v.marking + v.markingUnit,
-              v.externalLength + v.externalLengthUnit
+              v.externalLength + v.externalLengthUnit,
+              v.patientId,
+              v.patientName,
+              v.adNo
             )
         );
         this.activities = this.nurseActivityWorkListStoreService.activities;

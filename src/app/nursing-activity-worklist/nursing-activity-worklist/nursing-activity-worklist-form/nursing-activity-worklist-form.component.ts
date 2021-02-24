@@ -33,7 +33,7 @@ export class NursingActivityWorklistFormComponent implements OnInit {
     public appStoreService: AppStoreService,
     public nurseActivityWorkListStoreService: NurseActivityWorkListStoreService,
     private http: HttpService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.appStoreService.doctor = new Doctor();
@@ -88,13 +88,14 @@ export class NursingActivityWorklistFormComponent implements OnInit {
   save() {
     this.http
       .doPost(
-        `nurse-activity-worklist/${!this.nurseActivityWorkListStoreService.isUpdate
-          ? 'save'
-          : `update/${this.nurseActivityWorkListStoreService.currentSysKey}`
+        `nurse-activity-worklist/${
+          !this.nurseActivityWorkListStoreService.isUpdate
+            ? 'save'
+            : `update/${this.nurseActivityWorkListStoreService.currentSysKey}`
         }`,
         {
           pId: this.appStoreService.pId,
-          RgsNo: 1,
+          RgsNo: this.appStoreService.rgsNo,
           userid: '',
           username: '',
           doctorSysKey: this.appStoreService.doctor.syskey,
@@ -119,8 +120,8 @@ export class NursingActivityWorklistFormComponent implements OnInit {
           }
           this.nurseActivityWorkListStoreService.isUpdate = true;
         },
-        (error) => { },
-        () => { }
+        (error) => {},
+        () => {}
       );
   }
 
@@ -130,173 +131,176 @@ export class NursingActivityWorklistFormComponent implements OnInit {
   }
 
   print() {
-    this.http.doGet('nurse-activity-worklist/get-by-patient/1').subscribe(
-      (printData: any) => {
-        const query1 = [5, 11, 16, 21, 25, 29, 33, 37, 41, 45]
-          .map((n) => `#export_table tr:nth-child(${n}) td:nth-child(1)`)
-          .join(', ');
-        const query2 = [6, 12, 17, 22, 26, 30, 34, 38, 42, 46]
-          .map((n) => `#export_table tr:nth-child(${n}) td:nth-child(1)`)
-          .join(', ');
-        const elems = document.querySelectorAll(query2);
-        const proEles: any = document.querySelectorAll(query1);
-        proEles.forEach((p, i) => {
-          const tubeName = p.innerHTML.trim();
-          const proRef = this.nurseActivityWorkListStoreService.procedures.find(
-            (v) => v.text.match(new RegExp(tubeName))
-          );
-          if (proRef) {
-            this.filterdPrintData = printData.filter(
-              (p) => p.procedure == proRef.value
+    this.http
+      .doGet(
+        `nurse-activity-worklist/get-by-patient/${this.appStoreService.pId}`
+      )
+      .subscribe(
+        (printData: any) => {
+          const query1 = [5, 11, 16, 21, 25, 29, 33, 37, 41, 45]
+            .map((n) => `#export_table tr:nth-child(${n}) td:nth-child(1)`)
+            .join(', ');
+          const query2 = [6, 12, 17, 22, 26, 30, 34, 38, 42, 46]
+            .map((n) => `#export_table tr:nth-child(${n}) td:nth-child(1)`)
+            .join(', ');
+          const elems = document.querySelectorAll(query2);
+          const proEles: any = document.querySelectorAll(query1);
+          proEles.forEach((p, i) => {
+            const tubeName = p.innerHTML.trim();
+            const proRef = this.nurseActivityWorkListStoreService.procedures.find(
+              (v) => v.text.match(new RegExp(tubeName))
             );
-            if (this.filterdPrintData.length) {
-              elems[i].innerHTML = moment(
-                this.filterdPrintData[0].dueDateChange
-              ).format('DD/MM/yyyy');
+            if (proRef) {
+              this.filterdPrintData = printData.filter(
+                (p) => p.procedure == proRef.value
+              );
+              if (this.filterdPrintData.length) {
+                elems[i].innerHTML = moment(
+                  this.filterdPrintData[0].dueDateChange
+                ).format('DD/MM/yyyy');
+              }
             }
-          }
-        });
+          });
 
-        const doc = new jsPDF();
+          const doc = new jsPDF();
 
-        (doc as any).autoTable({
-          html: '#export_table',
-          startY: 10,
-          theme: 'grid',
-          didDrawCell: (data) => {
-            switch (data.row.index) {
-              case 4:
-              case 10:
-              case 15:
-              case 20:
-              case 24:
-              case 28:
-              case 32:
-              case 36:
-              case 40:
-              case 44:
-                const tubeName = data.row.cells[0].text.join(' ');
-                const proRef = this.nurseActivityWorkListStoreService.procedures.find(
-                  (v) => v.text.match(new RegExp(tubeName))
-                );
-                if (proRef) {
-                  this.filterdPrintData = printData.filter(
-                    (p) => p.procedure == proRef.value
+          (doc as any).autoTable({
+            html: '#export_table',
+            startY: 10,
+            theme: 'grid',
+            didDrawCell: (data) => {
+              switch (data.row.index) {
+                case 4:
+                case 10:
+                case 15:
+                case 20:
+                case 24:
+                case 28:
+                case 32:
+                case 36:
+                case 40:
+                case 44:
+                  const tubeName = data.row.cells[0].text.join(' ');
+                  const proRef = this.nurseActivityWorkListStoreService.procedures.find(
+                    (v) => v.text.match(new RegExp(tubeName))
                   );
-                }
-                this.filterdPrintData.forEach((p, i) => {
-                  if (i < 7) {
-                    data.row.cells[i + 1].text[0] = moment(p.date).format(
-                      'DD/MM/yyyy'
+                  if (proRef) {
+                    this.filterdPrintData = printData.filter(
+                      (p) => p.procedure == proRef.value
                     );
                   }
-                });
-                break;
-              case 5:
-              case 11:
-              case 16:
-              case 21:
-              case 25:
-              case 29:
-              case 33:
-              case 37:
-              case 41:
-              case 45:
-                // Due Date
-                this.filterdPrintData.forEach((p, i) => {
-                  if (i < 7) {
-                    data.row.cells[i + 1].text[0] = moment(
-                      p.dueDateChange
-                    ).format('DD/MM/yyyy');
-                  }
-                });
-                break;
-              case 34:
-                this.filterdPrintData.forEach((p, i) => {
-                  if (i < 7) {
-                    data.row.cells[i + 1].text[0] =
-                      p.site + p.siteUnit + ' & ' + p.size + p.sizeUnit;
-                  }
-                });
-                break;
-              case 17:
-              case 22:
-              case 26:
-              case 30:
-              case 38:
-                this.filterdPrintData.forEach((p, i) => {
-                  if (i < 7) {
-                    data.row.cells[i + 1].text[0] = p.site + p.siteUnit;
-                  }
-                });
-                break;
-              case 6:
-              case 12:
-              case 18:
-              case 42:
-              case 46:
-                this.filterdPrintData.forEach((p, i) => {
-                  if (i < 7) {
-                    data.row.cells[i + 1].text[0] = p.size + p.sizeUnit;
-                  }
-                });
-                break;
-              case 47:
-              case 8:
-                this.filterdPrintData.forEach((p, i) => {
-                  if (i < 7) {
-                    data.row.cells[i + 1].text[0] =
-                      p.externalLength + p.externalLengthUnit;
-                  }
-                });
-                break;
-              case 7:
-              case 13:
-                this.filterdPrintData.forEach((p, i) => {
-                  if (i < 7) {
-                    data.row.cells[i + 1].text[0] = p.marking + p.markingUnit;
-                  }
-                });
-                break;
-            }
-          },
-          willDrawCell: (data) => {
-            switch (data.row.index) {
-              case 0:
-                doc.setFillColor('#CDC8C8');
-                doc.setTextColor('#fff');
-                break;
-              case 3:
-              case 9:
-              case 14:
-              case 19:
-              case 23:
-              case 27:
-              case 31:
-              case 35:
-              case 39:
-              case 43:
-              case 48:
-              case 50:
-                data.row.height = 1;
-                doc.setFillColor('#CDC8C8');
-            }
-          },
-          styles: {
-            fontSize: 9,
-            minCellHeight: 1,
-            cellPadding: 1,
-            valign: 'middle',
-          },
-        });
+                  this.filterdPrintData.forEach((p, i) => {
+                    if (i < 7) {
+                      data.row.cells[i + 1].text[0] = moment(p.date).format(
+                        'DD/MM/yyyy'
+                      );
+                    }
+                  });
+                  break;
+                case 5:
+                case 11:
+                case 16:
+                case 21:
+                case 25:
+                case 29:
+                case 33:
+                case 37:
+                case 41:
+                case 45:
+                  // Due Date
+                  this.filterdPrintData.forEach((p, i) => {
+                    if (i < 7) {
+                      data.row.cells[i + 1].text[0] = moment(
+                        p.dueDateChange
+                      ).format('DD/MM/yyyy');
+                    }
+                  });
+                  break;
+                case 34:
+                  this.filterdPrintData.forEach((p, i) => {
+                    if (i < 7) {
+                      data.row.cells[i + 1].text[0] =
+                        p.site + p.siteUnit + ' & ' + p.size + p.sizeUnit;
+                    }
+                  });
+                  break;
+                case 17:
+                case 22:
+                case 26:
+                case 30:
+                case 38:
+                  this.filterdPrintData.forEach((p, i) => {
+                    if (i < 7) {
+                      data.row.cells[i + 1].text[0] = p.site + p.siteUnit;
+                    }
+                  });
+                  break;
+                case 6:
+                case 12:
+                case 18:
+                case 42:
+                case 46:
+                  this.filterdPrintData.forEach((p, i) => {
+                    if (i < 7) {
+                      data.row.cells[i + 1].text[0] = p.size + p.sizeUnit;
+                    }
+                  });
+                  break;
+                case 47:
+                case 8:
+                  this.filterdPrintData.forEach((p, i) => {
+                    if (i < 7) {
+                      data.row.cells[i + 1].text[0] =
+                        p.externalLength + p.externalLengthUnit;
+                    }
+                  });
+                  break;
+                case 7:
+                case 13:
+                  this.filterdPrintData.forEach((p, i) => {
+                    if (i < 7) {
+                      data.row.cells[i + 1].text[0] = p.marking + p.markingUnit;
+                    }
+                  });
+                  break;
+              }
+            },
+            willDrawCell: (data) => {
+              switch (data.row.index) {
+                case 0:
+                  doc.setFillColor('#CDC8C8');
+                  doc.setTextColor('#fff');
+                  break;
+                case 3:
+                case 9:
+                case 14:
+                case 19:
+                case 23:
+                case 27:
+                case 31:
+                case 35:
+                case 39:
+                case 43:
+                case 48:
+                case 50:
+                  data.row.height = 1;
+                  doc.setFillColor('#CDC8C8');
+              }
+            },
+            styles: {
+              fontSize: 9,
+              minCellHeight: 1,
+              cellPadding: 1,
+              valign: 'middle',
+            },
+          });
 
-        doc.save('nurse activity.pdf');
-      },
-      (error) => { },
-      () => { }
-    );
+          doc.save('nurse activity.pdf');
+        },
+        (error) => {},
+        () => {}
+      );
   }
-
 
   browseDoctor() {
     this.appStoreService.doctorDialog = true;

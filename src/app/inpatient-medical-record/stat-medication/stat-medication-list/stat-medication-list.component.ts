@@ -82,7 +82,7 @@ export class StatMedicationListComponent implements OnInit {
     {
       text: 'Patient Name',
       value: '10',
-      key: 'patientId',
+      key: 'patientName',
     },
     {
       text: 'Ad No',
@@ -177,7 +177,7 @@ export class StatMedicationListComponent implements OnInit {
                           this.appStoreService.isDoctorRank
                             ? v.moConfirmDate
                             : v.nurseConfirmDate,
-                            '',
+                          '',
                           v.patientId,
                           v.patientName,
                           v.adNo

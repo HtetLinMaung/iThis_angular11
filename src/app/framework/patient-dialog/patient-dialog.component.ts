@@ -166,7 +166,7 @@ export class PatientDialogComponent implements OnInit {
 
   selectPatient(patient: PatientData) {
     this.appStoreService.pId = patient.pId;
-
+    this.appStoreService.rgsNo = patient.rgsNo;
     this.appStoreService.patientDialog = false;
     this.fetchPatientInfoById();
   }

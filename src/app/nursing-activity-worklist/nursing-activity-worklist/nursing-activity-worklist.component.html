@@ -16,7 +16,7 @@
   </div>
 
   <div style="display: flex">
-    <div class="card tab__body">
+    <div class="card tab__body" style="flex: 1">
       <app-nursing-activity-worklist-list
         *ngIf="(nurseActivityWorkListStoreService.tabNo$ | async) == 1"
       ></app-nursing-activity-worklist-list>
