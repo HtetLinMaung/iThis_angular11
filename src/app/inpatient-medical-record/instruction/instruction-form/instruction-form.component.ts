@@ -59,7 +59,9 @@ export class InstructionFormComponent implements OnInit {
       this.instruction = instruction.instruction;
       this.remarks = instruction.remarks;
     } else {
-      this.fetchAllergiesByPatient(this.appStoreService.pId);
+      this.appStoreService.onPatientIdChanged = () => {
+        this.fetchAllergiesByPatient(this.appStoreService.pId);
+      };
     }
   }
 
@@ -192,6 +194,7 @@ export class InstructionFormComponent implements OnInit {
   }
 
   fetchAllergiesByPatient(pId: number) {
+    console.log('running fetchAllergiesByPatient');
     this.http
       .doGet(`inpatient-medical-record/allergies/${pId}`)
       .subscribe((data: any) => {

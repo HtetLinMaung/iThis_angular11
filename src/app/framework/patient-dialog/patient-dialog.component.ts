@@ -133,6 +133,7 @@ export class PatientDialogComponent implements OnInit {
       .subscribe(
         (data: any) => {
           this.appStoreService.patientDetail.headerData = data;
+          this.appStoreService.onPatientIdChanged();
           if (data.length) {
             this.appStoreService.patientDetail.patientId = data[0].patientid;
             this.appStoreService.patientDetail.patientName =
@@ -165,6 +166,7 @@ export class PatientDialogComponent implements OnInit {
 
   selectPatient(patient: PatientData) {
     this.appStoreService.pId = patient.pId;
+
     this.appStoreService.patientDialog = false;
     this.fetchPatientInfoById();
   }
