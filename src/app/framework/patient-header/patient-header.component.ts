@@ -52,7 +52,6 @@ export class PatientHeaderComponent implements OnInit {
   }
 
   browsePatients() {
-    console.log('browse');
     this.appStoreService.patientDialog = true;
   }
 
@@ -91,5 +90,25 @@ export class PatientHeaderComponent implements OnInit {
         (error) => {},
         () => {}
       );
+  }
+
+  clear() {
+    this.appStoreService.pId = 0;
+    this.appStoreService.patientDetail = {
+      patientId: '',
+      patientName: '',
+      adNos: [{ value: 0, text: '-' }],
+      adNo: 0,
+      headerData: [],
+      infoDialog: false,
+      patientAge: 0,
+      ADDate: '',
+      room: '',
+      doctor: '',
+      speciality: '',
+      patientType: '',
+    };
+    this.appStoreService.rgsNo = 0;
+    this.appStoreService.drID = 0;
   }
 }

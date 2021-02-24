@@ -23,7 +23,7 @@ export class AppStoreService {
   private readonly _patientDetail = new BehaviorSubject<any>({
     patientId: '',
     patientName: '',
-    adNos: [{ value: 0, text: '20-A0010' }],
+    adNos: [{ value: 0, text: '-' }],
     adNo: 0,
     headerData: [],
     infoDialog: false,
