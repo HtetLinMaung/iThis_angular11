@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AppStoreService } from '../app-store.service';
 
 @Component({
   selector: 'app-login',
@@ -7,7 +8,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    public appStoreService: AppStoreService
+  ) {}
 
   navigate(n: number) {
     switch (n) {
@@ -61,5 +65,10 @@ export class LoginComponent implements OnInit {
 
     }
   }
+<<<<<<< HEAD
   ngOnInit(): void { }
+=======
+
+  ngOnInit(): void {}
+>>>>>>> deb36a09d7a29524b6d4782d51706714a6eb90c7
 }

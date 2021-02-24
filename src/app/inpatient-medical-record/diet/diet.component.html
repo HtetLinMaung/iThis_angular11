@@ -11,7 +11,7 @@
       List
     </div>
     <div class="tab__list-item" (click)="tabClickHandler(2)" id="tab2">
-      History
+      Diet, fluid order and enteral feed form
     </div>
   </div>
 
@@ -33,3 +33,7 @@
   (onDelete)="deleteData()"
   (onCancel)="cancelDelete()"
 ></app-delete-dialog>
+
+<app-patient-dialog
+  *ngIf="appStoreService.patientDialog$ | async"
+></app-patient-dialog>

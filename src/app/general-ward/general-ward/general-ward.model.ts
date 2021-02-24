@@ -21,7 +21,8 @@ export default class GeneralWard {
     public nightNurseAt = 0,
     public nightNurseId = '',
     public nightNurseName = '',
-    public outcomeMet = false
+    public outcomeMet = false,
+    public detailSyskey = 0
   ) {}
 }
 

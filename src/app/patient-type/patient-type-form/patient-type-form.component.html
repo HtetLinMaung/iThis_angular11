@@ -1,0 +1,83 @@
+<div style="flex: 1">
+    <div style="display: flex; margin-top: 1rem; margin-bottom: 2rem">
+        <button class="btn btn-primary btn__crud" (click)="goNew()">New</button>
+        <button class="btn btn-success  btn__crud" (click)="save()">{{_obj.syskey=='' || _obj.syskey=='0'?
+            'Save':'Update' }}</button>
+        <button class="btn btn-danger btn__crud" [disabled]="this._obj.syskey==''" (click)="goDelete()">Delete</button>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 15%">
+            <label class="checkbox-inline">
+                <input type="radio" [checked]="this._obj.n1==2" [checked]="parentcheck" id="carelineyes"
+                    (click)="checkCare(2)" name="careline" value="2" checked>
+                Admission
+            </label>
+        </div>
+        <div class="p__5" style="flex: 0 0 10%">
+            <label class="checkbox-inline">
+                <input type="radio" [checked]="this._obj.n1==1" [checked]="childcheck" id="carelineno"
+                    (click)="checkCare(1)" name="careline" value="1" checked>
+                OPD
+            </label>
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 20%">
+            <label class="form__label">Code</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 30%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.t1" name="intervention"
+                placeholder="Code" />
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 20%">
+            <label class="form__label">Description</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 30%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.t2" name="intervention1"
+                placeholder="Description" />
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 20%">
+            <label class="form__label">Prefix</label>
+        </div>
+        <div class="p__5" style="flex: 0 0 30%">
+            <input type="text" class="select_control form-control" [(ngModel)]="_obj.t3" name="intervention2"
+                placeholder="Prefix" />
+        </div>
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 25%">
+            <label class="checkbox-inline">
+                Cashier payment
+                <input type="checkbox" [checked]="this._obj.n2==1" [checked]="separate_payment" id="separate" 
+                    (change)="SeparatePayment($event)" name="careline1" checked> 
+            </label>
+        </div>
+        <div class="p__5" style="flex: 0 0 25%">
+            <label class="checkbox-inline">
+                Default Credit
+                <input type="checkbox" [checked]="this._obj.n3==1" [checked]="credit" id="credit"
+                    (change)="Credit($event)" name="careline2" value="1" checked>
+            </label>
+        </div> 
+    </div>
+    <div class="flex__row">
+        <div class="p__5" style="flex: 0 0 25%">
+            <label class="checkbox-inline">
+                Full Payment
+                <input type="checkbox" [checked]="this._obj.n4==1" [checked]="full_payment" id="fullpayment"
+                    (change)="Full_payment($event)" name="careline3" value="1" checked>
+            </label>
+        </div>
+        <div class="p__5" style="flex: 0 0 25%">
+            <label class="checkbox-inline">
+                Export to Account
+                <input type="checkbox" [checked]="this._obj.n5==1" [checked]="export_to_account" id="carelineyes"
+                    (change)="Export($event)" name="careline4" value="1" checked>                
+            </label>
+        </div>
+    </div>
+</div>

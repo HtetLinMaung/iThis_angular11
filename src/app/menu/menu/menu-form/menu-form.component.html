@@ -1,0 +1,92 @@
+<div style="flex: 1">
+  <div style="display: flex; margin-top: 1rem; margin-bottom: 2rem">
+    <button class="btn btn-primary btn__crud" (click)="new()">New</button>
+    <button
+      *ngIf="menuStoreService.isUpdate$ | async"
+      class="btn btn-success btn__crud"
+      (click)="save()"
+    >
+      Update
+    </button>
+    <button
+      *ngIf="!(menuStoreService.isUpdate$ | async)"
+      class="btn btn-success btn__crud"
+      (click)="save()"
+    >
+      Save
+    </button>
+    <button class="btn btn-danger btn__crud" (click)="delete()">Delete</button>
+  </div>
+
+  <div class="flex__row">
+    <div
+      class="flex__row flex__item"
+      style="align-items: center; flex: 0 0 20%; justify-content: center"
+    >
+      <input type="radio" name="p-c" [value]="1" [(ngModel)]="menuPosition" />
+      <div style="font-size: 12px; padding: 0 1rem 0 0.5rem">Parent</div>
+      <input type="radio" name="p-c" [value]="2" [(ngModel)]="menuPosition" />
+      <div style="font-size: 12px; padding: 0 1rem 0 0.5rem">Child</div>
+    </div>
+    <div style="flex: 0 0 25%" class="flex__item">
+      <select class="form-control form__input" [(ngModel)]="menu">
+        <option *ngFor="let item of menus" [value]="item.value">
+          {{ item.text }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div class="flex__row" style="align-items: center">
+    <div style="flex: 0 0 20%" class="form__label flex__item">Code</div>
+    <div class="flex__item" style="flex: 0 0 20%">
+      <input
+        type="text"
+        class="form-control form__input"
+        [readonly]="(menuStoreService.isUpdate$ | async) ? true : false"
+        [(ngModel)]="code"
+      />
+    </div>
+  </div>
+
+  <div class="flex__row" style="align-items: center">
+    <div style="flex: 0 0 20%" class="form__label flex__item">Description</div>
+    <div class="flex__item" style="flex: 0 0 50%">
+      <input
+        type="text"
+        class="form-control form__input"
+        [(ngModel)]="description"
+      />
+    </div>
+  </div>
+
+  <div class="flex__row" style="align-items: center">
+    <div style="flex: 0 0 20%" class="form__label flex__item">Link</div>
+    <div class="flex__item" style="flex: 0 0 50%">
+      <input type="text" class="form-control form__input" [(ngModel)]="link" />
+    </div>
+  </div>
+
+  <div class="flex__row p__5" style="align-items: center">
+    <input type="checkbox" [(ngModel)]="isSetup" />
+    <div style="font-size: 12px; padding-left: 0.5rem">Is Setup</div>
+  </div>
+
+  <div class="p__5 form__label" style="margin-top: 2rem">Button Right</div>
+  <div class="flex__row">
+    <div class="chip__container flex__item">
+      <div
+        [style]="{
+          background: btn.selected ? '#c23564' : '#fff',
+          color: btn.selected ? '#fff' : 'black',
+          borderColor: btn.selected ? '#c23564' : '#c4c4c4'
+        }"
+        class="__chip"
+        *ngFor="let btn of btns"
+        (click)="clickChip(btn)"
+      >
+        {{ btn.title }}
+      </div>
+    </div>
+  </div>
+</div>

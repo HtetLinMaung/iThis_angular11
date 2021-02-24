@@ -10,41 +10,29 @@ import { HttpService } from '../http.service';
   styleUrls: ['./patient-header.component.css'],
 })
 export class PatientHeaderComponent implements OnInit {
-  patientId = '';
-  patientName = 'Htet Lin Maung';
-  adNos = [{ value: 0, text: '20-A0010' }];
-  adNo = 0;
-  headerData = [];
-  infoDialog = false;
-  patientAge = 0;
-  ADDate = '';
-  room = '';
-  doctor = '';
-  speciality = '';
-  patientType = '';
-
-
-
   constructor(
     private http: HttpService,
     public appStoreService: AppStoreService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.fetchPatientInfoById();
   }
 
   onAdNoChanged(event) {
-    const data = this.headerData.find((v) => v.refNo == event.target.value);
-    this.patientId = data.patientid;
-    this.patientName = data.persontitle + ' ' + data.personname;
-    this.patientAge = data.age;
-    this.ADDate = data.arriveDate;
-    this.room = data.roomNo;
-    this.doctor = data.doctorName;
-    this.speciality = data.speciality;
-    this.patientType = data.patientType;
-    this.appStoreService.patientInfo = new Patient(
+    const data = this.appStoreService.patientDetail.headerData.find(
+      (v) => v.refNo == event.target.value
+    );
+    this.appStoreService.patientDetail.patientId = data.patientid;
+    this.appStoreService.patientDetail.patientName =
+      data.persontitle + ' ' + data.personname;
+    this.appStoreService.patientDetail.patientAge = data.age;
+    this.appStoreService.patientDetail.ADDate = data.arriveDate;
+    this.appStoreService.patientDetail.room = data.roomNo;
+    this.appStoreService.patientDetail.doctor = data.doctorName;
+    this.appStoreService.patientDetail.speciality = data.speciality;
+    this.appStoreService.patientDetail.patientType = data.patientType;
+    this.appStoreService.patientDetail.appStoreService.patientInfo = new Patient(
       data.allergy,
       data.ward,
       data.bed
@@ -63,26 +51,33 @@ export class PatientHeaderComponent implements OnInit {
     dialogEle.style.display = 'none';
   }
 
+  browsePatients() {
+    this.appStoreService.patientDialog = true;
+  }
+
   fetchPatientInfoById() {
+    if (!this.appStoreService.pId) return;
     this.http
       .doGet(`nurse-activity-worklist/patient-info/${this.appStoreService.pId}`)
       .subscribe(
         (data: any) => {
-          this.headerData = data;
+          this.appStoreService.patientDetail.headerData = data;
           if (data.length) {
-            this.patientId = data[0].patientid;
-            this.patientName = data[0].persontitle + ' ' + data[0].personname;
-            this.patientAge = data[0].age;
-            this.ADDate = data[0].arriveDate;
-            this.room = data[0].roomNo;
-            this.doctor = data[0].doctorName;
-            this.speciality = data[0].speciality;
-            this.patientType = data[0].patientType;
-            this.adNos = data.map((v) => ({
+            this.appStoreService.patientDetail.patientId = data[0].patientid;
+            this.appStoreService.patientDetail.patientName =
+              data[0].persontitle + ' ' + data[0].personname;
+            this.appStoreService.patientDetail.patientAge = data[0].age;
+            this.appStoreService.patientDetail.ADDate = data[0].arriveDate;
+            this.appStoreService.patientDetail.room = data[0].roomNo;
+            this.appStoreService.patientDetail.doctor = data[0].doctorName;
+            this.appStoreService.patientDetail.speciality = data[0].speciality;
+            this.appStoreService.patientDetail.patientType =
+              data[0].patientType;
+            this.appStoreService.patientDetail.adNos = data.map((v) => ({
               value: v.refNo,
               text: v.refNo,
             }));
-            this.adNo = data[0].refNo;
+            this.appStoreService.patientDetail.adNo = data[0].refNo;
             this.appStoreService.patientInfo = new Patient(
               data[0].allergy,
               data[0].ward,
@@ -92,8 +87,28 @@ export class PatientHeaderComponent implements OnInit {
             this.appStoreService.drID = data[0].drID;
           }
         },
-        (error) => { },
-        () => { }
+        (error) => {},
+        () => {}
       );
+  }
+
+  clear() {
+    this.appStoreService.pId = 0;
+    this.appStoreService.patientDetail = {
+      patientId: '',
+      patientName: '',
+      adNos: [{ value: 0, text: '-' }],
+      adNo: 0,
+      headerData: [],
+      infoDialog: false,
+      patientAge: 0,
+      ADDate: '',
+      room: '',
+      doctor: '',
+      speciality: '',
+      patientType: '',
+    };
+    this.appStoreService.rgsNo = 0;
+    this.appStoreService.drID = 0;
   }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppStoreService } from 'src/app/app-store.service';
 import { HttpService } from 'src/app/framework/http.service';
 import { InstructionStoreService } from './instruction-store.service';
 
@@ -9,6 +10,7 @@ import { InstructionStoreService } from './instruction-store.service';
 })
 export class InstructionComponent implements OnInit {
   constructor(
+    public appStoreService: AppStoreService,
     private http: HttpService,
     public instructionStoreService: InstructionStoreService
   ) {}

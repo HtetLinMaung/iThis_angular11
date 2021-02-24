@@ -11,7 +11,7 @@
       List
     </div>
     <div class="tab__list-item" (click)="tabClickHandler(2)" id="tab2">
-      History
+      Blood, blood products and tpn form
     </div>
   </div>
 
@@ -34,10 +34,14 @@
   (onCancel)="cancelDelete()"
 ></app-delete-dialog>
 
+<app-patient-dialog
+  *ngIf="appStoreService.patientDialog$ | async"
+></app-patient-dialog>
+
 <!-- this is for dev only -->
 <button
   (click)="toggleRank()"
   style="position: absolute; top: 10px; right: 10px"
 >
-  Toggle Rank
+  Dr / Nurse
 </button>

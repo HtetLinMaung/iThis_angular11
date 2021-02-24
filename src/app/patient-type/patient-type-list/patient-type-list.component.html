@@ -1,0 +1,49 @@
+<div style="flex: 1">
+    <div style="display: flex; margin: 1rem 0">
+        <div style="display: flex;flex: 0 0 80%;align-items: center;justify-content: space-between;">
+            <input [(ngModel)]="this._patienttypeObj.t1" type="text" class="form-control form__input" style="flex: 0 0 35%" placeholder="Code"/>
+            <input [(ngModel)]="this._patienttypeObj.t2" type="text" class="form-control form__input" style="flex: 0 0 35%" placeholder="Description"/>
+            <div class="__fab __raised" title="Search" (click)="normalSearch()">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+            <div class="__fab __raised" title="Show all" (click)="showAll()">
+                <i class="fas fa-list"></i>
+            </div>
+            <div class="__fab __raised" title="Clear" (click)="clearSearch()">
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="__fab __raised" title="Advanced Search" (click)="openAdvSearch()">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="__fab __raised" title="Export">
+                <i class="fas fa-file-export"></i>
+            </div>
+        </div>
+    </div>
+    <div style="display: flex; margin: 0.5rem 0">
+        <app-pagination [total]="(instructionStoreService.instructions$ | async)?.length" [perPage]="perPage"
+            [start]="start" [end]="end" [perPages]="perPages" style="flex: 0 0 25%"
+            (onPerPageChanged)="handlePerPageChanged($event)" (onNext)="handleSkip(1)" (onPrev)="handleSkip(2)"
+            (onSkipFirst)="handleSkip(3)" (onSkipLast)="handleSkip(4)"></app-pagination>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered" style="font-size: 14px;">
+            <thead>
+                <tr class="header__row">
+                    <th>No</th>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th>Prefix</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of _patienttypeList; let i = index" (click)="detail(data)">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{data.t1}}</td>
+                    <td>{{data.t2}}</td>
+                    <td>{{data.t3}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

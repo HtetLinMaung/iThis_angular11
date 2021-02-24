@@ -17,9 +17,19 @@ import { RoomcodeModule } from './roomcode/roomcode.module';
 import { RoomrateModule } from './roomrate/roomrate.module';
 import { RouteModule } from './route/route.module';
 import { SharedModule } from './shared/shared.module';
+import { NavBarComponent } from './framework/nav-bar/nav-bar.component';
+import { DrawerComponent } from './framework/drawer/drawer.component';
+import { ListItemComponent } from './framework/list-item/list-item.component';
+import { MenuModule } from './menu/menu.module';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    NavBarComponent,
+    DrawerComponent,
+    ListItemComponent,
+  ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -32,9 +42,13 @@ import { SharedModule } from './shared/shared.module';
     CommonTypeModule,
     RouteModule,
     GeneralWardModule,
+<<<<<<< HEAD
     PatientTypeModule,
     RoomrateModule,
     RoomcodeModule,
+=======
+    MenuModule,
+>>>>>>> deb36a09d7a29524b6d4782d51706714a6eb90c7
     RouterModule.forRoot([
       {
         path: '',
@@ -45,4 +59,4 @@ import { SharedModule } from './shared/shared.module';
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

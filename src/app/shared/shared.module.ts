@@ -8,6 +8,7 @@ import { DeleteDialogComponent } from '../framework/delete-dialog/delete-dialog.
 import { AdvanceSearchComponent } from '../framework/advance-search/advance-search.component';
 import { DoctorDialogComponent } from '../framework/doctor-dialog/doctor-dialog.component';
 import { IconButtonComponent } from '../framework/icon-button/icon-button.component';
+import { PatientDialogComponent } from '../framework/patient-dialog/patient-dialog.component';
 
 @NgModule({
   exports: [
@@ -20,6 +21,7 @@ import { IconButtonComponent } from '../framework/icon-button/icon-button.compon
     AdvanceSearchComponent,
     DoctorDialogComponent,
     IconButtonComponent,
+    PatientDialogComponent,
   ],
   declarations: [
     PatientHeaderComponent,
@@ -29,6 +31,7 @@ import { IconButtonComponent } from '../framework/icon-button/icon-button.compon
     AdvanceSearchComponent,
     DoctorDialogComponent,
     IconButtonComponent,
+    PatientDialogComponent,
   ],
   imports: [CommonModule, FormsModule],
 })
