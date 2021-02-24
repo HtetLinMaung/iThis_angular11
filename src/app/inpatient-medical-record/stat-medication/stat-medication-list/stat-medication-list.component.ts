@@ -20,6 +20,9 @@ export class StatMedicationListComponent implements OnInit {
     'Given By',
     "Dr's remark",
     'Remark',
+    'Patient ID',
+    'Patient Name',
+    'Ad No',
   ];
   page = 1;
   totalPage = 0;
@@ -70,6 +73,21 @@ export class StatMedicationListComponent implements OnInit {
       text: 'Remark',
       value: '8',
       key: 'remark',
+    },
+    {
+      text: 'Patient ID',
+      value: '9',
+      key: 'patientId',
+    },
+    {
+      text: 'Patient Name',
+      value: '10',
+      key: 'patientId',
+    },
+    {
+      text: 'Ad No',
+      value: '11',
+      key: 'adNo',
     },
   ];
   search = '';
