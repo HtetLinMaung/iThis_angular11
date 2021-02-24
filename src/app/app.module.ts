@@ -12,6 +12,10 @@ import { LoginComponent } from './login/login.component';
 import { NurseShiftSummaryModule } from './nurse-shift-summary/nurse-shift-summary.module';
 import { NursingActivityWorklistModule } from './nursing-activity-worklist/nursing-activity-worklist.module';
 import { NursingCareRecordModule } from './nursing-care-record/nursing-care-record.module';
+import { PatientTypeModule } from './patient-type/patient-type.module';
+import { RoomcodeModule } from './roomcode/roomcode.module';
+import { RoomrateModule } from './roomrate/roomrate.module';
+import { RouteModule } from './route/route.module';
 import { SharedModule } from './shared/shared.module';
 import { NavBarComponent } from './framework/nav-bar/nav-bar.component';
 import { DrawerComponent } from './framework/drawer/drawer.component';
@@ -36,8 +40,15 @@ import { MenuModule } from './menu/menu.module';
     SharedModule,
     NursingCareRecordModule,
     CommonTypeModule,
+    RouteModule,
     GeneralWardModule,
+<<<<<<< HEAD
+    PatientTypeModule,
+    RoomrateModule,
+    RoomcodeModule,
+=======
     MenuModule,
+>>>>>>> deb36a09d7a29524b6d4782d51706714a6eb90c7
     RouterModule.forRoot([
       {
         path: '',

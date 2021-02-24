@@ -5,6 +5,7 @@ import { HttpService } from 'src/app/framework/http.service';
 
 import { NursingCareRecordService } from '../nursing-care-record.service';
 
+declare var jQuerry: any;
 @Component({
   selector: 'app-nursing-care-record-form',
   templateUrl: './nursing-care-record-form.component.html',
@@ -150,22 +151,23 @@ export class NursingCareRecordFormComponent implements OnInit {
         //alert("Saving Fail.in in");
       });
   }
+  goDeleteConfirm() {
+
+    // $('#delConfirmpopup')
+    jQuerry("#delConfirmpopup").modal();
+    // jQuery("#delConfirmpopup").modal();
+  }
   goDelete() {
     let url: string = `nursingcarerecord/delete`;
     this.http.doPost(url, this._obj).subscribe(
       (data: any) => {
         if (data.message == "Success") {
-          // alert("Delete Successfully.");
           this.goNew();
-
         } else if (data.message == "deleteFail") {
-          // alert("Delete Fail.");
         } else {
-          // alert("Delete Fail .");
         }
       },
       error => {
-        //alert("Delete Fail .");
 
       }
     );

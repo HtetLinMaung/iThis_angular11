@@ -45,22 +45,24 @@ export class LoginComponent implements OnInit {
       case 1:
         this.router.navigate(['/nurse-shift-summary']);
         break;
-    }
-  }
-  navigate2(n: number) {
-    switch (n) {
-      case 1:
+      case 2:
         this.router.navigate(['/nursing-care-record']);
         break;
-    }
-  }
-  navigate3(n: number) {
-    switch (n) {
-      case 1:
+      case 3:
         this.router.navigate(['/common-type']);
         break;
+      case 4:
+        this.router.navigate(['/route']);
+        break;
+      case 5:
+        this.router.navigate(['/patient-type']);
+        break;
+      case 6:
+        this.router.navigate(['/roomcode']);
+        break;
+      case 7:
+        this.router.navigate(['/roomrate']);
     }
   }
-
   ngOnInit(): void {}
 }
