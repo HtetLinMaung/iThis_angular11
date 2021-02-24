@@ -42,13 +42,10 @@ import { MenuModule } from './menu/menu.module';
     CommonTypeModule,
     RouteModule,
     GeneralWardModule,
-<<<<<<< HEAD
     PatientTypeModule,
     RoomrateModule,
     RoomcodeModule,
-=======
     MenuModule,
->>>>>>> deb36a09d7a29524b6d4782d51706714a6eb90c7
     RouterModule.forRoot([
       {
         path: '',
