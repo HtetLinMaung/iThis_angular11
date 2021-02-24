@@ -122,68 +122,74 @@ export class StatMedicationListComponent implements OnInit {
   }
 
   fetchAllStatMedications() {
-    Promise.all([
-      this.fetchRoutes(),
-      this.fetchDoses(),
-      this.fetchDrugTasks(),
-    ]).then(([routes, doses, drugTasks]: [any, any, any]) => {
-      this.statMedicationStoreService.routes = routes.map((v) => ({
-        value: v.route,
-        text: v.EngDesc,
-        syskey: v.syskey,
-      }));
-      this.statMedicationStoreService.doses = doses.map((v) => ({
-        text: v.Dose,
-        value: v.EngDesc,
-        syskey: v.syskey,
-      }));
-      this.statMedicationStoreService.drugTasks = drugTasks.map((v) => ({
-        text: v.eng_desc,
-        value: v.task,
-        syskey: v.syskey,
-      }));
+    this.http
+      .doGet('inpatient-medical-record/routes')
+      .subscribe((routes: any) => {
+        this.http
+          .doGet('inpatient-medical-record/doses')
+          .subscribe((doses: any) => {
+            this.http
+              .doGet('inpatient-medical-record/drug-tasks')
+              .subscribe((drugTasks: any) => {
+                this.statMedicationStoreService.routes = routes.map((v) => ({
+                  value: v.route,
+                  text: v.EngDesc,
+                  syskey: v.syskey,
+                }));
+                this.statMedicationStoreService.doses = doses.map((v) => ({
+                  text: v.Dose,
+                  value: v.EngDesc,
+                  syskey: v.syskey,
+                }));
+                this.statMedicationStoreService.drugTasks = drugTasks.map(
+                  (v) => ({
+                    text: v.eng_desc,
+                    value: v.task,
+                    syskey: v.syskey,
+                  })
+                );
 
-      this.http
-        .doGet(`inpatient-medical-record/stat-medications`)
-        .subscribe((data: any) => {
-          this.statMedicationStoreService.statMedications = data.map(
-            (v) =>
-              new StatMedication(
-                v.syskey,
-                routes.find((item) => item.syskey == v.routeSyskey).route,
-                v.stockDescription,
-                v.dose,
-                doses.map((item) => item.syskey == v.doseTypeSyskey).EngDesc,
-                v.prescriptionRemark,
-                v.timeAdmin,
-                v.givenBy,
-                '',
-                v.drRemark,
-                v.stockId,
-                v.remark,
-                routes.find((item) => item.syskey == v.routeSyskey).EngDesc,
-                this.appStoreService.isDoctorRank
-                  ? v.moConfirmDate
-                  : v.nurseConfirmDate
-              )
-          );
+                this.http
+                  .doGet(`inpatient-medical-record/stat-medications`)
+                  .subscribe((data: any) => {
+                    this.statMedicationStoreService.statMedications = data.map(
+                      (v) =>
+                        new StatMedication(
+                          v.syskey,
+                          routes.find(
+                            (item) => item.syskey == v.routeSyskey
+                          ).route,
+                          v.stockDescription,
+                          v.dose,
+                          doses.map(
+                            (item) => item.syskey == v.doseTypeSyskey
+                          ).EngDesc,
+                          v.prescriptionRemark,
+                          v.timeAdmin,
+                          v.givenBy,
+                          '',
+                          v.drRemark,
+                          v.stockId,
+                          v.remark,
+                          routes.find(
+                            (item) => item.syskey == v.routeSyskey
+                          ).EngDesc,
+                          this.appStoreService.isDoctorRank
+                            ? v.moConfirmDate
+                            : v.nurseConfirmDate,
+                            '',
+                          v.patientId,
+                          v.patientName,
+                          v.adNo
+                        )
+                    );
 
-          this.statMedications = this.statMedicationStoreService.statMedications;
-          this.initPagination(data);
-        });
-    });
-  }
-
-  fetchRoutes() {
-    return this.http.doGet('inpatient-medical-record/routes').toPromise();
-  }
-
-  fetchDoses() {
-    return this.http.doGet('inpatient-medical-record/doses').toPromise();
-  }
-
-  fetchDrugTasks() {
-    return this.http.doGet('inpatient-medical-record/drug-tasks').toPromise();
+                    this.statMedications = this.statMedicationStoreService.statMedications;
+                    this.initPagination(data);
+                  });
+              });
+          });
+      });
   }
 
   goToList({ syskey }: { syskey: number }) {
