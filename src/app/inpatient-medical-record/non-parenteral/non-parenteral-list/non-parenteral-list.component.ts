@@ -146,6 +146,7 @@ export class NonParenteralListComponent implements OnInit {
                     patientId: this.appStoreService.pId,
                     rgsno: this.appStoreService.rgsNo,
                     doctorId: this.appStoreService.drID,
+                    initial: false,
                   })
                   .subscribe((data: any) => {
                     this.nonParenteralStoreService.nonParenterals = data.map(
@@ -188,18 +189,6 @@ export class NonParenteralListComponent implements OnInit {
               });
           });
       });
-  }
-
-  fetchRoutes() {
-    return this.http.doGet('inpatient-medical-record/routes').toPromise();
-  }
-
-  fetchDoses() {
-    return this.http.doGet('inpatient-medical-record/doses').toPromise();
-  }
-
-  fetchDrugTasks() {
-    return this.http.doGet('inpatient-medical-record/drug-tasks').toPromise();
   }
 
   goToList({ syskey }: { syskey: number }) {

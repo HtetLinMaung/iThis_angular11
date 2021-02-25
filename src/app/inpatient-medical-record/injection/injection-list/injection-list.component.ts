@@ -12,7 +12,17 @@ import { CheckList } from '../../non-parenteral/non-parenteral.model';
   styleUrls: ['./injection-list.component.css'],
 })
 export class InjectionListComponent implements OnInit {
-  headers = ['Route', 'Medication', 'Dose', 'Dose Type', 'Remark', 'Frequency'];
+  headers = [
+    'Route',
+    'Medication',
+    'Dose',
+    'Dose Type',
+    'Remark',
+    'Frequency',
+    'Patient ID',
+    'Patient Name',
+    'Ad No',
+  ];
   page = 1;
   totalPage = 0;
   total = 0;
@@ -52,6 +62,21 @@ export class InjectionListComponent implements OnInit {
       text: 'Frequency',
       value: '6',
       key: 'frequency',
+    },
+    {
+      text: 'Patient ID',
+      value: '7',
+      key: 'patientId',
+    },
+    {
+      text: 'Patient Name',
+      value: '8',
+      key: 'patientName',
+    },
+    {
+      text: 'Ad No',
+      value: '9',
+      key: 'adNo',
     },
   ];
   search = '';
@@ -150,7 +175,10 @@ export class InjectionListComponent implements OnInit {
                           this.injectionStoreService.doses.find(
                             (dose) => dose.syskey == v.doseTypeSyskey
                           ).text,
-                          v.checkList.filter((item) => item.done).length
+                          v.checkList.filter((item) => item.done).length,
+                          v.patientId,
+                          v.patientName,
+                          v.adNo
                         )
                     );
 
@@ -160,18 +188,6 @@ export class InjectionListComponent implements OnInit {
               });
           });
       });
-  }
-
-  fetchRoutes() {
-    return this.http.doGet('inpatient-medical-record/routes').toPromise();
-  }
-
-  fetchDoses() {
-    return this.http.doGet('inpatient-medical-record/doses').toPromise();
-  }
-
-  fetchDrugTasks() {
-    return this.http.doGet('inpatient-medical-record/drug-tasks').toPromise();
   }
 
   goToList({ syskey }: { syskey: number }) {
