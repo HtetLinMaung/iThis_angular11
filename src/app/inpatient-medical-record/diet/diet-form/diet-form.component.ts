@@ -91,6 +91,8 @@ export class DietFormComponent implements OnInit {
         .doPost('inpatient-medical-record/save-diets', {
           diets: this.diets.map((v) => ({
             ...v,
+            pId: this.appStoreService.pId,
+            rgsNo: this.appStoreService.rgsNo,
             userid: '',
             username: '',
             isDoctor: this.appStoreService.isDoctorRank,
