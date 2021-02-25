@@ -34,10 +34,12 @@ export class GeneralWardListComponent implements OnInit {
     'Intervention',
     'Type',
     'Initial Date',
-    'Patient',
     'Outcome Met',
     'Day Nurse Approved at',
     'Night Nurse Approved at',
+    'Patient ID',
+    'Patient Name',
+    'Ad No',
   ];
   page = 1;
   totalPage = 0;
@@ -65,10 +67,6 @@ export class GeneralWardListComponent implements OnInit {
       key: 'initialDate',
     },
     {
-      text: 'Patient',
-      key: 'patientName',
-    },
-    {
       text: 'Outcome Met',
       value: '4',
       key: 'fmtOutcomeMet',
@@ -83,7 +81,22 @@ export class GeneralWardListComponent implements OnInit {
       value: '6',
       key: 'fmtNightAt',
     },
-  ].map((v, i) => ({ ...v, value: ++i }));
+    {
+      text: 'Patient ID',
+      value: '7',
+      key: 'patientId',
+    },
+    {
+      text: 'Patient Name',
+      value: '8',
+      key: 'patientName',
+    },
+    {
+      text: 'Ad No',
+      value: '9',
+      key: 'adNo',
+    },
+  ];
   search = '';
 
   constructor(
@@ -127,7 +140,6 @@ export class GeneralWardListComponent implements OnInit {
         ...v,
         intervention: v.headerDesc,
         problemName: this.Type[v.type].problemName,
-        patientName: '',
         fmtOutcomeMet: v.outcomeMet ? 'Yes' : 'No',
         fmtDayAt: v.dayNurseAt
           ? moment(v.dayNurseAt).format('DD/MM/yyyy h:mm:ss a')
