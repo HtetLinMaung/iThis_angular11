@@ -92,6 +92,9 @@ export class InjectionListComponent implements OnInit {
     const tabEle2 = document.getElementById('tab2');
     tabEle1.style.background = '#3b5998';
     tabEle2.style.background = '#8C9899';
+    this.appStoreService.onPatientIdChanged = () => {
+      this.fetchAllInjections();
+    };
     this.fetchAllInjections();
     this.injectionStoreService.isUpdate = false;
   }
@@ -145,7 +148,7 @@ export class InjectionListComponent implements OnInit {
                     patientId: this.appStoreService.pId,
                     rgsno: this.appStoreService.rgsNo,
                     doctorId: this.appStoreService.drID,
-                    all: true,
+                    initial: false,
                   })
                   .subscribe((data: any) => {
                     this.injectionStoreService.injections = data.map(
