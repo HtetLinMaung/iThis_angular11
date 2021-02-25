@@ -18,6 +18,9 @@ export default class Blood {
     public nurseConfirmDate = '',
     public nurseConfirmTime = '',
     public givenByType = '',
+    public patientId = '',
+    public patientName = '',
+    public adNo = '',
     public key = new Date().toISOString()
   ) {}
 }

@@ -90,70 +90,76 @@ export class InjectionListComponent implements OnInit {
   }
 
   fetchAllInjections() {
-    Promise.all([
-      this.fetchRoutes(),
-      this.fetchDoses(),
-      this.fetchDrugTasks(),
-    ]).then(([routes, doses, drugTasks]: [any, any, any]) => {
-      this.injectionStoreService.routes = routes.map((v) => ({
-        value: v.route,
-        text: v.EngDesc,
-        syskey: v.syskey,
-      }));
-      this.injectionStoreService.doses = doses.map((v) => ({
-        text: v.Dose,
-        value: v.EngDesc,
-        syskey: v.syskey,
-      }));
-      this.injectionStoreService.drugTasks = drugTasks.map((v) => ({
-        text: v.eng_desc,
-        value: v.task,
-        syskey: v.syskey,
-      }));
+    this.http
+      .doGet('inpatient-medical-record/routes')
+      .subscribe((routes: any) => {
+        this.http
+          .doGet('inpatient-medical-record/doses')
+          .subscribe((doses: any) => {
+            this.http
+              .doGet('inpatient-medical-record/drug-tasks')
+              .subscribe((drugTasks: any) => {
+                this.injectionStoreService.routes = routes.map((v) => ({
+                  value: v.route,
+                  text: v.EngDesc,
+                  syskey: v.syskey,
+                }));
+                this.injectionStoreService.doses = doses.map((v) => ({
+                  text: v.Dose,
+                  value: v.EngDesc,
+                  syskey: v.syskey,
+                }));
+                this.injectionStoreService.drugTasks = drugTasks.map((v) => ({
+                  text: v.eng_desc,
+                  value: v.task,
+                  syskey: v.syskey,
+                }));
 
-      this.http
-        .doPost(`inpatient-medical-record/injections-initial`, {
-          patientId: this.appStoreService.pId,
-          rgsno: this.appStoreService.rgsNo,
-          doctorId: this.appStoreService.drID,
-          all: true,
-        })
-        .subscribe((data: any) => {
-          this.injectionStoreService.injections = data.map(
-            (v) =>
-              new Injection(
-                v.syskey,
-                v.routeSyskey,
-                v.medication,
-                v.dose,
-                v.stockId,
-                v.doseTypeSyskey,
-                v.remark,
-                v.checkList
-                  .map(
-                    (item) =>
-                      new CheckList(
-                        item.syskey,
-                        item.done,
-                        item.nurseId,
-                        item.doneAt
-                      )
-                  )
-                  .sort((a, b) => a.syskey - b.syskey),
-                this.injectionStoreService.routes.find(
-                  (route) => route.syskey == v.routeSyskey
-                ).text,
-                this.injectionStoreService.doses.find(
-                  (dose) => dose.syskey == v.doseTypeSyskey
-                ).text,
-                v.checkList.filter((item) => item.done).length
-              )
-          );
+                this.http
+                  .doPost(`inpatient-medical-record/injections-initial`, {
+                    patientId: this.appStoreService.pId,
+                    rgsno: this.appStoreService.rgsNo,
+                    doctorId: this.appStoreService.drID,
+                    all: true,
+                  })
+                  .subscribe((data: any) => {
+                    this.injectionStoreService.injections = data.map(
+                      (v) =>
+                        new Injection(
+                          v.syskey,
+                          v.routeSyskey,
+                          v.medication,
+                          v.dose,
+                          v.stockId,
+                          v.doseTypeSyskey,
+                          v.remark,
+                          v.checkList
+                            .map(
+                              (item) =>
+                                new CheckList(
+                                  item.syskey,
+                                  item.done,
+                                  item.nurseId,
+                                  item.doneAt
+                                )
+                            )
+                            .sort((a, b) => a.syskey - b.syskey),
+                          this.injectionStoreService.routes.find(
+                            (route) => route.syskey == v.routeSyskey
+                          ).text,
+                          this.injectionStoreService.doses.find(
+                            (dose) => dose.syskey == v.doseTypeSyskey
+                          ).text,
+                          v.checkList.filter((item) => item.done).length
+                        )
+                    );
 
-          this.injections = this.injectionStoreService.injections;
-          this.initPagination(data);
-        });
-    });
+                    this.injections = this.injectionStoreService.injections;
+                    this.initPagination(data);
+                  });
+              });
+          });
+      });
   }
 
   fetchRoutes() {
