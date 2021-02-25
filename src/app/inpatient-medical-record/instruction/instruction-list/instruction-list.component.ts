@@ -11,14 +11,14 @@ import Instruction from '../Instruction.model';
 })
 export class InstructionListComponent implements OnInit {
   headers = [
+    'Patient ID',
+    'Ad No',
+    'Patient Name',
     'Date',
     'Date Taken',
     'Drug Allergy To',
     'Instruction Under Treatment',
     'Remarks',
-    'Patient ID',
-    'Patient Name',
-    'Ad No',
   ];
   page = 1;
   totalPage = 0;

@@ -12,6 +12,9 @@ import { AppStoreService } from 'src/app/app-store.service';
 })
 export class StatMedicationListComponent implements OnInit {
   headers = [
+    'Patient ID',
+    'Ad No',
+    'Patient Name',
     'Route',
     'Medication',
     'Dose',
@@ -20,9 +23,6 @@ export class StatMedicationListComponent implements OnInit {
     'Given By',
     "Dr's remark",
     'Remark',
-    'Patient ID',
-    'Patient Name',
-    'Ad No',
   ];
   page = 1;
   totalPage = 0;

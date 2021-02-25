@@ -31,15 +31,15 @@ export class GeneralWardListComponent implements OnInit {
     63: { problemName: 'Discharge Activities', icon: 'fa-notes-medical' },
   };
   headers = [
+    'Patient ID',
+    'Ad No',
+    'Patient Name',
     'Intervention',
     'Type',
     'Initial Date',
     'Outcome Met',
     'Day Nurse Approved at',
     'Night Nurse Approved at',
-    'Patient ID',
-    'Patient Name',
-    'Ad No',
   ];
   page = 1;
   totalPage = 0;

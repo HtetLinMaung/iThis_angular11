@@ -70,6 +70,9 @@
       "
       (click)="goToList(instruction)"
     >
+      <td>{{ instruction.patientId }}</td>
+      <td>{{ instruction.adNo }}</td>
+      <td>{{ instruction.patientName }}</td>
       <td>
         {{ formatDate(instruction.date, "DD/MM/yyyy") }}
       </td>
@@ -77,9 +80,6 @@
       <td>{{ instruction.drugAllergyTo }}</td>
       <td>{{ instruction.instruction }}</td>
       <td>{{ instruction.remarks }}</td>
-      <td>{{ instruction.patientId }}</td>
-      <td>{{ instruction.patientName }}</td>
-      <td>{{ instruction.adNo }}</td>
     </tr>
   </app-table>
 </div>

@@ -70,6 +70,9 @@
       "
       (click)="goToList(nonParenteral)"
     >
+      <td>{{ nonParenteral.patientId }}</td>
+      <td>{{ nonParenteral.adNo }}</td>
+      <td>{{ nonParenteral.patientName }}</td>
       <td>
         {{ nonParenteral.routeDesc }}
       </td>
@@ -78,9 +81,6 @@
       <td>{{ nonParenteral.doseTypeDesc }}</td>
       <td>{{ nonParenteral.remark }}</td>
       <td>{{ nonParenteral.frequency }}</td>
-      <td>{{ nonParenteral.patientId }}</td>
-      <td>{{ nonParenteral.patientName }}</td>
-      <td>{{ nonParenteral.adNo }}</td>
     </tr>
   </app-table>
 </div>

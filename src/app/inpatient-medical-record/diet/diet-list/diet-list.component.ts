@@ -12,13 +12,13 @@ import Diet from '../diet.model';
 })
 export class DietListComponent implements OnInit {
   headers = [
+    'Patient ID',
+    'Ad No',
+    'Patient Name',
     'No.',
     'Diet And Enteral Feed',
     'Noted By',
     'Remark',
-    'Patient ID',
-    'Patient Name',
-    'Ad No',
   ];
   page = 1;
   totalPage = 0;

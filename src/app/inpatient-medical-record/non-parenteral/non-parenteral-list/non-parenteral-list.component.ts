@@ -12,15 +12,15 @@ import NonParenteral, { CheckList } from '../non-parenteral.model';
 })
 export class NonParenteralListComponent implements OnInit {
   headers = [
+    'Patient ID',
+    'Ad No',
+    'Patient Name',
     'Route',
     'Medication',
     'Dose',
     'Dose Type',
     'Remark',
     'Frequency',
-    'Patient ID',
-    'Patient Name',
-    'Ad No',
   ];
   page = 1;
   totalPage = 0;

@@ -11,6 +11,9 @@ import Activity from '../../activity.model';
 })
 export class NursingActivityWorklistListComponent implements OnInit {
   headers = [
+    'Patient ID',
+    'Ad No',
+    'Patient Name',
     'Procedure',
     'Date',
     'Due Date For Change',
@@ -20,9 +23,6 @@ export class NursingActivityWorklistListComponent implements OnInit {
     'Marking',
     'External Length',
     'Doctor Name',
-    'Patient ID',
-    'Patient Name',
-    'Ad No',
   ];
   page = 1;
   totalPage = 0;
