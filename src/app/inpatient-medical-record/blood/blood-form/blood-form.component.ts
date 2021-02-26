@@ -65,28 +65,34 @@ export class BloodFormComponent implements OnInit {
   }
 
   fetchData() {
-    Promise.all([
-      this.fetchRoutes(),
-      this.fetchDoses(),
-      this.fetchDrugTasks(),
-    ]).then(([routes, doses, drugTasks]: [any, any, any]) => {
-      this.bloodStoreService.routes = routes.map((v) => ({
-        value: v.syskey + '',
-        text: v.EngDesc,
-        syskey: v.syskey,
-      }));
-      this.bloodStoreService.doses = doses.map((v) => ({
-        value: v.syskey + '',
-        text: v.Dose,
-        syskey: v.syskey,
-      }));
-      this.bloodStoreService.drugTasks = drugTasks.map((v) => ({
-        text: v.eng_desc,
-        value: v.task,
-        syskey: v.syskey,
-      }));
-      this.bindEditData();
-    });
+    this.http
+      .doGet('inpatient-medical-record/routes')
+      .subscribe((routes: any) => {
+        this.http
+          .doGet('inpatient-medical-record/doses')
+          .subscribe((doses: any) => {
+            this.http
+              .doGet('inpatient-medical-record/drug-tasks')
+              .subscribe((drugTasks: any) => {
+                this.bloodStoreService.routes = routes.map((v) => ({
+                  value: v.syskey + '',
+                  text: v.EngDesc,
+                  syskey: v.syskey,
+                }));
+                this.bloodStoreService.doses = doses.map((v) => ({
+                  value: v.syskey + '',
+                  text: v.Dose,
+                  syskey: v.syskey,
+                }));
+                this.bloodStoreService.drugTasks = drugTasks.map((v) => ({
+                  text: v.eng_desc,
+                  value: v.task,
+                  syskey: v.syskey,
+                }));
+                this.bindEditData();
+              });
+          });
+      });
   }
 
   addRow() {
@@ -120,18 +126,6 @@ export class BloodFormComponent implements OnInit {
       default:
         data.checkList = [new CheckList()];
     }
-  }
-
-  fetchRoutes() {
-    return this.http.doGet('inpatient-medical-record/routes').toPromise();
-  }
-
-  fetchDoses() {
-    return this.http.doGet('inpatient-medical-record/doses').toPromise();
-  }
-
-  fetchDrugTasks() {
-    return this.http.doGet('inpatient-medical-record/drug-tasks').toPromise();
   }
 
   toggleCheck(e, data: CheckList) {
@@ -185,6 +179,8 @@ export class BloodFormComponent implements OnInit {
         .doPost('inpatient-medical-record/save-blood', {
           bloods: this.bloods.map((v) => ({
             ...v,
+            pId: this.appStoreService.pId,
+            rgsNo: this.appStoreService.rgsNo,
             userid: '',
             username: '',
             givenByType: this.givenByType,

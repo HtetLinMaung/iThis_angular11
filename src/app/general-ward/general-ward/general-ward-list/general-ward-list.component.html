@@ -70,6 +70,9 @@
       "
       (click)="goToList(nonParenteral)"
     >
+      <td>{{ nonParenteral.patientId }}</td>
+      <td>{{ nonParenteral.adNo }}</td>
+      <td>{{ nonParenteral.patientName }}</td>
       <td>
         {{ nonParenteral.intervention }}
       </td>
@@ -77,7 +80,6 @@
       <td>
         {{ nonParenteral.fmtInitialDate }}
       </td>
-      <td>{{ nonParenteral.patientName }}</td>
       <td>{{ nonParenteral.fmtOutcomeMet }}</td>
       <td>{{ nonParenteral.fmtDayAt }}</td>
       <td>{{ nonParenteral.fmtNightAt }}</td>

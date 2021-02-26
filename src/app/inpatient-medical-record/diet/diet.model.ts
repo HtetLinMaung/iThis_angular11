@@ -7,6 +7,9 @@ export default class Diet {
     public remark = '',
     public date = '',
     public time = '',
+    public patientId = '',
+    public patientName = '',
+    public adNo = '',
     public key = new Date().toISOString()
   ) {}
 }

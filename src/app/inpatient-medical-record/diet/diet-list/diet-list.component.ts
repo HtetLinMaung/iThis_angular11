@@ -11,7 +11,15 @@ import Diet from '../diet.model';
   styleUrls: ['./diet-list.component.css'],
 })
 export class DietListComponent implements OnInit {
-  headers = ['No.', 'Diet And Enteral Feed', 'Noted By', 'Remark'];
+  headers = [
+    'Patient ID',
+    'Ad No',
+    'Patient Name',
+    'No.',
+    'Diet And Enteral Feed',
+    'Noted By',
+    'Remark',
+  ];
   page = 1;
   totalPage = 0;
   total = 0;
@@ -41,6 +49,21 @@ export class DietListComponent implements OnInit {
       text: 'Remark',
       value: '4',
       key: 'remark',
+    },
+    {
+      text: 'Patient ID',
+      value: '5',
+      key: 'patientId',
+    },
+    {
+      text: 'Patient Name',
+      value: '6',
+      key: 'patientName',
+    },
+    {
+      text: 'Ad No',
+      value: '7',
+      key: 'adNo',
     },
   ];
   search = '';
@@ -89,7 +112,10 @@ export class DietListComponent implements OnInit {
             v.notedBy,
             v.remark,
             v.date,
-            v.time
+            v.time,
+            v.patientId,
+            v.patientName,
+            v.adNo
           )
       );
 

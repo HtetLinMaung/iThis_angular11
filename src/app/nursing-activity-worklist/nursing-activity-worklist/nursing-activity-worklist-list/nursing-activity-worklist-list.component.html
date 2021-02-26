@@ -70,6 +70,9 @@
       "
       (click)="goToList(activity)"
     >
+      <td>{{ activity.patientId }}</td>
+      <td>{{ activity.adNo }}</td>
+      <td>{{ activity.patientName }}</td>
       <td>
         {{ getProcedure(activity.procedure) }}
       </td>

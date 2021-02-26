@@ -11,6 +11,9 @@ import Instruction from '../Instruction.model';
 })
 export class InstructionListComponent implements OnInit {
   headers = [
+    'Patient ID',
+    'Ad No',
+    'Patient Name',
     'Date',
     'Date Taken',
     'Drug Allergy To',
@@ -51,6 +54,21 @@ export class InstructionListComponent implements OnInit {
       text: 'Remarks',
       value: '5',
       key: 'remarks',
+    },
+    {
+      text: 'Patient ID',
+      value: '6',
+      key: 'patientId',
+    },
+    {
+      text: 'Patient Name',
+      value: '7',
+      key: 'patientName',
+    },
+    {
+      text: 'Ad No',
+      value: '8',
+      key: 'adNo',
     },
   ];
   search = '';
@@ -98,7 +116,10 @@ export class InstructionListComponent implements OnInit {
               v.remarks,
               this.formatDate(v.date, 'DD/MM/yyyy'),
               this.formatDate(v.dateTaken, 'DD/MM/yyyy'),
-              v.pId
+              v.pId,
+              v.patientId,
+              v.patientName,
+              v.adNo
             )
         );
         this.instructions = this.instructionStoreService.instructions;

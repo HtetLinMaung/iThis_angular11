@@ -12,6 +12,9 @@ export default class Injection {
     public checkList: CheckList[] = [],
     public routeDesc = '',
     public doseTypeDesc = '',
-    public frequency = 0
+    public frequency = 0,
+    public patientId = '',
+    public patientName = '',
+    public adNo = ''
   ) {}
 }

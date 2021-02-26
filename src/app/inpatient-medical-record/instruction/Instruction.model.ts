@@ -8,6 +8,9 @@ export default class Instruction {
     public remarks: string,
     public fmtDate: string,
     public fmtDateTaken: string,
-    public pId: number
+    public pId: number,
+    public patientId: string,
+    public patientName: string,
+    public adNo: string
   ) {}
 }

@@ -42,92 +42,86 @@ export class InjectionFormComponent implements OnInit {
   }
 
   fetchInjections() {
-    Promise.all([
-      this.fetchRoutes(),
-      this.fetchDoses(),
-      this.fetchDrugTasks(),
-    ]).then(([routes, doses, drugTasks]: [any, any, any]) => {
-      this.injectionStoreService.routes = routes.map((v) => ({
-        value: v.syskey + '',
-        text: v.EngDesc,
-        syskey: v.syskey,
-      }));
-      this.injectionStoreService.doses = doses.map((v) => ({
-        value: v.syskey + '',
-        text: v.Dose,
-        syskey: v.syskey,
-      }));
-      this.injectionStoreService.drugTasks = drugTasks.map((v) => ({
-        text: v.eng_desc,
-        value: v.task,
-        syskey: v.syskey,
-      }));
-      this.http
-        .doPost('inpatient-medical-record/injections-initial', {
-          patientId: this.appStoreService.pId,
-          rgsno: this.appStoreService.rgsNo,
-          doctorId: this.appStoreService.drID,
-          all: true,
-        })
-        .subscribe((data: any) => {
-          const injections = data.map((v, i) => {
-            if (i == 0) {
-              this.date = this.appStoreService.isDoctorRank
-                ? v.moConfirmDate
-                : v.nurseConfirmDate;
-              this.moConfirmDate = v.moConfirmDate;
-              this.nurseConfirmDate = v.nurseConfirmDate;
-            }
-            return new Injection(
-              v.syskey,
-              v.routeSyskey + '',
-              v.medication,
-              v.dose,
-              v.stockId,
-              v.doseTypeSyskey,
-              v.remark,
-              v.checkList
-                .map(
-                  (item) =>
-                    new CheckList(
-                      item.syskey,
-                      item.done,
-                      item.nurseId,
-                      item.doneAt
-                    )
-                )
-                .sort((a, b) => a.syskey - b.syskey),
-              this.injectionStoreService.routes.find(
-                (route) => route.syskey == v.routeSyskey
-              ).text,
-              this.injectionStoreService.doses.find(
-                (dose) => dose.syskey == v.doseTypeSyskey
-              ).text,
-              v.checkList.filter((item) => item.done).length
-            );
+    this.http
+      .doGet('inpatient-medical-record/routes')
+      .subscribe((routes: any) => {
+        this.http
+          .doGet('inpatient-medical-record/doses')
+          .subscribe((doses: any) => {
+            this.http
+              .doGet('inpatient-medical-record/drug-tasks')
+              .subscribe((drugTasks: any) => {
+                this.injectionStoreService.routes = routes.map((v) => ({
+                  value: v.syskey + '',
+                  text: v.EngDesc,
+                  syskey: v.syskey,
+                }));
+                this.injectionStoreService.doses = doses.map((v) => ({
+                  value: v.syskey + '',
+                  text: v.Dose,
+                  syskey: v.syskey,
+                }));
+                this.injectionStoreService.drugTasks = drugTasks.map((v) => ({
+                  text: v.eng_desc,
+                  value: v.task,
+                  syskey: v.syskey,
+                }));
+                this.http
+                  .doPost('inpatient-medical-record/injections-initial', {
+                    patientId: this.appStoreService.pId,
+                    rgsno: this.appStoreService.rgsNo,
+                    doctorId: this.appStoreService.drID,
+                  })
+                  .subscribe((data: any) => {
+                    const injections = data.map((v, i) => {
+                      if (i == 0) {
+                        this.date = this.appStoreService.isDoctorRank
+                          ? v.moConfirmDate
+                          : v.nurseConfirmDate;
+                        this.moConfirmDate = v.moConfirmDate;
+                        this.nurseConfirmDate = v.nurseConfirmDate;
+                      }
+                      return new Injection(
+                        v.syskey,
+                        v.routeSyskey + '',
+                        v.medication,
+                        v.dose,
+                        v.stockId,
+                        v.doseTypeSyskey,
+                        v.remark,
+                        v.checkList
+                          .map(
+                            (item) =>
+                              new CheckList(
+                                item.syskey,
+                                item.done,
+                                item.nurseId,
+                                item.doneAt
+                              )
+                          )
+                          .sort((a, b) => a.syskey - b.syskey),
+                        this.injectionStoreService.routes.find(
+                          (route) => route.syskey == v.routeSyskey
+                        ).text,
+                        this.injectionStoreService.doses.find(
+                          (dose) => dose.syskey == v.doseTypeSyskey
+                        ).text,
+                        v.checkList.filter((item) => item.done).length
+                      );
+                    });
+
+                    if (this.injectionStoreService.isUpdate) {
+                      this.injectionStoreService.injections = this.injectionStoreService.injections.filter(
+                        (v) =>
+                          v.syskey == this.injectionStoreService.currentSysKey
+                      );
+                    } else {
+                      this.injectionStoreService.injections = injections;
+                    }
+                  });
+              });
           });
-
-          if (this.injectionStoreService.isUpdate) {
-            this.injectionStoreService.injections = this.injectionStoreService.injections.filter(
-              (v) => v.syskey == this.injectionStoreService.currentSysKey
-            );
-          } else {
-            this.injectionStoreService.injections = injections;
-          }
-        });
-    });
-  }
-
-  fetchRoutes() {
-    return this.http.doGet('inpatient-medical-record/routes').toPromise();
-  }
-
-  fetchDoses() {
-    return this.http.doGet('inpatient-medical-record/doses').toPromise();
-  }
-
-  fetchDrugTasks() {
-    return this.http.doGet('inpatient-medical-record/drug-tasks').toPromise();
+      });
   }
 
   toggleCheck(e, data: CheckList) {

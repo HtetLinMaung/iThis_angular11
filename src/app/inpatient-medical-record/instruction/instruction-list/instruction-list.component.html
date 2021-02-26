@@ -37,7 +37,11 @@
   </div>
 
   <div *ngIf="open">
-    <app-advance-search [fields]="fields" (onAdvanceSearch)="advanceSearch($event)"(onCloseFilter)="closeFilter()"></app-advance-search>
+    <app-advance-search
+      [fields]="fields"
+      (onAdvanceSearch)="advanceSearch($event)"
+      (onCloseFilter)="closeFilter()"
+    ></app-advance-search>
   </div>
 
   <div style="display: flex; margin: 0.5rem 0">
@@ -66,6 +70,9 @@
       "
       (click)="goToList(instruction)"
     >
+      <td>{{ instruction.patientId }}</td>
+      <td>{{ instruction.adNo }}</td>
+      <td>{{ instruction.patientName }}</td>
       <td>
         {{ formatDate(instruction.date, "DD/MM/yyyy") }}
       </td>

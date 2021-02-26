@@ -3,6 +3,8 @@ import { HttpService } from 'src/app/framework/http.service';
 import { NurseActivityWorkListStoreService } from '../../nurse-activity-work-list-store.service';
 import * as moment from 'moment';
 import Activity from '../../activity.model';
+import { AppStoreService } from 'src/app/app-store.service';
+import { Doctor } from 'src/app/framework/doctor-dialog/doctor.model';
 
 @Component({
   selector: 'app-nursing-activity-worklist-list',
@@ -11,6 +13,9 @@ import Activity from '../../activity.model';
 })
 export class NursingActivityWorklistListComponent implements OnInit {
   headers = [
+    'Patient ID',
+    'Ad No',
+    'Patient Name',
     'Procedure',
     'Date',
     'Due Date For Change',
@@ -76,18 +81,45 @@ export class NursingActivityWorklistListComponent implements OnInit {
       value: '9',
       key: 'doctorName',
     },
+    {
+      text: 'Patient ID',
+      value: '10',
+      key: 'patientId',
+    },
+    {
+      text: 'Patient Name',
+      value: '11',
+      key: 'patientName',
+    },
+    {
+      text: 'Ad No',
+      value: '12',
+      key: 'adNo',
+    },
   ];
   search = '';
   activities: Activity[] = [];
 
   constructor(
+    public appStoreService: AppStoreService,
     private http: HttpService,
     public nurseActivityWorkListStoreService: NurseActivityWorkListStoreService
   ) {}
 
   ngOnInit(): void {
-    this.fetchProcedures();
+    this.fetchDoctors();
     this.nurseActivityWorkListStoreService.isUpdate = false;
+  }
+
+  fetchDoctors() {
+    this.http.doGet('nurse-activity-worklist/doctors').subscribe(
+      (data: Doctor[]) => {
+        this.appStoreService.doctors = data;
+        this.fetchProcedures();
+      },
+      (error) => {},
+      () => {}
+    );
   }
 
   formatDate(dateStr: string, format: string) {
@@ -289,7 +321,10 @@ export class NursingActivityWorklistListComponent implements OnInit {
               v.size + v.sizeUnit,
               v.site + v.siteUnit,
               v.marking + v.markingUnit,
-              v.externalLength + v.externalLengthUnit
+              v.externalLength + v.externalLengthUnit,
+              v.patientId,
+              v.patientName,
+              v.adNo
             )
         );
         this.activities = this.nurseActivityWorkListStoreService.activities;

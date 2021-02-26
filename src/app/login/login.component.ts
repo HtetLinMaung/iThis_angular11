@@ -62,9 +62,12 @@ export class LoginComponent implements OnInit {
         break;
       case 7:
         this.router.navigate(['/roomrate']);
-
     }
   }
+<<<<<<< HEAD
   ngOnInit(): void { }
 
+=======
+  ngOnInit(): void {}
+>>>>>>> 84e07fabc2b0cfecb1c366affeda9292b95caf1c
 }

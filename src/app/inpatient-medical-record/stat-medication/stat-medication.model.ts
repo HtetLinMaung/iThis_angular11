@@ -14,6 +14,9 @@ export default class StatMedication {
     public remark: string = '',
     public routeDesc: string = '',
     public confirmDate: string = '',
-    public fmtTimeAdmin: string = ''
+    public fmtTimeAdmin: string = '',
+    public patientId: string = '',
+    public patientName: string = '',
+    public adNo: string = ''
   ) {}
 }

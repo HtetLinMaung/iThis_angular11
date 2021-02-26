@@ -35,6 +35,7 @@ export class AppStoreService {
     patientType: '',
   });
   private readonly _menus = new BehaviorSubject<any>([]);
+  private readonly _onPatientIdChanged = new BehaviorSubject<any>(() => {});
 
   readonly pId$ = this._pId.asObservable();
   readonly patientInfo$ = this._patientInfo.asObservable();
@@ -48,6 +49,7 @@ export class AppStoreService {
   readonly patients$ = this._patients.asObservable();
   readonly patientDetail$ = this._patientDetail.asObservable();
   readonly menus$ = this._menus.asObservable();
+  readonly onPatientIdChanged$ = this._onPatientIdChanged.asObservable();
 
   constructor() {}
 
@@ -145,5 +147,13 @@ export class AppStoreService {
 
   get menus(): any {
     return this._menus.getValue();
+  }
+
+  set onPatientIdChanged(v: any) {
+    this._onPatientIdChanged.next(v);
+  }
+
+  get onPatientIdChanged(): any {
+    return this._onPatientIdChanged.getValue();
   }
 }
