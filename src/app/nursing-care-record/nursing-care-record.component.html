@@ -8,7 +8,7 @@
       Nursing Care Record
     </div>
   </div>
-  
+
   <div style="display: flex">
     <div class="card tab__body">
       <app-nursing-care-record-list *ngIf="(instructionStoreService.tabNo$ | async) == 1">
@@ -18,3 +18,4 @@
     </div>
   </div>
 </div>
+<app-patient-dialog *ngIf="appStoreService.patientDialog$ | async"></app-patient-dialog>

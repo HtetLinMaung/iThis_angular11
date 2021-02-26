@@ -6,9 +6,13 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { CommonTypeModule } from './common-type/common-type.module';
+import { DrawerComponent } from './framework/drawer/drawer.component';
+import { ListItemComponent } from './framework/list-item/list-item.component';
+import { NavBarComponent } from './framework/nav-bar/nav-bar.component';
 import { GeneralWardModule } from './general-ward/general-ward.module';
 import { InpatientMedicalRecordModule } from './inpatient-medical-record/inpatient-medical-record.module';
 import { LoginComponent } from './login/login.component';
+import { MenuModule } from './menu/menu.module';
 import { NurseShiftSummaryModule } from './nurse-shift-summary/nurse-shift-summary.module';
 import { NursingActivityWorklistModule } from './nursing-activity-worklist/nursing-activity-worklist.module';
 import { NursingCareRecordModule } from './nursing-care-record/nursing-care-record.module';
@@ -17,10 +21,6 @@ import { RoomcodeModule } from './roomcode/roomcode.module';
 import { RoomrateModule } from './roomrate/roomrate.module';
 import { RouteModule } from './route/route.module';
 import { SharedModule } from './shared/shared.module';
-import { NavBarComponent } from './framework/nav-bar/nav-bar.component';
-import { DrawerComponent } from './framework/drawer/drawer.component';
-import { ListItemComponent } from './framework/list-item/list-item.component';
-import { MenuModule } from './menu/menu.module';
 
 @NgModule({
   declarations: [
@@ -42,13 +42,10 @@ import { MenuModule } from './menu/menu.module';
     CommonTypeModule,
     RouteModule,
     GeneralWardModule,
-<<<<<<< HEAD
     PatientTypeModule,
     RoomrateModule,
     RoomcodeModule,
-=======
     MenuModule,
->>>>>>> deb36a09d7a29524b6d4782d51706714a6eb90c7
     RouterModule.forRoot([
       {
         path: '',
@@ -59,4 +56,4 @@ import { MenuModule } from './menu/menu.module';
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

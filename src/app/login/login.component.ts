@@ -11,7 +11,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     public appStoreService: AppStoreService
-  ) {}
+  ) { }
 
   navigate(n: number) {
     switch (n) {
@@ -65,10 +65,6 @@ export class LoginComponent implements OnInit {
 
     }
   }
-<<<<<<< HEAD
   ngOnInit(): void { }
-=======
 
-  ngOnInit(): void {}
->>>>>>> deb36a09d7a29524b6d4782d51706714a6eb90c7
 }

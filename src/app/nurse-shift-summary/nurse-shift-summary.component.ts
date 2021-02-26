@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { AppStoreService } from '../app-store.service';
 import { HttpService } from '../framework/http.service';
 import { NurseShiftSummaryService } from './nurse-shift-summary.service';
 
@@ -11,6 +12,7 @@ import { NurseShiftSummaryService } from './nurse-shift-summary.service';
 export class NurseShiftSummaryComponent implements OnInit {
   syskey = this.getSyskey();
   constructor(
+    public appStoreService: AppStoreService,
     private http: HttpService,
     public instructionStoreService: NurseShiftSummaryService
   ) { }
