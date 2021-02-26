@@ -3,6 +3,8 @@ import { HttpService } from 'src/app/framework/http.service';
 import { NurseActivityWorkListStoreService } from '../../nurse-activity-work-list-store.service';
 import * as moment from 'moment';
 import Activity from '../../activity.model';
+import { AppStoreService } from 'src/app/app-store.service';
+import { Doctor } from 'src/app/framework/doctor-dialog/doctor.model';
 
 @Component({
   selector: 'app-nursing-activity-worklist-list',
@@ -99,13 +101,25 @@ export class NursingActivityWorklistListComponent implements OnInit {
   activities: Activity[] = [];
 
   constructor(
+    public appStoreService: AppStoreService,
     private http: HttpService,
     public nurseActivityWorkListStoreService: NurseActivityWorkListStoreService
   ) {}
 
   ngOnInit(): void {
-    this.fetchProcedures();
+    this.fetchDoctors();
     this.nurseActivityWorkListStoreService.isUpdate = false;
+  }
+
+  fetchDoctors() {
+    this.http.doGet('nurse-activity-worklist/doctors').subscribe(
+      (data: Doctor[]) => {
+        this.appStoreService.doctors = data;
+        this.fetchProcedures();
+      },
+      (error) => {},
+      () => {}
+    );
   }
 
   formatDate(dateStr: string, format: string) {
