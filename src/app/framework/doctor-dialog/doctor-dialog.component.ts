@@ -1,3 +1,4 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { AppStoreService } from 'src/app/app-store.service';
 import { HttpService } from '../http.service';
@@ -22,17 +23,17 @@ export class DoctorDialogComponent implements OnInit {
     {
       text: 'ID',
       value: '1',
-      key: 'doctorID',
+      key: 'DrID',
     },
     {
       text: 'Name',
       value: '2',
-      key: 'doctorName',
+      key: 'name',
     },
     {
       text: 'Speciality',
       value: '3',
-      key: 'speciality',
+      key: 'spname',
     },
     {
       text: 'Rank',
@@ -42,21 +43,22 @@ export class DoctorDialogComponent implements OnInit {
     {
       text: 'Degree',
       value: '5',
-      key: 'degree',
+      key: 'Degree1',
     },
     {
       text: 'Phone',
       value: '6',
-      key: 'phone',
+      key: 'Phone',
     },
     {
       text: 'Clinic',
       value: '7',
-      key: 'clinic',
+      key: 'clinicname',
     },
   ];
   search = '';
   open = false;
+  filters = [];
 
   constructor(
     private http: HttpService,
@@ -73,34 +75,37 @@ export class DoctorDialogComponent implements OnInit {
   }
 
   initPagination(data) {
-    this.start = 0;
-    this.end = this.perPage;
-    if (data.length < this.perPage) {
-      this.end = data.length;
-    }
-    this.calculateTotal(data);
-  }
-
-  calculateTotal(data) {
-    this.totalPage = Math.ceil(data.length / this.perPage);
-    this.total = data.length;
+    this.start = data.from;
+    this.end = data.to;
+    this.total = data.total;
+    this.totalPage = data.lastPage;
   }
 
   fetchDoctors() {
-    this.http.doGet('nurse-activity-worklist/doctors').subscribe(
-      (data: Doctor[]) => {
-        this.appStoreService.doctors = [...data];
-        this.doctors = data;
-        this.initPagination(data);
-      },
-      (error) => {},
-      () => {}
-    );
+    this.http
+      .doPost('nurse-activity-worklist/doctors', {
+        page: this.page,
+        perPage: this.perPage,
+        search: this.search,
+        advSearch: this.filters.map((filter) => ({
+          ...filter,
+          field: this.fields.find((v) => v.value == filter.field)?.key,
+        })),
+      })
+      .subscribe(
+        (data: any) => {
+          this.appStoreService.doctors = [...data.data];
+          this.initPagination(data);
+        },
+        (error) => {},
+        () => {}
+      );
   }
 
   handlePerPageChanged(perPage) {
+    this.page = 1;
     this.perPage = perPage;
-    this.initPagination(this.doctors);
+    this.fetchDoctors();
   }
 
   handleSkip(n: number) {
@@ -108,43 +113,20 @@ export class DoctorDialogComponent implements OnInit {
       case 1:
         if (this.page < this.totalPage) {
           this.page++;
-          this.end = this.page * this.perPage;
-          if (this.page == this.totalPage) {
-            this.end = this.doctors.length - this.start;
-          }
-          this.start = (this.page - 1) * this.perPage;
         }
         break;
       case 2:
-        if (this.page !== 1) {
+        if (this.page > 1) {
           this.page--;
-          this.end = this.page * this.perPage;
-          this.start = (this.page - 1) * this.perPage;
-        } else {
-          this.start = (this.page - 1) * this.perPage;
-          this.end = this.perPage;
-          if (this.doctors.length < this.perPage) {
-            this.end = this.doctors.length;
-          }
         }
         break;
       case 3:
         this.page = 1;
-        this.start = (this.page - 1) * this.perPage;
-        this.end = this.perPage;
-        if (this.doctors.length < this.perPage) {
-          this.end = this.doctors.length;
-        }
         break;
       default:
         this.page = this.totalPage;
-        this.start = (this.page - 1) * this.perPage;
-        if (this.doctors.length % this.perPage === 0) {
-          this.end = this.page * this.perPage;
-        } else {
-          this.end = this.start + (this.doctors.length % this.perPage);
-        }
     }
+    this.fetchDoctors();
   }
 
   openAdvSearch() {
@@ -156,45 +138,12 @@ export class DoctorDialogComponent implements OnInit {
   }
 
   advanceSearch(filters) {
-    this.doctors = this.appStoreService.doctors.filter((doctor) => {
-      let flag = true;
-      for (const filter of filters) {
-        const key = this.fields.find((field) => field.value == filter.field)
-          ?.key;
-        switch (filter.condition) {
-          case '1':
-            flag = flag && filter.search == doctor[key];
-            break;
-          case '2':
-            flag = flag && doctor[key].toString().includes(filter.search);
-            break;
-          case '3':
-            flag = flag && doctor[key].toString().startsWith(filter.search);
-            break;
-          default:
-            flag = flag && doctor[key].toString().endsWith(filter.search);
-        }
-      }
-      return flag;
-    });
-    this.initPagination(this.doctors);
+    this.filters = filters;
+    this.fetchDoctors();
   }
 
   normalSearch() {
-    if (this.search) {
-      const searchKeys = this.fields.map((field) => field.key);
-      this.doctors = this.appStoreService.doctors.filter((doctor) => {
-        let flag = false;
-        for (const key in doctor) {
-          if (searchKeys.includes(key)) {
-            flag = flag || doctor[key].toString().includes(this.search);
-          }
-        }
-        return flag;
-      });
-    }
-
-    this.initPagination(this.doctors);
+    this.fetchDoctors();
   }
 
   showAll() {
