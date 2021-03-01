@@ -11,7 +11,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     public appStoreService: AppStoreService
-  ) {}
+  ) { }
 
   navigate(n: number) {
     switch (n) {
@@ -64,5 +64,10 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/roomrate']);
     }
   }
+<<<<<<< HEAD
+  ngOnInit(): void { }
+
+=======
   ngOnInit(): void {}
+>>>>>>> 84e07fabc2b0cfecb1c366affeda9292b95caf1c
 }

@@ -128,7 +128,7 @@ export class RoomcodeListComponent implements OnInit {
     let url: string = `roomcode/get`;
     this.http.doPost(url, this._roomcodeObj).subscribe(
       (data: any) => {
-        this._roomcodeList = data.PatientTypeList;
+        this._roomcodeList = data.RoomCodeList;
       },
     );
   }
