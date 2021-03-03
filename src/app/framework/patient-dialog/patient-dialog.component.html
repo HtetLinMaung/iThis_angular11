@@ -75,9 +75,9 @@
 
     <div style="display: flex; margin: 0.5rem 0">
       <app-pagination
-        [total]="patients.length"
+        [total]="total"
         [perPage]="perPage"
-        [start]="start"
+        [start]="start - 1"
         [end]="end"
         [perPages]="perPages"
         style="flex: 0 0 35%"
@@ -92,7 +92,7 @@
     <app-table [headers]="headers" class="doctor__table">
       <tr
         class="__raised"
-        *ngFor="let patient of patients.slice(start, end)"
+        *ngFor="let patient of appStoreService.patients$ | async"
         (click)="selectPatient(patient)"
       >
         <td>

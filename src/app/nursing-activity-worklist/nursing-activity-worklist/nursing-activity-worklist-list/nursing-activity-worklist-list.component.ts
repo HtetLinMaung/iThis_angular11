@@ -107,19 +107,8 @@ export class NursingActivityWorklistListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchDoctors();
+    this.fetchProcedures();
     this.nurseActivityWorkListStoreService.isUpdate = false;
-  }
-
-  fetchDoctors() {
-    this.http.doGet('nurse-activity-worklist/doctors').subscribe(
-      (data: Doctor[]) => {
-        this.appStoreService.doctors = data;
-        this.fetchProcedures();
-      },
-      (error) => {},
-      () => {}
-    );
   }
 
   formatDate(dateStr: string, format: string) {
