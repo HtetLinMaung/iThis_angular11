@@ -147,6 +147,8 @@ export class DoctorDialogComponent implements OnInit {
   }
 
   showAll() {
+    this.search = '';
+    this.filters = [];
     this.fetchDoctors();
   }
 

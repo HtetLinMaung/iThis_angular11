@@ -63,9 +63,11 @@ export class NursingActivityWorklistFormComponent implements OnInit {
       this.markingUnit = activity.markingUnit;
       this.externalLength = activity.externalLength.toString();
       this.externalLengthUnit = activity.externalLengthUnit;
-      this.appStoreService.doctor = this.appStoreService.doctors.find(
-        (doctor) => doctor.syskey == activity.doctorId
-      );
+      this.http
+        .doGet(`nurse-activity-worklist/doctors/${activity.doctorId}`)
+        .subscribe((data: any) => {
+          this.appStoreService.doctor = data;
+        });
     }
   }
 
