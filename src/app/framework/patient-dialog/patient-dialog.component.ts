@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppStoreService } from 'src/app/app-store.service';
 import { Patient } from 'src/app/patient.model';
+import PaginationUtil from 'src/app/utils/pagination.util';
 
 import { HttpService } from '../http.service';
 import PatientData from './patient.model';
@@ -10,7 +11,7 @@ import PatientData from './patient.model';
   templateUrl: './patient-dialog.component.html',
   styleUrls: ['./patient-dialog.component.css'],
 })
-export class PatientDialogComponent implements OnInit {
+export class PatientDialogComponent extends PaginationUtil implements OnInit {
   headers = [
     'AD No.',
     'ID',
@@ -25,13 +26,6 @@ export class PatientDialogComponent implements OnInit {
     'Dpt. Date',
   ];
   patients: PatientData[] = [];
-  page = 1;
-  totalPage = 0;
-  total = 0;
-  perPage = 10;
-  perPages = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-  start = 0;
-  end = 0;
   fields = [
     {
       text: 'AD No.',
@@ -89,8 +83,6 @@ export class PatientDialogComponent implements OnInit {
       key: 'DptDate',
     },
   ];
-  search = '';
-  open = false;
   rgsStatus = 0;
   patientType = 0;
   patientTypes = [];
@@ -116,12 +108,13 @@ export class PatientDialogComponent implements OnInit {
       text: 'Inactive',
     },
   ];
-  filters = [];
 
   constructor(
     private http: HttpService,
     public appStoreService: AppStoreService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.fetchInitialData();
@@ -172,13 +165,6 @@ export class PatientDialogComponent implements OnInit {
     this.fetchPatientInfoById();
   }
 
-  initPagination(data) {
-    this.start = data.from;
-    this.end = data.to;
-    this.total = data.total;
-    this.totalPage = data.lastPage;
-  }
-
   fetchInitialData() {
     this.http
       .doGet('nurse-activity-worklist/patient-types')
@@ -224,32 +210,8 @@ export class PatientDialogComponent implements OnInit {
   }
 
   handleSkip(n: number) {
-    switch (n) {
-      case 1:
-        if (this.page < this.totalPage) {
-          this.page++;
-        }
-        break;
-      case 2:
-        if (this.page > 1) {
-          this.page--;
-        }
-        break;
-      case 3:
-        this.page = 1;
-        break;
-      default:
-        this.page = this.totalPage;
-    }
+    this.calculateSkipType(n);
     this.fetchPatients();
-  }
-
-  openAdvSearch() {
-    this.open = true;
-  }
-
-  closeFilter() {
-    this.open = false;
   }
 
   advanceSearch(filters) {
@@ -267,15 +229,7 @@ export class PatientDialogComponent implements OnInit {
     this.fetchPatients();
   }
 
-  clearSearch() {
-    this.search = '';
-  }
-
   closeDialog() {
     this.appStoreService.patientDialog = false;
-  }
-
-  preventBubble(e) {
-    e.stopPropagation();
   }
 }

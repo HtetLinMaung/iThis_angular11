@@ -1,6 +1,6 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { AppStoreService } from 'src/app/app-store.service';
+import PaginationUtil from 'src/app/utils/pagination.util';
 import { HttpService } from '../http.service';
 import { Doctor } from './doctor.model';
 
@@ -9,16 +9,9 @@ import { Doctor } from './doctor.model';
   templateUrl: './doctor-dialog.component.html',
   styleUrls: ['./doctor-dialog.component.css'],
 })
-export class DoctorDialogComponent implements OnInit {
+export class DoctorDialogComponent extends PaginationUtil implements OnInit {
   headers = ['ID', 'Name', 'Speciality', 'Rank', 'Degree', 'Phone', 'Clinic'];
   doctors: Doctor[] = [];
-  page = 1;
-  totalPage = 0;
-  total = 0;
-  perPage = 10;
-  perPages = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-  start = 0;
-  end = 0;
   fields = [
     {
       text: 'ID',
@@ -56,14 +49,13 @@ export class DoctorDialogComponent implements OnInit {
       key: 'clinicname',
     },
   ];
-  search = '';
-  open = false;
-  filters = [];
 
   constructor(
     private http: HttpService,
     public appStoreService: AppStoreService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.fetchDoctors();
@@ -72,13 +64,6 @@ export class DoctorDialogComponent implements OnInit {
   selectDoctor(doctor: Doctor) {
     this.appStoreService.doctor = doctor;
     this.appStoreService.doctorDialog = false;
-  }
-
-  initPagination(data) {
-    this.start = data.from;
-    this.end = data.to;
-    this.total = data.total;
-    this.totalPage = data.lastPage;
   }
 
   fetchDoctors() {
@@ -109,32 +94,8 @@ export class DoctorDialogComponent implements OnInit {
   }
 
   handleSkip(n: number) {
-    switch (n) {
-      case 1:
-        if (this.page < this.totalPage) {
-          this.page++;
-        }
-        break;
-      case 2:
-        if (this.page > 1) {
-          this.page--;
-        }
-        break;
-      case 3:
-        this.page = 1;
-        break;
-      default:
-        this.page = this.totalPage;
-    }
+    this.calculateSkipType(n);
     this.fetchDoctors();
-  }
-
-  openAdvSearch() {
-    this.open = true;
-  }
-
-  closeFilter() {
-    this.open = false;
   }
 
   advanceSearch(filters) {
@@ -152,15 +113,7 @@ export class DoctorDialogComponent implements OnInit {
     this.fetchDoctors();
   }
 
-  clearSearch() {
-    this.search = '';
-  }
-
   closeDialog() {
     this.appStoreService.doctorDialog = false;
-  }
-
-  preventBubble(e) {
-    e.stopPropagation();
   }
 }
