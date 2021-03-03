@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppStoreService } from 'src/app/app-store.service';
-import PaginationUtil from 'src/app/utils/pagination.util';
+import CommonUtil from 'src/app/utils/common.util';
 import { HttpService } from '../http.service';
 import { Doctor } from './doctor.model';
 
@@ -9,7 +9,7 @@ import { Doctor } from './doctor.model';
   templateUrl: './doctor-dialog.component.html',
   styleUrls: ['./doctor-dialog.component.css'],
 })
-export class DoctorDialogComponent extends PaginationUtil implements OnInit {
+export class DoctorDialogComponent extends CommonUtil implements OnInit {
   headers = ['ID', 'Name', 'Speciality', 'Rank', 'Degree', 'Phone', 'Clinic'];
   doctors: Doctor[] = [];
   fields = [

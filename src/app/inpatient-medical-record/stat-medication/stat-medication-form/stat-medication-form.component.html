@@ -22,11 +22,15 @@
   <div class="flex__row">
     <div class="p__5" style="flex: 0 0 20%">
       <label class="form__label">Date</label>
+      <input type="date" class="form-control form__input" [(ngModel)]="date" />
+    </div>
+    <div class="p__5" style="flex: 0 0 20%">
+      <label class="form__label">Time</label>
       <input
-        type="datetime-local"
+        type="time"
         step="1"
         class="form-control form__input"
-        [(ngModel)]="date"
+        [(ngModel)]="time"
       />
     </div>
   </div>

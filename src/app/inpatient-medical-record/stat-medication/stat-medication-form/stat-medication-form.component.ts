@@ -24,6 +24,7 @@ export class StatMedicationFormComponent implements OnInit {
     'Remark',
   ];
   date = '';
+  time = '';
   printData = [];
 
   constructor(
@@ -51,6 +52,7 @@ export class StatMedicationFormComponent implements OnInit {
         (v) => v.syskey == this.statMedicationStoreService.currentSysKey
       );
       this.date = this.statMedicationStoreService.statMedications[0].confirmDate;
+      this.time = this.statMedicationStoreService.statMedications[0].confirmTime;
     } else {
       this.fetchStatMedications();
     }
@@ -58,79 +60,76 @@ export class StatMedicationFormComponent implements OnInit {
 
   fetchStatMedications() {
     this.statMedicationStoreService.statMedications = [];
-    Promise.all([
-      this.fetchRoutes(),
-      this.fetchDoses(),
-      this.fetchDrugTasks(),
-    ]).then(([routes, doses, drugTasks]: [any, any, any]) => {
-      this.statMedicationStoreService.routes = routes.map((v) => ({
-        value: v.route,
-        text: v.EngDesc,
-        syskey: v.syskey,
-      }));
-      this.statMedicationStoreService.doses = doses.map((v) => ({
-        text: v.Dose,
-        value: v.EngDesc,
-        syskey: v.syskey,
-      }));
-      this.statMedicationStoreService.drugTasks = drugTasks.map((v) => ({
-        text: v.eng_desc,
-        value: v.task,
-        syskey: v.syskey,
-      }));
+    this.http
+      .doGet('inpatient-medical-record/routes')
+      .subscribe((routes: any) => {
+        this.http
+          .doGet('inpatient-medical-record/doses')
+          .subscribe((doses: any) => {
+            this.http
+              .doGet('inpatient-medical-record/drug-tasks')
+              .subscribe((drugTasks: any) => {
+                this.statMedicationStoreService.routes = routes.map((v) => ({
+                  value: v.route,
+                  text: v.EngDesc,
+                  syskey: v.syskey,
+                }));
+                this.statMedicationStoreService.doses = doses.map((v) => ({
+                  text: v.Dose,
+                  value: v.EngDesc,
+                  syskey: v.syskey,
+                }));
+                this.statMedicationStoreService.drugTasks = drugTasks.map(
+                  (v) => ({
+                    text: v.eng_desc,
+                    value: v.task,
+                    syskey: v.syskey,
+                  })
+                );
+                this.http
+                  .doPost('inpatient-medical-record/stat-medications-initial', {
+                    rgsno: this.appStoreService.rgsNo,
+                  })
+                  .subscribe((data: any) => {
+                    this.statMedicationStoreService.statMedications = [];
+                    for (const v of data) {
+                      let times = 1;
+                      switch (data.engdesc) {
+                        case 'twice a day':
+                          times = 2;
+                          break;
+                        case '3 times a day':
+                          times = 3;
+                          break;
+                        case '4 times a day':
+                          times = 4;
+                          break;
+                      }
+                      let i = 0;
 
-      this.http
-        .doGet('inpatient-medical-record/stat-medications-initial')
-        .subscribe((data: any) => {
-          this.statMedicationStoreService.statMedications = [];
-          for (const v of data) {
-            let times = 1;
-            switch (data.engdesc) {
-              case 'twice a day':
-                times = 2;
-                break;
-              case '3 times a day':
-                times = 3;
-                break;
-              case '4 times a day':
-                times = 4;
-                break;
-            }
-            let i = 0;
-
-            while (i++ < times) {
-              this.statMedicationStoreService.statMedications.push(
-                new StatMedication(
-                  v.syskey,
-                  v.route,
-                  v.medication,
-                  v.dose,
-                  v.engdesc,
-                  '',
-                  '',
-                  '',
-                  '',
-                  '',
-                  v.stockId,
-                  v.remark
-                )
-              );
-            }
-          }
-        });
-    });
-  }
-
-  fetchRoutes() {
-    return this.http.doGet('inpatient-medical-record/routes').toPromise();
-  }
-
-  fetchDoses() {
-    return this.http.doGet('inpatient-medical-record/doses').toPromise();
-  }
-
-  fetchDrugTasks() {
-    return this.http.doGet('inpatient-medical-record/drug-tasks').toPromise();
+                      while (i++ < times) {
+                        this.statMedicationStoreService.statMedications.push(
+                          new StatMedication(
+                            v.syskey,
+                            v.route,
+                            v.medication,
+                            v.dose,
+                            v.engdesc,
+                            '',
+                            '',
+                            '',
+                            '',
+                            '',
+                            v.stockId,
+                            v.remark
+                          )
+                        );
+                      }
+                    }
+                  });
+              });
+          });
+      });
   }
 
   handleRowClick(e) {
@@ -161,6 +160,10 @@ export class StatMedicationFormComponent implements OnInit {
             nurseConfirmDate: !this.appStoreService.isDoctorRank
               ? this.date
               : '',
+            moConfirmTime: this.appStoreService.isDoctorRank ? this.time : '',
+            nurseConfirmTime: !this.appStoreService.isDoctorRank
+              ? this.time
+              : '',
             routeSyskey: this.statMedicationStoreService.routes.find(
               (item) => item.value == v.route
             ).syskey,
@@ -177,7 +180,8 @@ export class StatMedicationFormComponent implements OnInit {
           statMedications: this.statMedicationStoreService.statMedications.map(
             (v) => ({
               pId: this.appStoreService.pId,
-              RgsNo: this.appStoreService.rgsNo,
+              rgsNo: this.appStoreService.rgsNo,
+              adNo: this.appStoreService.patientDetail.adNo,
               userid: '',
               username: '',
               parentId: v.syskey,
@@ -191,6 +195,10 @@ export class StatMedicationFormComponent implements OnInit {
               moConfirmDate: this.appStoreService.isDoctorRank ? this.date : '',
               nurseConfirmDate: !this.appStoreService.isDoctorRank
                 ? this.date
+                : '',
+              moConfirmTime: this.appStoreService.isDoctorRank ? this.time : '',
+              nurseConfirmTime: !this.appStoreService.isDoctorRank
+                ? this.time
                 : '',
               routeSyskey: this.statMedicationStoreService.routes.find(
                 (item) => item.value == v.route

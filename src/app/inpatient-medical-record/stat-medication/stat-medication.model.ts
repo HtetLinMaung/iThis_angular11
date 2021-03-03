@@ -17,6 +17,7 @@ export default class StatMedication {
     public fmtTimeAdmin: string = '',
     public patientId: string = '',
     public patientName: string = '',
-    public adNo: string = ''
+    public adNo: string = '',
+    public confirmTime = ''
   ) {}
 }

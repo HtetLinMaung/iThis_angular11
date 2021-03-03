@@ -180,7 +180,10 @@ export class StatMedicationListComponent implements OnInit {
                           '',
                           v.patientId,
                           v.patientName,
-                          v.adNo
+                          v.adNo,
+                          this.appStoreService.isDoctorRank
+                            ? v.moConfirmTime
+                            : v.nurseConfirmTime
                         )
                     );
 
