@@ -158,19 +158,8 @@ export class NursingCareRecordFormComponent implements OnInit {
     // jQuery("#delConfirmpopup").modal();
   }
   goDelete() {
-    let url: string = `nursingcarerecord/delete`;
-    this.http.doPost(url, this._obj).subscribe(
-      (data: any) => {
-        if (data.message == "Success") {
-          this.goNew();
-        } else if (data.message == "deleteFail") {
-        } else {
-        }
-      },
-      error => {
-
-      }
-    );
+    this.instructionStoreService.deleteDialog = true;
+    this.instructionStoreService._syskey = this._obj;
   }
   getNurse() {
     let url: string = `nursingcarerecord/get`;

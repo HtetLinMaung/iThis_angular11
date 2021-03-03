@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { AppStoreService } from '../app-store.service';
 
 @Component({
@@ -64,10 +65,5 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/roomrate']);
     }
   }
-<<<<<<< HEAD
   ngOnInit(): void { }
-
-=======
-  ngOnInit(): void {}
->>>>>>> 84e07fabc2b0cfecb1c366affeda9292b95caf1c
 }

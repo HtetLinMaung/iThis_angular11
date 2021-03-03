@@ -18,4 +18,6 @@
     </div>
   </div>
 </div>
+<app-delete-dialog *ngIf="instructionStoreService.deleteDialog$ | async" (onDelete)="deleteData()"
+  (onCancel)="cancelDelete()"></app-delete-dialog>
 <app-patient-dialog *ngIf="appStoreService.patientDialog$ | async"></app-patient-dialog>

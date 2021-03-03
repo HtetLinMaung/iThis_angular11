@@ -41,5 +41,37 @@ export class NurseShiftSummaryComponent implements OnInit {
       syskey: "",
     };
   }
+  deleteData() {
 
+    this.instructionStoreService.deleteDialog = true;
+    let url: string = `nurseshiftsummary/delete`;
+    this.http.doPost(url, this.instructionStoreService._syskey).subscribe(
+      (data: any) => {
+        if (data.message == "Success") {
+          // this.goNew();
+          const tabEle1 = document.getElementById('tab1');
+          const tabEle2 = document.getElementById('tab2');
+          tabEle1.style.background = '#3b5998';
+          tabEle2.style.background = '#8C9899';
+          this.instructionStoreService.tabNo = 1;
+          this.instructionStoreService.deleteDialog = false;
+
+
+        } else if (data.message == "deleteFail") {
+          // alert("Delete Fail.");
+        } else {
+          // alert("Delete Fail .");
+        }
+      },
+      error => {
+        //alert("Delete Fail .");
+
+      }
+    );
+
+
+  }
+  cancelDelete() {
+    this.instructionStoreService.deleteDialog = false;
+  }
 }
