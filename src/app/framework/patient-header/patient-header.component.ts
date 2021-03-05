@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppStoreService } from 'src/app/app-store.service';
 import { Patient } from 'src/app/patient.model';
+import CommonUtil from 'src/app/utils/common.util';
 
 import { HttpService } from '../http.service';
 
@@ -9,20 +10,24 @@ import { HttpService } from '../http.service';
   templateUrl: './patient-header.component.html',
   styleUrls: ['./patient-header.component.css'],
 })
-export class PatientHeaderComponent implements OnInit {
+export class PatientHeaderComponent extends CommonUtil implements OnInit {
   constructor(
     private http: HttpService,
     public appStoreService: AppStoreService
-  ) {}
-
-  ngOnInit(): void {
-    this.fetchPatientInfoById();
+  ) {
+    super();
+    // this.appStoreService.fetchPatientByRgsNo = () => {
+    //   this.fetchPatientInfoById();
+    // };
   }
+
+  ngOnInit(): void {}
 
   onAdNoChanged(event) {
     const data = this.appStoreService.patientDetail.headerData.find(
       (v) => v.refNo == event.target.value
     );
+    console.log(data);
     this.appStoreService.patientDetail.patientId = data.patientid;
     this.appStoreService.patientDetail.patientName =
       data.persontitle + ' ' + data.personname;
@@ -37,6 +42,7 @@ export class PatientHeaderComponent implements OnInit {
       data.ward,
       data.bed
     );
+    this.appStoreService.onAdNoChanged(event.target.value);
   }
 
   viewInfo(e) {
@@ -58,7 +64,7 @@ export class PatientHeaderComponent implements OnInit {
   fetchPatientInfoById() {
     if (!this.appStoreService.pId) return;
     this.http
-      .doGet(`nurse-activity-worklist/patient-info/${this.appStoreService.pId}`)
+      .doGet(`patients/patient-info/${this.appStoreService.pId}`)
       .subscribe(
         (data: any) => {
           this.appStoreService.patientDetail.headerData = data;
@@ -97,8 +103,8 @@ export class PatientHeaderComponent implements OnInit {
     this.appStoreService.patientDetail = {
       patientId: '',
       patientName: '',
-      adNos: [{ value: 0, text: '-' }],
-      adNo: 0,
+      adNos: ['-'],
+      adNo: '-',
       headerData: [],
       infoDialog: false,
       patientAge: 0,
@@ -110,5 +116,6 @@ export class PatientHeaderComponent implements OnInit {
     };
     this.appStoreService.rgsNo = 0;
     this.appStoreService.drID = 0;
+    this.appStoreService.onClear();
   }
 }

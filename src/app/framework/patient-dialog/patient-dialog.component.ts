@@ -120,64 +120,45 @@ export class PatientDialogComponent extends CommonUtil implements OnInit {
     this.fetchInitialData();
   }
 
-  fetchPatientInfoById() {
-    if (!this.appStoreService.pId) return;
-    this.http
-      .doGet(`nurse-activity-worklist/patient-info/${this.appStoreService.pId}`)
-      .subscribe(
-        (data: any) => {
-          this.appStoreService.patientDetail.headerData = data;
-          this.appStoreService.onPatientIdChanged();
-          if (data.length) {
-            this.appStoreService.patientDetail.patientId = data[0].patientid;
-            this.appStoreService.patientDetail.patientName =
-              data[0].persontitle + ' ' + data[0].personname;
-            this.appStoreService.patientDetail.patientAge = data[0].age;
-            this.appStoreService.patientDetail.ADDate = data[0].arriveDate;
-            this.appStoreService.patientDetail.room = data[0].roomNo;
-            this.appStoreService.patientDetail.doctor = data[0].doctorName;
-            this.appStoreService.patientDetail.speciality = data[0].speciality;
-            this.appStoreService.patientDetail.patientType =
-              data[0].patientType;
-            this.appStoreService.patientDetail.adNos = data.map((v) => ({
-              value: v.refNo,
-              text: v.refNo,
-            }));
-            this.appStoreService.patientDetail.adNo = data[0].refNo;
-            this.appStoreService.patientInfo = new Patient(
-              data[0].allergy,
-              data[0].ward,
-              data[0].bed
-            );
-            this.appStoreService.rgsNo = data[0].rgsNo;
-            this.appStoreService.drID = data[0].drID;
-          }
-        },
-        (error) => {},
-        () => {}
-      );
-  }
-
   selectPatient(patient: PatientData) {
     this.appStoreService.pId = patient.pId;
     this.appStoreService.rgsNo = patient.rgsNo;
     this.appStoreService.patientDialog = false;
-    this.fetchPatientInfoById();
+    this.http
+      .doGet(`patients/adnos/${this.appStoreService.pId}`)
+      .subscribe((data: string[]) => {
+        this.appStoreService.patientDetail.adNos = data;
+        this.appStoreService.patientDetail.patientId = patient.id;
+        this.appStoreService.patientDetail.patientName = patient.name;
+        this.appStoreService.patientDetail.patientAge = patient.age;
+        this.appStoreService.patientDetail.ADDate = patient.adDate;
+        this.appStoreService.patientDetail.room = patient.roomNo;
+        this.appStoreService.patientDetail.doctor = patient.doctor;
+        this.appStoreService.patientDetail.speciality = patient.speciality;
+        this.appStoreService.patientDetail.patientType = patient.patientType;
+
+        this.appStoreService.patientDetail.adNo = patient.adNo;
+        this.appStoreService.patientInfo = new Patient(
+          patient.allergy,
+          patient.ward,
+          patient.bed
+        );
+        this.appStoreService.rgsNo = patient.rgsNo;
+        this.appStoreService.drID = parseInt(patient.drID || '0');
+      });
   }
 
   fetchInitialData() {
-    this.http
-      .doGet('nurse-activity-worklist/patient-types')
-      .subscribe((data: any) => {
-        this.patientTypes = data.patientTypeList;
-        this.patientType = data.currentPatientType;
-        this.fetchPatients();
-      });
+    this.http.doGet('patients/patient-types').subscribe((data: any) => {
+      this.patientTypes = data.patientTypeList;
+      this.patientType = data.currentPatientType;
+      this.fetchPatients();
+    });
   }
 
   fetchPatients() {
     this.http
-      .doPost('nurse-activity-worklist/patients', {
+      .doPost('patients/', {
         patientType: this.patientType,
         rgsStatus: this.rgsStatus,
         page: this.page,

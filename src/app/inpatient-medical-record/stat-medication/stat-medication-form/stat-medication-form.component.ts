@@ -34,6 +34,7 @@ export class StatMedicationFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.appStoreService.onAdNoChanged = (adNo) => {};
     this.bindEditData();
   }
 

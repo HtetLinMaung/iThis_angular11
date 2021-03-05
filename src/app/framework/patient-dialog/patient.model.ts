@@ -13,6 +13,11 @@ export default class PatientData {
     public roomNo = '',
     public adDate = '',
     public dptDate = '',
-    public patientType = ''
+    public patientType = '',
+    public age = 0,
+    public allergy = '',
+    public ward = '',
+    public bed = '',
+    public drID = ''
   ) {}
 }

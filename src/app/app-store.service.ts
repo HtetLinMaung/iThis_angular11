@@ -23,8 +23,8 @@ export class AppStoreService {
   private readonly _patientDetail = new BehaviorSubject<any>({
     patientId: '',
     patientName: '',
-    adNos: [{ value: 0, text: '-' }],
-    adNo: 0,
+    adNos: ['-'],
+    adNo: '-',
     headerData: [],
     infoDialog: false,
     patientAge: 0,
@@ -36,6 +36,9 @@ export class AppStoreService {
   });
   private readonly _menus = new BehaviorSubject<any>([]);
   private readonly _onPatientIdChanged = new BehaviorSubject<any>(() => {});
+  private readonly _fetchPatientByRgsNo = new BehaviorSubject<any>(() => {});
+  private readonly _onAdNoChanged = new BehaviorSubject<any>(() => {});
+  private readonly _onClear = new BehaviorSubject<any>(() => {});
 
   readonly pId$ = this._pId.asObservable();
   readonly patientInfo$ = this._patientInfo.asObservable();
@@ -50,6 +53,9 @@ export class AppStoreService {
   readonly patientDetail$ = this._patientDetail.asObservable();
   readonly menus$ = this._menus.asObservable();
   readonly onPatientIdChanged$ = this._onPatientIdChanged.asObservable();
+  readonly fetchPatientByRgsNo$ = this._fetchPatientByRgsNo.asObservable();
+  readonly onAdNoChanged$ = this._onAdNoChanged.asObservable();
+  readonly onClear$ = this._onClear.asObservable();
 
   constructor() {}
 
@@ -155,5 +161,29 @@ export class AppStoreService {
 
   get onPatientIdChanged(): any {
     return this._onPatientIdChanged.getValue();
+  }
+
+  set fetchPatientByRgsNo(v: any) {
+    this._fetchPatientByRgsNo.next(v);
+  }
+
+  get fetchPatientByRgsNo(): any {
+    return this._fetchPatientByRgsNo.getValue();
+  }
+
+  set onAdNoChanged(v: any) {
+    this._onAdNoChanged.next(v);
+  }
+
+  get onAdNoChanged() {
+    return this._onAdNoChanged.getValue();
+  }
+
+  set onClear(v: any) {
+    this._onClear.next(v);
+  }
+
+  get onClear() {
+    return this._onClear.getValue();
   }
 }
