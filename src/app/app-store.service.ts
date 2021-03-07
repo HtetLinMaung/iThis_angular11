@@ -34,11 +34,12 @@ export class AppStoreService {
     speciality: '',
     patientType: '',
   });
-  private readonly _menus = new BehaviorSubject<any>([]);
+  private readonly _menus = new BehaviorSubject<any[]>([]);
   private readonly _onPatientIdChanged = new BehaviorSubject<any>(() => {});
   private readonly _fetchPatientByRgsNo = new BehaviorSubject<any>(() => {});
   private readonly _onAdNoChanged = new BehaviorSubject<any>(() => {});
   private readonly _onClear = new BehaviorSubject<any>(() => {});
+  private readonly _patientTypes = new BehaviorSubject<any[]>([]);
 
   readonly pId$ = this._pId.asObservable();
   readonly patientInfo$ = this._patientInfo.asObservable();
@@ -56,6 +57,7 @@ export class AppStoreService {
   readonly fetchPatientByRgsNo$ = this._fetchPatientByRgsNo.asObservable();
   readonly onAdNoChanged$ = this._onAdNoChanged.asObservable();
   readonly onClear$ = this._onClear.asObservable();
+  readonly patientTypes$ = this._patientTypes.asObservable();
 
   constructor() {}
 
@@ -185,5 +187,13 @@ export class AppStoreService {
 
   get onClear() {
     return this._onClear.getValue();
+  }
+
+  set patientTypes(v: any[]) {
+    this._patientTypes.next(v);
+  }
+
+  get patientTypes(): any[] {
+    return this._patientTypes.getValue();
   }
 }

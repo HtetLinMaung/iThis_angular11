@@ -20,9 +20,9 @@
     >
       <option
         *ngFor="let item of appStoreService.patientDetail.adNos"
-        [value]="item"
+        [value]="item.value"
       >
-        {{ item }}
+        {{ item.text }}
       </option>
     </select>
   </div>

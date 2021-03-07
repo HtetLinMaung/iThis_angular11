@@ -4,6 +4,7 @@ import { Patient } from 'src/app/patient.model';
 import CommonUtil from 'src/app/utils/common.util';
 
 import { HttpService } from '../http.service';
+import PatientData from '../patient-dialog/patient.model';
 
 @Component({
   selector: 'app-patient-header',
@@ -24,25 +25,26 @@ export class PatientHeaderComponent extends CommonUtil implements OnInit {
   ngOnInit(): void {}
 
   onAdNoChanged(event) {
-    const data = this.appStoreService.patientDetail.headerData.find(
-      (v) => v.refNo == event.target.value
-    );
-    console.log(data);
-    this.appStoreService.patientDetail.patientId = data.patientid;
-    this.appStoreService.patientDetail.patientName =
-      data.persontitle + ' ' + data.personname;
-    this.appStoreService.patientDetail.patientAge = data.age;
-    this.appStoreService.patientDetail.ADDate = data.arriveDate;
-    this.appStoreService.patientDetail.room = data.roomNo;
-    this.appStoreService.patientDetail.doctor = data.doctorName;
-    this.appStoreService.patientDetail.speciality = data.speciality;
-    this.appStoreService.patientDetail.patientType = data.patientType;
-    this.appStoreService.patientDetail.appStoreService.patientInfo = new Patient(
-      data.allergy,
-      data.ward,
-      data.bed
-    );
-    this.appStoreService.onAdNoChanged(event.target.value);
+    this.http
+      .doGet(`patients/${this.appStoreService.patientDetail.adNo}`)
+      .subscribe((patient: PatientData) => {
+        this.appStoreService.patientDetail.patientId = patient.id;
+        this.appStoreService.patientDetail.patientName = patient.name;
+        this.appStoreService.patientDetail.patientAge = patient.age;
+        this.appStoreService.patientDetail.ADDate = patient.adDate;
+        this.appStoreService.patientDetail.room = patient.roomNo;
+        this.appStoreService.patientDetail.doctor = patient.doctor;
+        this.appStoreService.patientDetail.speciality = patient.speciality;
+        this.appStoreService.patientDetail.patientType = this.appStoreService.patientTypes.find(
+          (v) => v.value == patient.patientType
+        ).text;
+        this.appStoreService.patientDetail.appStoreService.patientInfo = new Patient(
+          patient.allergy,
+          patient.ward,
+          patient.bed
+        );
+        this.appStoreService.onAdNoChanged(event.target.value);
+      });
   }
 
   viewInfo(e) {

@@ -135,9 +135,11 @@ export class PatientDialogComponent extends CommonUtil implements OnInit {
         this.appStoreService.patientDetail.room = patient.roomNo;
         this.appStoreService.patientDetail.doctor = patient.doctor;
         this.appStoreService.patientDetail.speciality = patient.speciality;
-        this.appStoreService.patientDetail.patientType = patient.patientType;
+        this.appStoreService.patientDetail.patientType = this.patientTypes.find(
+          (v) => v.value == patient.patientType
+        ).text;
 
-        this.appStoreService.patientDetail.adNo = patient.adNo;
+        this.appStoreService.patientDetail.adNo = patient.rgsNo + '';
         this.appStoreService.patientInfo = new Patient(
           patient.allergy,
           patient.ward,
@@ -150,7 +152,8 @@ export class PatientDialogComponent extends CommonUtil implements OnInit {
 
   fetchInitialData() {
     this.http.doGet('patients/patient-types').subscribe((data: any) => {
-      this.patientTypes = data.patientTypeList;
+      this.patientTypes = [...data.patientTypeList];
+      this.appStoreService.patientTypes = data.patientTypeList;
       this.patientType = data.currentPatientType;
       this.fetchPatients();
     });
