@@ -35,7 +35,7 @@ export class AppStoreService {
     patientType: '',
   });
   private readonly _menus = new BehaviorSubject<any[]>([]);
-  private readonly _onPatientIdChanged = new BehaviorSubject<any>(() => {});
+  private readonly _onPatientChanged = new BehaviorSubject<any>(() => {});
   private readonly _fetchPatientByRgsNo = new BehaviorSubject<any>(() => {});
   private readonly _onAdNoChanged = new BehaviorSubject<any>(() => {});
   private readonly _onClear = new BehaviorSubject<any>(() => {});
@@ -53,7 +53,7 @@ export class AppStoreService {
   readonly patients$ = this._patients.asObservable();
   readonly patientDetail$ = this._patientDetail.asObservable();
   readonly menus$ = this._menus.asObservable();
-  readonly onPatientIdChanged$ = this._onPatientIdChanged.asObservable();
+  readonly onPatientChanged$ = this._onPatientChanged.asObservable();
   readonly fetchPatientByRgsNo$ = this._fetchPatientByRgsNo.asObservable();
   readonly onAdNoChanged$ = this._onAdNoChanged.asObservable();
   readonly onClear$ = this._onClear.asObservable();
@@ -157,12 +157,12 @@ export class AppStoreService {
     return this._menus.getValue();
   }
 
-  set onPatientIdChanged(v: any) {
-    this._onPatientIdChanged.next(v);
+  set onPatientChanged(v: any) {
+    this._onPatientChanged.next(v);
   }
 
-  get onPatientIdChanged(): any {
-    return this._onPatientIdChanged.getValue();
+  get onPatientChanged(): any {
+    return this._onPatientChanged.getValue();
   }
 
   set fetchPatientByRgsNo(v: any) {

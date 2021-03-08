@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppStoreService } from 'src/app/app-store.service';
 import { HttpService } from 'src/app/framework/http.service';
 import { NonParenteralStoreService } from '../non-parenteral-store.service';
@@ -6,15 +6,19 @@ import NonParenteral, { CheckList } from '../non-parenteral.model';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import * as moment from 'moment';
+import CommonUtil from 'src/app/utils/common.util';
 
 @Component({
   selector: 'app-non-parenteral-form',
   templateUrl: './non-parenteral-form.component.html',
   styleUrls: ['./non-parenteral-form.component.css'],
 })
-export class NonParenteralFormComponent implements OnInit {
+export class NonParenteralFormComponent
+  extends CommonUtil
+  implements OnInit, OnDestroy {
   date = '';
-  diagnosis: '';
+  time = '';
+  diagnosis = '';
   drugAllergyTo = '';
   chronicRenalFailure = false;
   pregnant = false;
@@ -30,17 +34,22 @@ export class NonParenteralFormComponent implements OnInit {
     private http: HttpService,
     public nonParenteralStoreService: NonParenteralStoreService,
     public appStoreService: AppStoreService
-  ) {}
+  ) {
+    super();
+  }
+  ngOnDestroy(): void {
+    this.appStoreService.onPatientChanged = this.appStoreService.onClear = () => {};
+  }
 
   ngOnInit(): void {
     const tabEle1 = document.getElementById('tab1');
     const tabEle2 = document.getElementById('tab2');
     tabEle2.style.background = '#3b5998';
     tabEle1.style.background = '#8C9899';
-    this.appStoreService.onPatientIdChanged = () => {
-      this.fetchNonParenterals();
-    };
-    this.fetchNonParenterals();
+    (this.appStoreService.onPatientChanged = this.fetchNonParenterals.bind(
+      this
+    ))();
+    this.appStoreService.onClear = this.new.bind(this);
   }
 
   getHeaders() {
@@ -51,96 +60,41 @@ export class NonParenteralFormComponent implements OnInit {
     }
   }
 
-  fetchNonParenterals() {
+  async fetchNonParenterals() {
+    await this.fetchRouteDoseTask(this.http, this.nonParenteralStoreService);
     this.http
-      .doGet('inpatient-medical-record/routes')
-      .subscribe((routes: any) => {
-        this.http
-          .doGet('inpatient-medical-record/doses')
-          .subscribe((doses: any) => {
-            this.http
-              .doGet('inpatient-medical-record/drug-tasks')
-              .subscribe((drugTasks: any) => {
-                this.nonParenteralStoreService.routes = routes.map((v) => ({
-                  value: v.syskey + '',
-                  text: v.EngDesc,
-                  syskey: v.syskey,
-                }));
-                this.nonParenteralStoreService.doses = doses.map((v) => ({
-                  value: v.syskey + '',
-                  text: v.Dose,
-                  syskey: v.syskey,
-                }));
-                this.nonParenteralStoreService.drugTasks = drugTasks.map(
-                  (v) => ({
-                    text: v.eng_desc,
-                    value: v.task,
-                    syskey: v.syskey,
-                  })
-                );
+      .doPost('inpatient-medical-record/non-parenterals-initial', {
+        rgsno: this.appStoreService.rgsNo,
+      })
+      .subscribe((data: any) => {
+        this.nonParenteralStoreService.nonParenterals = data.map((v, i) => {
+          return new NonParenteral(
+            i + 1,
+            v.routeSyskey + '',
+            v.medication,
+            v.dose,
+            v.stockId,
+            v.doseTypeSyskey,
+            v.remark,
+            v.checkList
+              .map(
+                (item) =>
+                  new CheckList(i + 1, item.done, item.nurseId, item.doneAt)
+              )
+              .sort((a, b) => a.syskey - b.syskey),
+            this.nonParenteralStoreService.routes.find(
+              (route) => route.syskey == v.routeSyskey
+            ).text,
+            this.nonParenteralStoreService.doses.find(
+              (dose) => dose.syskey == v.doseTypeSyskey
+            ).text,
+            v.checkList.filter((item) => item.done).length
+          );
+        });
 
-                this.http
-                  .doPost('inpatient-medical-record/non-parenterals-initial', {
-                    patientId: this.appStoreService.pId,
-                    rgsno: this.appStoreService.rgsNo,
-                    doctorId: this.appStoreService.drID,
-                  })
-                  .subscribe((data: any) => {
-                    const nonParenterals = data.map((v, i) => {
-                      if (i == 0) {
-                        for (const [key, value] of Object.entries(v)) {
-                          this[key] = value;
-                        }
-                        this.date = this.appStoreService.isDoctorRank
-                          ? v.moConfirmDate
-                          : v.nurseConfirmDate;
-                        this.moConfirmDate = v.moConfirmDate;
-                        this.nurseConfirmDate = v.nurseConfirmDate;
-                      }
-                      return new NonParenteral(
-                        v.syskey,
-                        v.routeSyskey + '',
-                        v.medication,
-                        v.dose,
-                        v.stockId,
-                        v.doseTypeSyskey,
-                        v.remark,
-                        v.checkList
-                          .map(
-                            (item) =>
-                              new CheckList(
-                                item.syskey,
-                                item.done,
-                                item.nurseId,
-                                item.doneAt
-                              )
-                          )
-                          .sort((a, b) => a.syskey - b.syskey),
-                        this.nonParenteralStoreService.routes.find(
-                          (route) => route.syskey == v.routeSyskey
-                        ).text,
-                        this.nonParenteralStoreService.doses.find(
-                          (dose) => dose.syskey == v.doseTypeSyskey
-                        ).text,
-                        v.checkList.filter((item) => item.done).length
-                      );
-                    });
-
-                    if (this.nonParenteralStoreService.isUpdate) {
-                      this.nonParenteralStoreService.nonParenterals = this.nonParenteralStoreService.nonParenterals.filter(
-                        (v) =>
-                          v.syskey ==
-                          this.nonParenteralStoreService.currentSysKey
-                      );
-                    } else {
-                      if (!this.drugAllergyTo) {
-                        this.fetchAllergiesByPatient(this.appStoreService.pId);
-                      }
-                      this.nonParenteralStoreService.nonParenterals = nonParenterals;
-                    }
-                  });
-              });
-          });
+        if (!this.drugAllergyTo) {
+          this.fetchAllergiesByPatient(this.appStoreService.pId);
+        }
       });
   }
 
@@ -163,7 +117,27 @@ export class NonParenteralFormComponent implements OnInit {
     }
   }
 
-  new() {}
+  new() {
+    this.clear();
+    this.nonParenteralStoreService.isUpdate = false;
+    this.fetchNonParenterals();
+  }
+
+  clear() {
+    this.date = '';
+    this.time = '';
+    this.diagnosis = '';
+    this.drugAllergyTo = '';
+    this.chronicRenalFailure = false;
+    this.pregnant = false;
+    this.tubeFeed = false;
+    this.liquidMedication = false;
+    this.dateStart = '';
+    this.dateOff = '';
+    this.givenByType = 'X1';
+    this.moConfirmDate = '';
+    this.nurseConfirmDate = '';
+  }
 
   save() {
     if (this.nonParenteralStoreService.isUpdate) {

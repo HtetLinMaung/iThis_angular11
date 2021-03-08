@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppStoreService } from 'src/app/app-store.service';
 import { HttpService } from 'src/app/framework/http.service';
 import { StatMedicationStoreService } from '../stat-medication-store.service';
@@ -12,7 +12,7 @@ import * as moment from 'moment';
   templateUrl: './stat-medication-form.component.html',
   styleUrls: ['./stat-medication-form.component.css'],
 })
-export class StatMedicationFormComponent implements OnInit {
+export class StatMedicationFormComponent implements OnInit, OnDestroy {
   headers = [
     'Route',
     'Medication',
@@ -33,8 +33,15 @@ export class StatMedicationFormComponent implements OnInit {
     public statMedicationStoreService: StatMedicationStoreService
   ) {}
 
+  ngOnDestroy(): void {
+    this.appStoreService.onPatientChanged = this.appStoreService.onClear = () => {};
+  }
+
   ngOnInit(): void {
-    this.appStoreService.onAdNoChanged = (adNo) => {};
+    (this.appStoreService.onPatientChanged = this.fetchStatMedications.bind(
+      this
+    ))();
+    this.appStoreService.onClear = this.new.bind(this);
     this.bindEditData();
   }
 
@@ -56,8 +63,6 @@ export class StatMedicationFormComponent implements OnInit {
       this.date = data.confirmDate;
       this.time = data.confirmTime;
       this.appStoreService.fetchPatientByRgsNo(data.rgsNo);
-    } else {
-      this.fetchStatMedications();
     }
   }
 
@@ -142,7 +147,12 @@ export class StatMedicationFormComponent implements OnInit {
     // });
   }
 
-  new() {}
+  new() {
+    this.statMedicationStoreService.isUpdate = false;
+    this.date = '';
+    this.time = '';
+    this.printData = [];
+  }
 
   save() {
     if (this.statMedicationStoreService.isUpdate) {

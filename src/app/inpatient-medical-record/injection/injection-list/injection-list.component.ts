@@ -92,7 +92,7 @@ export class InjectionListComponent implements OnInit {
     const tabEle2 = document.getElementById('tab2');
     tabEle1.style.background = '#3b5998';
     tabEle2.style.background = '#8C9899';
-    this.appStoreService.onPatientIdChanged = () => {
+    this.appStoreService.onPatientChanged = () => {
       this.fetchAllInjections();
     };
     this.fetchAllInjections();
