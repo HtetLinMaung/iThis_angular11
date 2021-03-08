@@ -168,7 +168,8 @@ export class StatMedicationListComponent extends CommonUtil implements OnInit {
                           v.adNo,
                           this.appStoreService.isDoctorRank
                             ? v.moConfirmTime
-                            : v.nurseConfirmTime
+                            : v.nurseConfirmTime,
+                          v.rgsNo
                         )
                     );
                     this.initPagination(data);

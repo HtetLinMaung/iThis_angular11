@@ -19,6 +19,15 @@ export class PatientHeaderComponent extends CommonUtil implements OnInit {
     super();
     this.appStoreService.fetchPatientByRgsNo = (rgsNo: number) => {
       this.http.doGet(`patients/${rgsNo}`).subscribe((patient: PatientData) => {
+        this.http
+          .doGet(`patients/adnos/${patient.pId}`)
+          .subscribe((data: { text: string; value: string }[]) => {
+            this.appStoreService.patientDetail.adNos = data;
+            this.appStoreService.patientDetail.adNo = patient.rgsNo + '';
+          });
+        this.appStoreService.pId = patient.pId;
+        this.appStoreService.rgsNo = patient.rgsNo;
+        this.appStoreService.drID = parseInt(patient.drID || '0');
         this.appStoreService.patientDetail.patientId = patient.id;
         this.appStoreService.patientDetail.patientName = patient.name;
         this.appStoreService.patientDetail.patientAge = patient.age;
@@ -34,8 +43,6 @@ export class PatientHeaderComponent extends CommonUtil implements OnInit {
           patient.ward,
           patient.bed
         );
-        this.appStoreService.rgsNo = patient.rgsNo;
-        this.appStoreService.drID = parseInt(patient.drID || '0');
       });
     };
   }
@@ -63,43 +70,6 @@ export class PatientHeaderComponent extends CommonUtil implements OnInit {
 
   browsePatients() {
     this.appStoreService.patientDialog = true;
-  }
-
-  fetchPatientInfoById() {
-    if (!this.appStoreService.pId) return;
-    this.http
-      .doGet(`patients/patient-info/${this.appStoreService.pId}`)
-      .subscribe(
-        (data: any) => {
-          this.appStoreService.patientDetail.headerData = data;
-          if (data.length) {
-            this.appStoreService.patientDetail.patientId = data[0].patientid;
-            this.appStoreService.patientDetail.patientName =
-              data[0].persontitle + ' ' + data[0].personname;
-            this.appStoreService.patientDetail.patientAge = data[0].age;
-            this.appStoreService.patientDetail.ADDate = data[0].arriveDate;
-            this.appStoreService.patientDetail.room = data[0].roomNo;
-            this.appStoreService.patientDetail.doctor = data[0].doctorName;
-            this.appStoreService.patientDetail.speciality = data[0].speciality;
-            this.appStoreService.patientDetail.patientType =
-              data[0].patientType;
-            this.appStoreService.patientDetail.adNos = data.map((v) => ({
-              value: v.refNo,
-              text: v.refNo,
-            }));
-            this.appStoreService.patientDetail.adNo = data[0].refNo;
-            this.appStoreService.patientInfo = new Patient(
-              data[0].allergy,
-              data[0].ward,
-              data[0].bed
-            );
-            this.appStoreService.rgsNo = data[0].rgsNo;
-            this.appStoreService.drID = data[0].drID;
-          }
-        },
-        (error) => {},
-        () => {}
-      );
   }
 
   clear() {

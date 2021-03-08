@@ -52,8 +52,10 @@ export class StatMedicationFormComponent implements OnInit {
       this.statMedicationStoreService.statMedications = this.statMedicationStoreService.statMedications.filter(
         (v) => v.syskey == this.statMedicationStoreService.currentSysKey
       );
-      this.date = this.statMedicationStoreService.statMedications[0].confirmDate;
-      this.time = this.statMedicationStoreService.statMedications[0].confirmTime;
+      const data = this.statMedicationStoreService.statMedications[0];
+      this.date = data.confirmDate;
+      this.time = data.confirmTime;
+      this.appStoreService.fetchPatientByRgsNo(data.rgsNo);
     } else {
       this.fetchStatMedications();
     }

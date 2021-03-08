@@ -121,33 +121,31 @@ export class PatientDialogComponent extends CommonUtil implements OnInit {
   }
 
   selectPatient(patient: PatientData) {
+    this.appStoreService.patientDialog = false;
     this.appStoreService.pId = patient.pId;
     this.appStoreService.rgsNo = patient.rgsNo;
-    this.appStoreService.patientDialog = false;
+    this.appStoreService.drID = parseInt(patient.drID || '0');
     this.http
       .doGet(`patients/adnos/${this.appStoreService.pId}`)
       .subscribe((data: string[]) => {
         this.appStoreService.patientDetail.adNos = data;
-        this.appStoreService.patientDetail.patientId = patient.id;
-        this.appStoreService.patientDetail.patientName = patient.name;
-        this.appStoreService.patientDetail.patientAge = patient.age;
-        this.appStoreService.patientDetail.ADDate = patient.adDate;
-        this.appStoreService.patientDetail.room = patient.roomNo;
-        this.appStoreService.patientDetail.doctor = patient.doctor;
-        this.appStoreService.patientDetail.speciality = patient.speciality;
-        this.appStoreService.patientDetail.patientType = this.patientTypes.find(
-          (v) => v.value == patient.patientType
-        ).text;
-
         this.appStoreService.patientDetail.adNo = patient.rgsNo + '';
-        this.appStoreService.patientInfo = new Patient(
-          patient.allergy,
-          patient.ward,
-          patient.bed
-        );
-        this.appStoreService.rgsNo = patient.rgsNo;
-        this.appStoreService.drID = parseInt(patient.drID || '0');
       });
+    this.appStoreService.patientDetail.patientId = patient.id;
+    this.appStoreService.patientDetail.patientName = patient.name;
+    this.appStoreService.patientDetail.patientAge = patient.age;
+    this.appStoreService.patientDetail.ADDate = patient.adDate;
+    this.appStoreService.patientDetail.room = patient.roomNo;
+    this.appStoreService.patientDetail.doctor = patient.doctor;
+    this.appStoreService.patientDetail.speciality = patient.speciality;
+    this.appStoreService.patientDetail.patientType = this.patientTypes.find(
+      (v) => v.value == patient.patientType
+    ).text;
+    this.appStoreService.patientInfo = new Patient(
+      patient.allergy,
+      patient.ward,
+      patient.bed
+    );
   }
 
   fetchInitialData() {
