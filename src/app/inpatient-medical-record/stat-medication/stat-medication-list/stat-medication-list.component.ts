@@ -4,13 +4,14 @@ import { StatMedicationStoreService } from '../stat-medication-store.service';
 import * as moment from 'moment';
 import StatMedication from '../stat-medication.model';
 import { AppStoreService } from 'src/app/app-store.service';
+import CommonUtil from 'src/app/utils/common.util';
 
 @Component({
   selector: 'app-stat-medication-list',
   templateUrl: './stat-medication-list.component.html',
   styleUrls: ['./stat-medication-list.component.css'],
 })
-export class StatMedicationListComponent implements OnInit {
+export class StatMedicationListComponent extends CommonUtil implements OnInit {
   headers = [
     'Patient ID',
     'Ad No',
@@ -24,15 +25,7 @@ export class StatMedicationListComponent implements OnInit {
     "Dr's remark",
     'Remark',
   ];
-  page = 1;
-  totalPage = 0;
-  total = 0;
-  perPage = 10;
-  perPages = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-  start = 0;
-  end = 0;
   statMedications = [];
-  open = false;
   fields = [
     {
       text: 'Route',
@@ -90,35 +83,18 @@ export class StatMedicationListComponent implements OnInit {
       key: 'adNo',
     },
   ];
-  search = '';
 
   constructor(
     public appStoreService: AppStoreService,
     public statMedicationStoreService: StatMedicationStoreService,
     private http: HttpService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.fetchAllStatMedications();
     this.statMedicationStoreService.isUpdate = false;
-  }
-
-  formatDate(dateStr: string, format: string) {
-    return moment(dateStr).format(format);
-  }
-
-  initPagination(data) {
-    this.start = 0;
-    this.end = this.perPage;
-    if (data.length < this.perPage) {
-      this.end = data.length;
-    }
-    this.calculateTotal(data);
-  }
-
-  calculateTotal(data) {
-    this.totalPage = Math.ceil(data.length / this.perPage);
-    this.total = data.length;
   }
 
   fetchAllStatMedications() {
@@ -150,9 +126,18 @@ export class StatMedicationListComponent implements OnInit {
                 );
 
                 this.http
-                  .doGet(`inpatient-medical-record/stat-medications`)
+                  .doPost(`inpatient-medical-record/stat-medications`, {
+                    page: this.page,
+                    perPage: this.perPage,
+                    search: this.search,
+                    advSearch: this.filters.map((filter) => ({
+                      ...filter,
+                      field: this.fields.find((v) => v.value == filter.field)
+                        ?.key,
+                    })),
+                  })
                   .subscribe((data: any) => {
-                    this.statMedicationStoreService.statMedications = data.map(
+                    this.statMedicationStoreService.statMedications = data.data.map(
                       (v) =>
                         new StatMedication(
                           v.syskey,
@@ -183,11 +168,10 @@ export class StatMedicationListComponent implements OnInit {
                           v.adNo,
                           this.appStoreService.isDoctorRank
                             ? v.moConfirmTime
-                            : v.nurseConfirmTime
+                            : v.nurseConfirmTime,
+                          v.rgsNo
                         )
                     );
-
-                    this.statMedications = this.statMedicationStoreService.statMedications;
                     this.initPagination(data);
                   });
               });
@@ -202,130 +186,28 @@ export class StatMedicationListComponent implements OnInit {
   }
 
   handlePerPageChanged(perPage) {
+    this.page = 1;
     this.perPage = perPage;
-    this.initPagination(this.statMedicationStoreService.statMedications);
-  }
-
-  handleSkip(n: number) {
-    switch (n) {
-      case 1:
-        if (this.page < this.totalPage) {
-          this.page++;
-          this.end = this.page * this.perPage;
-          if (this.page == this.totalPage) {
-            this.end =
-              this.statMedicationStoreService.statMedications.length -
-              this.start;
-          }
-          this.start = (this.page - 1) * this.perPage;
-        }
-        break;
-      case 2:
-        if (this.page !== 1) {
-          this.page--;
-          this.end = this.page * this.perPage;
-          this.start = (this.page - 1) * this.perPage;
-        } else {
-          this.start = (this.page - 1) * this.perPage;
-          this.end = this.perPage;
-          if (
-            this.statMedicationStoreService.statMedications.length <
-            this.perPage
-          ) {
-            this.end = this.statMedicationStoreService.statMedications.length;
-          }
-        }
-        break;
-      case 3:
-        this.page = 1;
-        this.start = (this.page - 1) * this.perPage;
-        this.end = this.perPage;
-        if (
-          this.statMedicationStoreService.statMedications.length < this.perPage
-        ) {
-          this.end = this.statMedicationStoreService.statMedications.length;
-        }
-        break;
-      default:
-        this.page = this.totalPage;
-        this.start = (this.page - 1) * this.perPage;
-        if (
-          this.statMedicationStoreService.statMedications.length %
-            this.perPage ===
-          0
-        ) {
-          this.end = this.page * this.perPage;
-        } else {
-          this.end =
-            this.start +
-            (this.statMedicationStoreService.statMedications.length %
-              this.perPage);
-        }
-    }
-  }
-
-  openAdvSearch() {
-    this.open = true;
-  }
-
-  closeFilter() {
-    this.open = false;
-  }
-
-  advanceSearch(filters) {
-    this.statMedicationStoreService.statMedications = this.statMedications.filter(
-      (instruction) => {
-        let flag = true;
-        for (const filter of filters) {
-          const key = this.fields.find((field) => field.value == filter.field)
-            ?.key;
-          switch (filter.condition) {
-            case '1':
-              flag = flag && filter.search == instruction[key];
-              break;
-            case '2':
-              flag =
-                flag && instruction[key].toString().includes(filter.search);
-              break;
-            case '3':
-              flag =
-                flag && instruction[key].toString().startsWith(filter.search);
-              break;
-            default:
-              flag =
-                flag && instruction[key].toString().endsWith(filter.search);
-          }
-        }
-        return flag;
-      }
-    );
-    this.initPagination(this.statMedicationStoreService.statMedications);
-  }
-
-  normalSearch() {
-    if (this.search) {
-      const searchKeys = this.fields.map((field) => field.key);
-      this.statMedicationStoreService.statMedications = this.statMedications.filter(
-        (instruction) => {
-          let flag = false;
-          for (const key in instruction) {
-            if (searchKeys.includes(key)) {
-              flag = flag || instruction[key].toString().includes(this.search);
-            }
-          }
-          return flag;
-        }
-      );
-    }
-
-    this.initPagination(this.statMedicationStoreService.statMedications);
-  }
-
-  showAll() {
     this.fetchAllStatMedications();
   }
 
-  clearSearch() {
+  handleSkip(n: number) {
+    this.calculateSkipType(n);
+    this.fetchAllStatMedications();
+  }
+
+  advanceSearch(filters) {
+    this.filters = filters;
+    this.fetchAllStatMedications();
+  }
+
+  normalSearch() {
+    this.fetchAllStatMedications();
+  }
+
+  showAll() {
     this.search = '';
+    this.filters = [];
+    this.fetchAllStatMedications();
   }
 }

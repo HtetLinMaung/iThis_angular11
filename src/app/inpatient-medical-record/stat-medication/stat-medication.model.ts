@@ -18,6 +18,7 @@ export default class StatMedication {
     public patientId: string = '',
     public patientName: string = '',
     public adNo: string = '',
-    public confirmTime = ''
+    public confirmTime = '',
+    public rgsNo = 0
   ) {}
 }
