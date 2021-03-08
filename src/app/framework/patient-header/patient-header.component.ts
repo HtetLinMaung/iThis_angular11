@@ -17,17 +17,8 @@ export class PatientHeaderComponent extends CommonUtil implements OnInit {
     public appStoreService: AppStoreService
   ) {
     super();
-    // this.appStoreService.fetchPatientByRgsNo = () => {
-    //   this.fetchPatientInfoById();
-    // };
-  }
-
-  ngOnInit(): void {}
-
-  onAdNoChanged(event) {
-    this.http
-      .doGet(`patients/${this.appStoreService.patientDetail.adNo}`)
-      .subscribe((patient: PatientData) => {
+    this.appStoreService.fetchPatientByRgsNo = (rgsNo: number) => {
+      this.http.doGet(`patients/${rgsNo}`).subscribe((patient: PatientData) => {
         this.appStoreService.patientDetail.patientId = patient.id;
         this.appStoreService.patientDetail.patientName = patient.name;
         this.appStoreService.patientDetail.patientAge = patient.age;
@@ -38,13 +29,24 @@ export class PatientHeaderComponent extends CommonUtil implements OnInit {
         this.appStoreService.patientDetail.patientType = this.appStoreService.patientTypes.find(
           (v) => v.value == patient.patientType
         ).text;
-        this.appStoreService.patientDetail.appStoreService.patientInfo = new Patient(
+        this.appStoreService.patientInfo = new Patient(
           patient.allergy,
           patient.ward,
           patient.bed
         );
-        this.appStoreService.onAdNoChanged(event.target.value);
+        this.appStoreService.rgsNo = patient.rgsNo;
+        this.appStoreService.drID = parseInt(patient.drID || '0');
       });
+    };
+  }
+
+  ngOnInit(): void {}
+
+  onAdNoChanged(event) {
+    this.appStoreService.fetchPatientByRgsNo(
+      this.appStoreService.patientDetail.adNo
+    );
+    this.appStoreService.onAdNoChanged(event.target.value);
   }
 
   viewInfo(e) {
@@ -105,7 +107,7 @@ export class PatientHeaderComponent extends CommonUtil implements OnInit {
     this.appStoreService.patientDetail = {
       patientId: '',
       patientName: '',
-      adNos: ['-'],
+      adNos: [{ text: '-', value: '-' }],
       adNo: '-',
       headerData: [],
       infoDialog: false,
