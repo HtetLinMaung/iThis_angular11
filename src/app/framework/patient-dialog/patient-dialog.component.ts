@@ -153,8 +153,8 @@ export class PatientDialogComponent extends CommonUtil implements OnInit {
             this.appStoreService.drID = data[0].drID;
           }
         },
-        (error) => {},
-        () => {}
+        (error) => { },
+        () => { }
       );
   }
 
@@ -193,8 +193,8 @@ export class PatientDialogComponent extends CommonUtil implements OnInit {
           this.appStoreService.patients = [...data.data] as PatientData[];
           this.initPagination(data);
         },
-        (error) => {},
-        () => {}
+        (error) => { },
+        () => { }
       );
   }
 

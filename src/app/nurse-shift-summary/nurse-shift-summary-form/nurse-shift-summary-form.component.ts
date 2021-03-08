@@ -34,6 +34,9 @@ export class NurseShiftSummaryFormComponent implements OnInit {
     this._obj.n6 = 1;
     this.childcheck2 = true;
     this._obj.n7 = 2;
+    this._obj.rgsNo = this.appStoreService.rgsNo;
+    this._obj.pId = this.appStoreService.pId;
+
   }
   goNew() {
     this._obj = this.getObj();
@@ -64,6 +67,9 @@ export class NurseShiftSummaryFormComponent implements OnInit {
       hsId: 0,
       doctorId: "",
       dayNight: 0,
+      patientName: "",
+      patientId: "",
+      doctorName: "",
       t1: "",
       t2: "",
       t3: "",
@@ -115,6 +121,8 @@ export class NurseShiftSummaryFormComponent implements OnInit {
     //   alert("fill all blanks");
     //   return;
     // }
+    //this._obj.doctorId=this.appStoreService.drID;
+    this._obj.refNo = this.appStoreService.patientDetail.adNo;
     let url: string = `nurseshiftsummary/save`;
     this.http.doPost(url, this._obj).subscribe(
       (data: any) => {
@@ -134,7 +142,7 @@ export class NurseShiftSummaryFormComponent implements OnInit {
       },
       error => {
         this._btn_flag._save = false;
-        alert("Saving Fail.");
+        // alert("Saving Fail.");
       });
   }
   valide(): boolean {

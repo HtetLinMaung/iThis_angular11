@@ -1,8 +1,10 @@
 import { Component, OnInit, SchemaMetadata } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { HttpService } from 'src/app/framework/http.service';
 import { InstructionStoreService } from 'src/app/inpatient-medical-record/instruction/instruction-store.service';
+
 import { NurseShiftSummaryService } from '../nurse-shift-summary.service';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
 @Component({
   selector: 'app-nurse-shift-summary-list',
   templateUrl: './nurse-shift-summary-list.component.html',
@@ -17,7 +19,7 @@ export class NurseShiftSummaryListComponent implements OnInit {
   totalPage = 0;
   total = 0;
   perPages = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-  _nurseList = this.getObj();
+  _nurseList = [];
   _nurseObj = this.getObj();
   constructor(
     public instructionStoreService: NurseShiftSummaryService,
@@ -93,18 +95,6 @@ export class NurseShiftSummaryListComponent implements OnInit {
     }
   }
   //framework
-  searchObj() {
-    return {
-      syskey: "",
-      t1: "",
-      t5: "",
-      t6: "",
-      t7: "",
-      t8: "",
-      t9: "",
-      t10: "",
-    }
-  }
   getObj() {
     return {
       syskey: "",
@@ -125,7 +115,10 @@ export class NurseShiftSummaryListComponent implements OnInit {
       hsId: 0,
       doctorId: "",
       patientdate: "",
-      daynight: 0,
+      dayNight: 0,
+      patientName: "",
+      patientId: "",
+      doctorName: "",
       t1: "",
       t2: "",
       t3: "",
