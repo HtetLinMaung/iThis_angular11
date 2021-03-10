@@ -97,85 +97,53 @@ export class StatMedicationListComponent extends CommonUtil implements OnInit {
     this.statMedicationStoreService.isUpdate = false;
   }
 
-  fetchAllStatMedications() {
-    this.http
-      .doGet('inpatient-medical-record/routes')
-      .subscribe((routes: any) => {
-        this.http
-          .doGet('inpatient-medical-record/doses')
-          .subscribe((doses: any) => {
-            this.http
-              .doGet('inpatient-medical-record/drug-tasks')
-              .subscribe((drugTasks: any) => {
-                this.statMedicationStoreService.routes = routes.map((v) => ({
-                  value: v.route,
-                  text: v.EngDesc,
-                  syskey: v.syskey,
-                }));
-                this.statMedicationStoreService.doses = doses.map((v) => ({
-                  text: v.Dose,
-                  value: v.EngDesc,
-                  syskey: v.syskey,
-                }));
-                this.statMedicationStoreService.drugTasks = drugTasks.map(
-                  (v) => ({
-                    text: v.eng_desc,
-                    value: v.task,
-                    syskey: v.syskey,
-                  })
-                );
+  async fetchAllStatMedications() {
+    const { routes, doses } = await this.fetchRouteDoseTask(
+      this.http,
+      this.statMedicationStoreService
+    );
 
-                this.http
-                  .doPost(`inpatient-medical-record/stat-medications`, {
-                    page: this.page,
-                    perPage: this.perPage,
-                    search: this.search,
-                    advSearch: this.filters.map((filter) => ({
-                      ...filter,
-                      field: this.fields.find((v) => v.value == filter.field)
-                        ?.key,
-                    })),
-                  })
-                  .subscribe((data: any) => {
-                    this.statMedicationStoreService.statMedications = data.data.map(
-                      (v) =>
-                        new StatMedication(
-                          v.syskey,
-                          routes.find(
-                            (item) => item.syskey == v.routeSyskey
-                          ).route,
-                          v.stockDescription,
-                          v.dose,
-                          doses.map(
-                            (item) => item.syskey == v.doseTypeSyskey
-                          ).EngDesc,
-                          v.prescriptionRemark,
-                          v.timeAdmin,
-                          v.givenBy,
-                          '',
-                          v.drRemark,
-                          v.stockId,
-                          v.remark,
-                          routes.find(
-                            (item) => item.syskey == v.routeSyskey
-                          ).EngDesc,
-                          this.appStoreService.isDoctorRank
-                            ? v.moConfirmDate
-                            : v.nurseConfirmDate,
-                          '',
-                          v.patientId,
-                          v.patientName,
-                          v.adNo,
-                          this.appStoreService.isDoctorRank
-                            ? v.moConfirmTime
-                            : v.nurseConfirmTime,
-                          v.rgsNo
-                        )
-                    );
-                    this.initPagination(data);
-                  });
-              });
-          });
+    this.http
+      .doPost(`inpatient-medical-record/stat-medications`, {
+        page: this.page,
+        perPage: this.perPage,
+        search: this.search,
+        advSearch: this.filters.map((filter) => ({
+          ...filter,
+          field: this.fields.find((v) => v.value == filter.field)?.key,
+        })),
+      })
+      .subscribe((data: any) => {
+        this.statMedicationStoreService.statMedications = data.data.map(
+          (v) =>
+            new StatMedication(
+              v.syskey,
+              routes.find((item) => item.syskey == v.routeSyskey).route,
+              v.stockDescription,
+              v.dose,
+              doses.find((item) => item.syskey == v.doseTypeSyskey).EngDesc,
+              v.prescriptionRemark,
+              v.timeAdmin,
+              v.givenBy,
+              '',
+              v.drRemark,
+              v.stockId,
+              v.remark,
+              routes.find((item) => item.syskey == v.routeSyskey).EngDesc,
+              this.appStoreService.isDoctorRank
+                ? v.moConfirmDate
+                : v.nurseConfirmDate,
+              '',
+              v.patientId,
+              v.patientName,
+              v.adNo,
+              this.appStoreService.isDoctorRank
+                ? v.moConfirmTime
+                : v.nurseConfirmTime,
+              v.rgsNo
+            )
+        );
+        this.initPagination(data);
       });
   }
 
