@@ -120,53 +120,12 @@ export class PatientDialogComponent extends CommonUtil implements OnInit {
     this.fetchInitialData();
   }
 
-<<<<<<< HEAD
-
-  fetchPatientInfoById() {
-    if (!this.appStoreService.pId) return;
-    this.http
-      .doGet(`nurse-activity-worklist/patient-info/${this.appStoreService.pId}`)
-      .subscribe(
-        (data: any) => {
-          this.appStoreService.patientDetail.headerData = data;
-          this.appStoreService.onPatientChanged();
-          if (data.length) {
-            this.appStoreService.patientDetail.patientId = data[0].patientid;
-            this.appStoreService.patientDetail.patientName =
-              data[0].persontitle + ' ' + data[0].personname;
-            this.appStoreService.patientDetail.patientAge = data[0].age;
-            this.appStoreService.patientDetail.ADDate = data[0].arriveDate;
-            this.appStoreService.patientDetail.room = data[0].roomNo;
-            this.appStoreService.patientDetail.doctor = data[0].doctorName;
-            this.appStoreService.patientDetail.speciality = data[0].speciality;
-            this.appStoreService.patientDetail.patientType =
-              data[0].patientType;
-            this.appStoreService.patientDetail.adNos = data.map((v) => ({
-              value: v.refNo,
-              text: v.refNo,
-            }));
-            this.appStoreService.patientDetail.adNo = data[0].refNo;
-            this.appStoreService.patientInfo = new Patient(
-              data[0].allergy,
-              data[0].ward,
-              data[0].bed
-            );
-            this.appStoreService.rgsNo = data[0].rgsNo;
-            this.appStoreService.drID = data[0].drID;
-          }
-        },
-        (error) => { },
-        () => { }
-      );
-  }
-=======
->>>>>>> c8605954ff8a33c8fe10a9d7eddda3b8dab5f0ed
   selectPatient(patient: PatientData) {
     this.appStoreService.pId = patient.pId;
     this.appStoreService.rgsNo = patient.rgsNo;
     this.appStoreService.patientDialog = false;
     //this.setPatientDetail(this.http, this.appStoreService, patient);
-    this.fetchPatientInfoById();
+    this.fetchPatients();
   }
 
   fetchInitialData() {
@@ -196,8 +155,8 @@ export class PatientDialogComponent extends CommonUtil implements OnInit {
           this.appStoreService.patients = [...data.data] as PatientData[];
           this.initPagination(data);
         },
-        (error) => {},
-        () => {}
+        (error) => { },
+        () => { }
       );
   }
 
