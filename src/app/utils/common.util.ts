@@ -25,6 +25,7 @@ export default class CommonUtil extends PaginationUtil {
       .subscribe((data: { text: string; value: string }[]) => {
         appStoreService.patientDetail.adNos = data;
         appStoreService.patientDetail.adNo = patient.rgsNo + '';
+        appStoreService.onPatientChanged();
       });
     appStoreService.pId = patient.pId;
     appStoreService.rgsNo = patient.rgsNo;
@@ -44,7 +45,6 @@ export default class CommonUtil extends PaginationUtil {
       patient.ward,
       patient.bed
     );
-    appStoreService.onPatientChanged();
   }
 
   fetchRouteDoseTask(
