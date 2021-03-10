@@ -27,6 +27,7 @@ export class NurseShiftSummaryFormComponent implements OnInit {
 
   ) { }
   ngOnInit(): void {
+    this._obj.refNo = this.appStoreService.patientDetail.adNo;
     this.getNurse();
     this.parentcheck = true;
     this._obj.dayNight = 1;
@@ -34,9 +35,6 @@ export class NurseShiftSummaryFormComponent implements OnInit {
     this._obj.n6 = 1;
     this.childcheck2 = true;
     this._obj.n7 = 2;
-    this._obj.rgsNo = this.appStoreService.rgsNo;
-    this._obj.pId = this.appStoreService.pId;
-
   }
   goNew() {
     this._obj = this.getObj();
@@ -158,16 +156,23 @@ export class NurseShiftSummaryFormComponent implements OnInit {
     this.instructionStoreService.deleteDialog = true;
     this.instructionStoreService._syskey = this._obj;
   }
+  // getNurse() {
+  //   let url: string = `nurseshiftsummary/get`;
+  //   this.http.doPost(url, { syskey: this.instructionStoreService._syskey }).subscribe(
+  //     (data: any) => {
+  //       this._obj = data.NurseList[0];
+  //     },
+  //   );
+  // }
   getNurse() {
     let url: string = `nurseshiftsummary/get`;
-    this.http.doPost(url, { syskey: this.instructionStoreService._syskey }).subscribe(
+    this.http.doPost(url, this._obj).subscribe(
       (data: any) => {
         this._obj = data.NurseList[0];
       },
     );
   }
   print() {
-
     const doc = new jsPDF();
     doc.setFontSize(12);
     doc.text('ASIA ROYAL HOSPITAL', 105, 5, { align: 'center' });

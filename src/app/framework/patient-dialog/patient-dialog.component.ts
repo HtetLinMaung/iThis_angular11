@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppStoreService } from 'src/app/app-store.service';
+import { Patient } from 'src/app/patient.model';
 import CommonUtil from 'src/app/utils/common.util';
 
 import { HttpService } from '../http.service';
@@ -120,6 +121,8 @@ export class PatientDialogComponent extends CommonUtil implements OnInit {
   }
 
   selectPatient(patient: PatientData) {
+    this.appStoreService.pId = patient.pId;
+    this.appStoreService.rgsNo = patient.rgsNo;
     this.appStoreService.patientDialog = false;
     this.setPatientDetail(this.http, this.appStoreService, patient);
   }

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpService } from 'src/app/framework/http.service';
-import { NursingCareRecordService } from '../nursing-care-record.service';
 import * as moment from 'moment';
+import { HttpService } from 'src/app/framework/http.service';
+
+import { NursingCareRecordService } from '../nursing-care-record.service';
+
 @Component({
   selector: 'app-nursing-care-record-list',
   templateUrl: './nursing-care-record-list.component.html',
@@ -110,6 +112,9 @@ export class NursingCareRecordListComponent implements OnInit {
       pId: 0,
       eMRType: "",
       refNo: "",
+      patientName: "",
+      patientId: "",
+      doctorName: "",
       rgsNo: 0,
       hsId: 0,
       t1: "",
