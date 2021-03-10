@@ -115,39 +115,16 @@ export class NonParenteralListComponent extends CommonUtil implements OnInit {
         })),
       })
       .subscribe((data: any) => {
-        this.nonParenteralStoreService.nonParenterals = data.data.map(
-          (v) =>
-            new NonParenteral(
-              v.syskey,
-              v.routeSyskey,
-              v.medication,
-              v.dose,
-              v.stockId,
-              v.doseTypeSyskey,
-              v.remark,
-              v.checkList
-                .map(
-                  (item) =>
-                    new CheckList(
-                      item.syskey,
-                      item.done,
-                      item.nurseId,
-                      item.doneAt
-                    )
-                )
-                .sort((a, b) => a.syskey - b.syskey),
-              this.nonParenteralStoreService.routes.find(
-                (route) => route.syskey == v.routeSyskey
-              ).text,
-              this.nonParenteralStoreService.doses.find(
-                (dose) => dose.syskey == v.doseTypeSyskey
-              ).text,
-              v.checkList.filter((item) => item.done).length,
-              v.patientId,
-              v.patientName,
-              v.adNo
-            )
-        );
+        this.nonParenteralStoreService.nonParenterals = data.data.map((v) => ({
+          ...v,
+          routeDesc: this.nonParenteralStoreService.routes.find(
+            (route) => route.syskey == v.routeSyskey
+          ).text,
+          doseTypeDesc: this.nonParenteralStoreService.doses.find(
+            (dose) => dose.syskey == v.doseTypeSyskey
+          ).text,
+          frequency: v.checkList.filter((item) => item.done).length,
+        }));
 
         this.initPagination(data);
       });

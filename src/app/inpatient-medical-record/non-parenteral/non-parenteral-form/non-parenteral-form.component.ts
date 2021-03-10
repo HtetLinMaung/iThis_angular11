@@ -52,6 +52,33 @@ export class NonParenteralFormComponent
       this
     ))();
     this.appStoreService.onClear = this.new.bind(this);
+    if (this.nonParenteralStoreService.isUpdate) {
+      this.nonParenteralStoreService.nonParenterals = this.nonParenteralStoreService.nonParenterals.filter(
+        (v) => v.syskey == this.nonParenteralStoreService.currentSysKey
+      );
+      const data: NonParenteral = this.nonParenteralStoreService
+        .nonParenterals[0];
+      this.date = this.appStoreService.isDoctorRank
+        ? data.moConfirmDate
+        : data.nurseConfirmDate;
+      this.time = this.appStoreService.isDoctorRank
+        ? data.moConfirmTime
+        : data.nurseConfirmTime;
+      this.diagnosis = data.diagnosis;
+      this.drugAllergyTo = data.drugAllergyTo;
+      this.chronicRenalFailure = data.chronicRenalFailure;
+      this.pregnant = data.pregnant;
+      this.tubeFeed = data.tubeFeed;
+      this.liquidMedication = data.liquidMedication;
+      this.dateStart = data.dateStart;
+      this.dateOff = data.dateOff;
+      this.givenByType = data.givenByType;
+      this.moConfirmDate = data.moConfirmDate;
+      this.nurseConfirmDate = data.nurseConfirmDate;
+      this.moConfirmTime = data.moConfirmTime;
+      this.nurseConfirmTime = data.nurseConfirmTime;
+      this.appStoreService.fetchPatientByRgsNo(data.rgsNo);
+    }
   }
 
   getHeaders() {
@@ -63,13 +90,14 @@ export class NonParenteralFormComponent
   }
 
   async fetchNonParenterals() {
+    if (this.nonParenteralStoreService.isUpdate) return;
     await this.fetchRouteDoseTask(this.http, this.nonParenteralStoreService);
     this.http
       .doPost('inpatient-medical-record/non-parenterals-initial', {
         rgsno: this.appStoreService.rgsNo,
       })
       .subscribe((data: any) => {
-        this.nonParenteralStoreService.nonParenterals = data.map((v, i) => {
+        this.nonParenteralStoreService.nonParenterals = data.map((v) => {
           return new NonParenteral(
             v.syskey,
             v.routeSyskey + '',
@@ -138,6 +166,7 @@ export class NonParenteralFormComponent
     this.givenByType = 'X1';
     this.moConfirmDate = '';
     this.nurseConfirmDate = '';
+    this.nonParenteralStoreService.nonParenterals = [];
   }
 
   save() {
@@ -166,6 +195,12 @@ export class NonParenteralFormComponent
             nurseConfirmDate: !this.appStoreService.isDoctorRank
               ? this.date
               : this.nurseConfirmDate,
+            moConfirmTime: this.appStoreService.isDoctorRank
+              ? this.time
+              : this.moConfirmTime,
+            nurseConfirmTime: !this.appStoreService.isDoctorRank
+              ? this.time
+              : this.nurseConfirmTime,
           }
         )
         .subscribe((data: any) => {});
@@ -207,7 +242,10 @@ export class NonParenteralFormComponent
             })
           ),
         })
-        .subscribe((data: any) => {});
+        .subscribe((data: any) => {
+          this.nonParenteralStoreService.tabNo = 1;
+          this.clear();
+        });
     }
   }
 

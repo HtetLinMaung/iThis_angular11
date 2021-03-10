@@ -6,13 +6,16 @@ import StatMedication from '../stat-medication.model';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import * as moment from 'moment';
+import CommonUtil from 'src/app/utils/common.util';
 
 @Component({
   selector: 'app-stat-medication-form',
   templateUrl: './stat-medication-form.component.html',
   styleUrls: ['./stat-medication-form.component.css'],
 })
-export class StatMedicationFormComponent implements OnInit, OnDestroy {
+export class StatMedicationFormComponent
+  extends CommonUtil
+  implements OnInit, OnDestroy {
   headers = [
     'Route',
     'Medication',
@@ -31,18 +34,18 @@ export class StatMedicationFormComponent implements OnInit, OnDestroy {
     private http: HttpService,
     public appStoreService: AppStoreService,
     public statMedicationStoreService: StatMedicationStoreService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnDestroy(): void {
     this.appStoreService.onPatientChanged = this.appStoreService.onClear = () => {};
   }
 
   ngOnInit(): void {
-    this.appStoreService.onPatientChanged = () => {
-      if (!this.statMedicationStoreService.isUpdate) {
-        this.fetchStatMedications();
-      }
-    };
+    (this.appStoreService.onPatientChanged = this.fetchStatMedications.bind(
+      this
+    ))();
     this.appStoreService.onClear = this.new.bind(this);
     this.bindEditData();
   }
@@ -65,82 +68,53 @@ export class StatMedicationFormComponent implements OnInit, OnDestroy {
       this.date = data.confirmDate;
       this.time = data.confirmTime;
       this.appStoreService.fetchPatientByRgsNo(data.rgsNo);
-    } else {
-      this.fetchStatMedications();
     }
   }
 
-  fetchStatMedications() {
+  async fetchStatMedications() {
+    if (this.statMedicationStoreService.isUpdate) return;
     this.statMedicationStoreService.statMedications = [];
+    await this.fetchRouteDoseTask(this.http, this.statMedicationStoreService);
     this.http
-      .doGet('inpatient-medical-record/routes')
-      .subscribe((routes: any) => {
-        this.http
-          .doGet('inpatient-medical-record/doses')
-          .subscribe((doses: any) => {
-            this.http
-              .doGet('inpatient-medical-record/drug-tasks')
-              .subscribe((drugTasks: any) => {
-                this.statMedicationStoreService.routes = routes.map((v) => ({
-                  value: v.route,
-                  text: v.EngDesc,
-                  syskey: v.syskey,
-                }));
-                this.statMedicationStoreService.doses = doses.map((v) => ({
-                  text: v.Dose,
-                  value: v.EngDesc,
-                  syskey: v.syskey,
-                }));
-                this.statMedicationStoreService.drugTasks = drugTasks.map(
-                  (v) => ({
-                    text: v.eng_desc,
-                    value: v.task,
-                    syskey: v.syskey,
-                  })
-                );
-                this.http
-                  .doPost('inpatient-medical-record/stat-medications-initial', {
-                    rgsno: this.appStoreService.rgsNo,
-                  })
-                  .subscribe((data: any) => {
-                    this.statMedicationStoreService.statMedications = [];
-                    for (const v of data) {
-                      let times = 1;
-                      switch (data.engdesc) {
-                        case 'twice a day':
-                          times = 2;
-                          break;
-                        case '3 times a day':
-                          times = 3;
-                          break;
-                        case '4 times a day':
-                          times = 4;
-                          break;
-                      }
-                      let i = 0;
+      .doPost('inpatient-medical-record/stat-medications-initial', {
+        rgsno: this.appStoreService.rgsNo,
+      })
+      .subscribe((data: any) => {
+        this.statMedicationStoreService.statMedications = [];
+        for (const v of data) {
+          let times = 1;
+          switch (data.engdesc) {
+            case 'twice a day':
+              times = 2;
+              break;
+            case '3 times a day':
+              times = 3;
+              break;
+            case '4 times a day':
+              times = 4;
+              break;
+          }
+          let i = 0;
 
-                      while (i++ < times) {
-                        this.statMedicationStoreService.statMedications.push(
-                          new StatMedication(
-                            v.syskey,
-                            v.route,
-                            v.medication,
-                            v.dose,
-                            v.engdesc,
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            v.stockId,
-                            v.remark
-                          )
-                        );
-                      }
-                    }
-                  });
-              });
-          });
+          while (i++ < times) {
+            this.statMedicationStoreService.statMedications.push(
+              new StatMedication(
+                v.syskey,
+                v.route,
+                v.medication,
+                v.dose,
+                v.engdesc,
+                '',
+                '',
+                '',
+                '',
+                '',
+                v.stockId,
+                v.remark
+              )
+            );
+          }
+        }
       });
   }
 
@@ -153,7 +127,12 @@ export class StatMedicationFormComponent implements OnInit, OnDestroy {
 
   new() {
     this.statMedicationStoreService.isUpdate = false;
+    this.clear();
     this.fetchStatMedications();
+  }
+
+  clear() {
+    this.statMedicationStoreService.statMedications = [];
     this.date = '';
     this.time = '';
     this.printData = [];
@@ -231,7 +210,10 @@ export class StatMedicationFormComponent implements OnInit, OnDestroy {
             })
           ),
         })
-        .subscribe((data: any) => {});
+        .subscribe((data: any) => {
+          this.statMedicationStoreService.tabNo = 1;
+          this.clear();
+        });
     }
   }
 
