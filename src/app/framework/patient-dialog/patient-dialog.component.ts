@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppStoreService } from 'src/app/app-store.service';
+import { Patient } from 'src/app/patient.model';
 import CommonUtil from 'src/app/utils/common.util';
 
 import { HttpService } from '../http.service';
@@ -119,7 +120,7 @@ export class PatientDialogComponent extends CommonUtil implements OnInit {
     this.fetchInitialData();
   }
 
-<<<<<<< HEAD
+
   fetchPatientInfoById() {
     if (!this.appStoreService.pId) return;
     this.http
@@ -127,7 +128,7 @@ export class PatientDialogComponent extends CommonUtil implements OnInit {
       .subscribe(
         (data: any) => {
           this.appStoreService.patientDetail.headerData = data;
-          this.appStoreService.onPatientIdChanged();
+          this.appStoreService.onPatientChanged();
           if (data.length) {
             this.appStoreService.patientDetail.patientId = data[0].patientid;
             this.appStoreService.patientDetail.patientName =
@@ -157,12 +158,12 @@ export class PatientDialogComponent extends CommonUtil implements OnInit {
         () => { }
       );
   }
-
-=======
->>>>>>> 61db74f85f05f3784b68c2b06ae842aacf13526a
   selectPatient(patient: PatientData) {
+    this.appStoreService.pId = patient.pId;
+    this.appStoreService.rgsNo = patient.rgsNo;
     this.appStoreService.patientDialog = false;
-    this.setPatientDetail(this.http, this.appStoreService, patient);
+    //this.setPatientDetail(this.http, this.appStoreService, patient);
+    this.fetchPatientInfoById();
   }
 
   fetchInitialData() {

@@ -30,6 +30,7 @@ export class NursingCareRecordFormComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this._obj.refNo = this.appStoreService.patientDetail.adNo;
     this.getNurse();
     this.getRelationship();
   }
@@ -80,6 +81,9 @@ export class NursingCareRecordFormComponent implements OnInit {
       pId: 0,
       eMRType: "",
       refNo: "",
+      patientName: "",
+      patientId: "",
+      doctorName: "",
       rgsNo: 0,
       hsId: 0,
       t1: "",
@@ -161,9 +165,17 @@ export class NursingCareRecordFormComponent implements OnInit {
     this.instructionStoreService.deleteDialog = true;
     this.instructionStoreService._syskey = this._obj;
   }
+  // getNurse() {
+  //   let url: string = `nursingcarerecord/get`;
+  //   this.http.doPost(url, { syskey: this.instructionStoreService._syskey }).subscribe(
+  //     (data: any) => {
+  //       this._obj = data.NurseList[0];
+  //     },
+  //   );
+  // }
   getNurse() {
     let url: string = `nursingcarerecord/get`;
-    this.http.doPost(url, { syskey: this.instructionStoreService._syskey }).subscribe(
+    this.http.doPost(url, this._obj).subscribe(
       (data: any) => {
         this._obj = data.NurseList[0];
       },
