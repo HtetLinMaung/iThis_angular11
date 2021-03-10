@@ -29,6 +29,8 @@ export class NonParenteralFormComponent
   givenByType = 'X1';
   moConfirmDate = '';
   nurseConfirmDate = '';
+  moConfirmTime = '';
+  nurseConfirmTime = '';
 
   constructor(
     private http: HttpService,
@@ -69,7 +71,7 @@ export class NonParenteralFormComponent
       .subscribe((data: any) => {
         this.nonParenteralStoreService.nonParenterals = data.map((v, i) => {
           return new NonParenteral(
-            i + 1,
+            v.syskey,
             v.routeSyskey + '',
             v.medication,
             v.dose,
@@ -78,8 +80,7 @@ export class NonParenteralFormComponent
             v.remark,
             v.checkList
               .map(
-                (item) =>
-                  new CheckList(i + 1, item.done, item.nurseId, item.doneAt)
+                (item) => new CheckList(0, item.done, item.nurseId, item.doneAt)
               )
               .sort((a, b) => a.syskey - b.syskey),
             this.nonParenteralStoreService.routes.find(
@@ -174,8 +175,13 @@ export class NonParenteralFormComponent
           nonParenterals: this.nonParenteralStoreService.nonParenterals.map(
             (v) => ({
               ...v,
+              pId: this.appStoreService.pId,
+              rgsNo: this.appStoreService.rgsNo,
+              adNo: this.appStoreService.patientDetail.adNo,
               userid: '',
               username: '',
+              parentId: v.syskey,
+              doctorId: this.appStoreService.drID,
               diagnosis: this.diagnosis,
               drugAllergyTo: this.drugAllergyTo,
               dateStart: this.dateStart,
@@ -192,6 +198,12 @@ export class NonParenteralFormComponent
               nurseConfirmDate: !this.appStoreService.isDoctorRank
                 ? this.date
                 : this.nurseConfirmDate,
+              moConfirmTime: this.appStoreService.isDoctorRank
+                ? this.time
+                : this.moConfirmTime,
+              nurseConfirmTime: !this.appStoreService.isDoctorRank
+                ? this.time
+                : this.nurseConfirmTime,
             })
           ),
         })

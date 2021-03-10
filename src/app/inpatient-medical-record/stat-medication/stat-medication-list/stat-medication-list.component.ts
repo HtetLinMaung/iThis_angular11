@@ -25,7 +25,6 @@ export class StatMedicationListComponent extends CommonUtil implements OnInit {
     "Dr's remark",
     'Remark',
   ];
-  statMedications = [];
   fields = [
     {
       text: 'Route',

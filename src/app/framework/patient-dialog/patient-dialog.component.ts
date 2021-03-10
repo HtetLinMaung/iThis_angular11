@@ -124,8 +124,8 @@ export class PatientDialogComponent extends CommonUtil implements OnInit {
     this.appStoreService.pId = patient.pId;
     this.appStoreService.rgsNo = patient.rgsNo;
     this.appStoreService.patientDialog = false;
-    //this.setPatientDetail(this.http, this.appStoreService, patient);
-    this.fetchPatients();
+    this.setPatientDetail(this.http, this.appStoreService, patient);
+
   }
 
   fetchInitialData() {
