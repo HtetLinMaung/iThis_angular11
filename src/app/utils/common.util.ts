@@ -47,7 +47,14 @@ export default class CommonUtil extends PaginationUtil {
     appStoreService.onPatientChanged();
   }
 
-  fetchRouteDoseTask(http: HttpService, store: any) {
+  fetchRouteDoseTask(
+    http: HttpService,
+    store: any
+  ): Promise<{
+    routes: any[];
+    doses: any[];
+    drugTasks: any[];
+  }> {
     return new Promise((resolve, reject) => {
       try {
         http
@@ -74,7 +81,12 @@ export default class CommonUtil extends PaginationUtil {
                       value: v.task,
                       syskey: v.syskey,
                     }));
-                    resolve({ routes, doses, drugTasks });
+
+                    resolve({ routes, doses, drugTasks } as {
+                      routes: any[];
+                      doses: any[];
+                      drugTasks: any[];
+                    });
                   });
               });
           });

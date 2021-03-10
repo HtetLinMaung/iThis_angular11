@@ -120,6 +120,7 @@ export class PatientDialogComponent extends CommonUtil implements OnInit {
     this.fetchInitialData();
   }
 
+<<<<<<< HEAD
 
   fetchPatientInfoById() {
     if (!this.appStoreService.pId) return;
@@ -158,6 +159,8 @@ export class PatientDialogComponent extends CommonUtil implements OnInit {
         () => { }
       );
   }
+=======
+>>>>>>> c8605954ff8a33c8fe10a9d7eddda3b8dab5f0ed
   selectPatient(patient: PatientData) {
     this.appStoreService.pId = patient.pId;
     this.appStoreService.rgsNo = patient.rgsNo;
@@ -193,8 +196,8 @@ export class PatientDialogComponent extends CommonUtil implements OnInit {
           this.appStoreService.patients = [...data.data] as PatientData[];
           this.initPagination(data);
         },
-        (error) => { },
-        () => { }
+        (error) => {},
+        () => {}
       );
   }
 

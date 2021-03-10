@@ -244,9 +244,9 @@ export class StatMedicationFormComponent implements OnInit, OnDestroy {
     });
 
     this.http
-      .doGet(`inpatient-medical-record/stat-medications`)
+      .doPost(`inpatient-medical-record/stat-medications`, { all: true })
       .subscribe((data: any) => {
-        this.printData = data.map((v) => {
+        this.printData = data.data.map((v) => {
           return new StatMedication(
             v.syskey,
             this.statMedicationStoreService.routes.find(
