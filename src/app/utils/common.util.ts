@@ -25,7 +25,12 @@ export default class CommonUtil extends PaginationUtil {
       .subscribe((data: { text: string; value: string }[]) => {
         appStoreService.patientDetail.adNos = data;
         appStoreService.patientDetail.adNo = patient.rgsNo + '';
-        appStoreService.onPatientChanged();
+        http.doGet('patients/patient-types').subscribe((data: any) => {
+          appStoreService.patientDetail.patientType = data.patientTypeList.find(
+            (v) => v.value == patient.patientType
+          ).text;
+          appStoreService.onPatientChanged();
+        });
       });
     appStoreService.pId = patient.pId;
     appStoreService.rgsNo = patient.rgsNo;
@@ -37,9 +42,7 @@ export default class CommonUtil extends PaginationUtil {
     appStoreService.patientDetail.room = patient.roomNo;
     appStoreService.patientDetail.doctor = patient.doctor;
     appStoreService.patientDetail.speciality = patient.speciality;
-    appStoreService.patientDetail.patientType = appStoreService.patientTypes.find(
-      (v) => v.value == patient.patientType
-    ).text;
+
     appStoreService.patientInfo = new Patient(
       patient.allergy,
       patient.ward,

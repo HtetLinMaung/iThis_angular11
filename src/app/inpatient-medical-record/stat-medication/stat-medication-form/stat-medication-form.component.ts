@@ -38,9 +38,11 @@ export class StatMedicationFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    (this.appStoreService.onPatientChanged = this.fetchStatMedications.bind(
-      this
-    ))();
+    this.appStoreService.onPatientChanged = () => {
+      if (!this.statMedicationStoreService.isUpdate) {
+        this.fetchStatMedications();
+      }
+    };
     this.appStoreService.onClear = this.new.bind(this);
     this.bindEditData();
   }
@@ -63,6 +65,8 @@ export class StatMedicationFormComponent implements OnInit, OnDestroy {
       this.date = data.confirmDate;
       this.time = data.confirmTime;
       this.appStoreService.fetchPatientByRgsNo(data.rgsNo);
+    } else {
+      this.fetchStatMedications();
     }
   }
 
@@ -149,6 +153,7 @@ export class StatMedicationFormComponent implements OnInit, OnDestroy {
 
   new() {
     this.statMedicationStoreService.isUpdate = false;
+    this.fetchStatMedications();
     this.date = '';
     this.time = '';
     this.printData = [];
