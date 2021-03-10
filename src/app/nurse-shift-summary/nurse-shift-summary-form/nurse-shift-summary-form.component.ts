@@ -28,6 +28,24 @@ export class NurseShiftSummaryFormComponent implements OnInit {
   ) { }
   ngOnInit(): void {
     this.getNurse();
+    this.parentcheck = true;
+    this._obj.dayNight = 1;
+    this.parentcheck1 = true;
+    this._obj.n6 = 1;
+    this.childcheck2 = true;
+    this._obj.n7 = 2;
+    this._obj.rgsNo = this.appStoreService.rgsNo;
+    this._obj.pId = this.appStoreService.pId;
+
+  }
+  goNew() {
+    this._obj = this.getObj();
+    this.parentcheck = true;
+    this._obj.dayNight = 1;
+    this.parentcheck1 = true;
+    this._obj.n6 = 1;
+    this.childcheck2 = true;
+    this._obj.n7 = 2;
   }
   getObj() {
     return {
@@ -49,6 +67,9 @@ export class NurseShiftSummaryFormComponent implements OnInit {
       hsId: 0,
       doctorId: "",
       dayNight: 0,
+      patientName: "",
+      patientId: "",
+      doctorName: "",
       t1: "",
       t2: "",
       t3: "",
@@ -95,44 +116,36 @@ export class NurseShiftSummaryFormComponent implements OnInit {
     this._obj.n6 = +myRadio;
 
   }
-  goNew() {
-    this._obj = this.getObj();
-    this.childcheck = false;
-    this.parentcheck = false;
-    this.childcheck1 = false;
-    this.parentcheck1 = false;
-    this.childcheck2 = false;
-    this.parentcheck2 = false;
-  }
   save() {
-    if (!this.valide()) {
-      alert("fill all blanks");
-      return;
-    }
+    // if (this.valide()) {
+    //   alert("fill all blanks");
+    //   return;
+    // }
+    //this._obj.doctorId=this.appStoreService.drID;
+    this._obj.refNo = this.appStoreService.patientDetail.adNo;
     let url: string = `nurseshiftsummary/save`;
     this.http.doPost(url, this._obj).subscribe(
       (data: any) => {
         if (data.message == "SUCCESS") {
-          alert("Saved Successfully.");
+          //alert("Saved Successfully.");
           this.goNew();
         } else if (data.message == "FAIL") {
-          alert("Saving Fail.");
-          this._btn_flag._save = false;
+          //alert("Saving Fail.");
+          //this._btn_flag._save = false;
         } else if (data.message == "EXIT") {
-          alert("Saving Fail.");
-          this._btn_flag._save = false;
+          //alert("Saving Fail.");
+          //this._btn_flag._save = false;
         } else {
-          alert("Saving Fail.");
-          this._btn_flag._save = false;
+          // alert("Saving Fail.");
+          //this._btn_flag._save = false;
         }
       },
       error => {
         this._btn_flag._save = false;
-        alert("Saving Fail.");
+        // alert("Saving Fail.");
       });
   }
   valide(): boolean {
-
     if (this._obj.t2 == "") return false;
     if (this._obj.t3 == "") return false;
     if (this._obj.t4 == "") return false;
@@ -140,27 +153,10 @@ export class NurseShiftSummaryFormComponent implements OnInit {
     if (this._obj.t6 == "") return false;
     if (this._obj.t7 == "") return false;
     else return true;
-
   }
   goDelete() {
-    let url: string = `nurseshiftsummary/delete`;
-    this.http.doPost(url, this._obj).subscribe(
-      (data: any) => {
-        if (data.message == "Success") {
-          alert("Delete Successfully.");
-          this.goNew();
-
-        } else if (data.message == "deleteFail") {
-          alert("Delete Fail.");
-        } else {
-          alert("Delete Fail .");
-        }
-      },
-      error => {
-        alert("Delete Fail .");
-
-      }
-    );
+    this.instructionStoreService.deleteDialog = true;
+    this.instructionStoreService._syskey = this._obj;
   }
   getNurse() {
     let url: string = `nurseshiftsummary/get`;

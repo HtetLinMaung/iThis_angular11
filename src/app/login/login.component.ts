@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { AppStoreService } from '../app-store.service';
 
 @Component({
@@ -11,7 +12,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     public appStoreService: AppStoreService
-  ) {}
+  ) { }
 
   navigate(n: number) {
     switch (n) {
@@ -65,5 +66,5 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

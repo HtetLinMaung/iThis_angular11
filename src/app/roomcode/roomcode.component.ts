@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { AppStoreService } from '../app-store.service';
 import { HttpService } from '../framework/http.service';
 import { RoomcodeService } from './roomcode.service';
 
@@ -12,6 +13,7 @@ export class RoomcodeComponent implements OnInit {
 
   syskey = this.getSyskey();
   constructor(
+    public appStoreService: AppStoreService,
     private http: HttpService,
     public instructionStoreService: RoomcodeService
   ) { }

@@ -30,7 +30,9 @@
             <thead>
                 <tr class="header__row">
                     <th>Ref.No</th>
-                    <th>Name</th>
+                    <th>Ad No</th>
+                    <th>Patient ID</th>
+                    <th>Patient Name</th>
                     <th>Doctor Name</th>
                     <th>Problem</th>
                     <th>Admission Date</th>
@@ -41,11 +43,13 @@
             <tbody>
                 <tr *ngFor="let data of _nurseList; let i = index" (click)="detail(data)">
                     <th scope="row">{{i+1}}</th>
-                    <td>{{data.t2}}</td>
-                    <td>{{data.t1}}</td>
+                    <td>{{data.refNo}}</td>
+                    <td>{{data.patientId}}</td>
+                    <td>{{data.patientName}}</td>
+                    <td>{{data.doctorName}}</td>
                     <td>{{data.t5}}</td>
-                    <td>{{data.t3}}</td>
-                    <td>{{data.t4}}</td>
+                    <td>{{data.createdDate}}</td>
+                    <td>{{data.modifiedDate}}</td>
                     <td>{{data.userName}}</td>
                 </tr>
             </tbody>
