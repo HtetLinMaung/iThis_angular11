@@ -117,7 +117,7 @@ export class StatMedicationListComponent extends CommonUtil implements OnInit {
           (v) =>
             new StatMedication(
               v.syskey,
-              routes.find((item) => item.syskey == v.routeSyskey).route,
+              routes.find((item) => item.syskey == v.routeSyskey).syskey,
               v.stockDescription,
               v.dose,
               doses.find((item) => item.syskey == v.doseTypeSyskey).EngDesc,
