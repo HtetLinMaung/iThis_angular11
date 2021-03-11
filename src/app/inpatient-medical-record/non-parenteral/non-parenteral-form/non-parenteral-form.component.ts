@@ -91,7 +91,7 @@ export class NonParenteralFormComponent
 
   async fetchNonParenterals() {
     if (this.nonParenteralStoreService.isUpdate) return;
-    await this.fetchRouteDoseTask(this.http, this.nonParenteralStoreService);
+    // await this.fetchRouteDoseTaskAsync(this.http, this.nonParenteralStoreService);
     this.http
       .doPost('inpatient-medical-record/non-parenterals-initial', {
         rgsno: this.appStoreService.rgsNo,

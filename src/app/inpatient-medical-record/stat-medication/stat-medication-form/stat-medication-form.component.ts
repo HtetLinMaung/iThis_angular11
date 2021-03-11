@@ -74,10 +74,11 @@ export class StatMedicationFormComponent
   async fetchStatMedications() {
     if (this.statMedicationStoreService.isUpdate) return;
     this.statMedicationStoreService.statMedications = [];
-    await this.fetchRouteDoseTask(this.http, this.statMedicationStoreService);
+    // await this.fetchRouteDoseTask(this.http, this.statMedicationStoreService);
     this.http
       .doPost('inpatient-medical-record/stat-medications-initial', {
-        rgsno: this.appStoreService.rgsNo,
+        // rgsno: this.appStoreService.rgsNo,
+        rgsno: 300268044,
       })
       .subscribe((data: any) => {
         this.statMedicationStoreService.statMedications = [];
@@ -100,7 +101,9 @@ export class StatMedicationFormComponent
             this.statMedicationStoreService.statMedications.push(
               new StatMedication(
                 v.syskey,
-                v.route,
+                this.statMedicationStoreService.routes
+                  .find((e: any) => e.route == v.route)
+                  .syskey.toString(),
                 v.medication,
                 v.dose,
                 v.engdesc,
@@ -164,6 +167,9 @@ export class StatMedicationFormComponent
             routeSyskey: this.statMedicationStoreService.routes.find(
               (item) => item.value == v.route
             ).syskey,
+            doseTypeSyskey: this.statMedicationStoreService.doses.find(
+              (item: any) => item.EngDesc == v.doseDesc
+            ).syskey,
             doseRemarkSyskey: 0,
             dose: v.doseCount,
             remark: v.remark,
@@ -201,8 +207,9 @@ export class StatMedicationFormComponent
                 (item) => item.value == v.route
               ).syskey,
               doseTypeSyskey: this.statMedicationStoreService.doses.find(
-                (item) => item.value == v.doseDesc
+                (item: any) => item.EngDesc == v.doseDesc
               ).syskey,
+
               doseRemarkSyskey: 0,
               dose: v.doseCount,
               remark: v.remark,
@@ -210,7 +217,7 @@ export class StatMedicationFormComponent
             })
           ),
         })
-        .subscribe((data: any) => {
+        .subscribe(() => {
           this.statMedicationStoreService.tabNo = 1;
           this.clear();
         });
