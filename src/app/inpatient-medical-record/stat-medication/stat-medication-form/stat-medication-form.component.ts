@@ -77,8 +77,8 @@ export class StatMedicationFormComponent
     // await this.fetchRouteDoseTask(this.http, this.statMedicationStoreService);
     this.http
       .doPost('inpatient-medical-record/stat-medications-initial', {
-        // rgsno: this.appStoreService.rgsNo,
-        rgsno: 300268044,
+        rgsno: this.appStoreService.rgsNo,
+        // rgsno: 300268044,
       })
       .subscribe((data: any) => {
         this.statMedicationStoreService.statMedications = [];
