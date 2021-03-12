@@ -26,8 +26,16 @@ export class NurseShiftSummaryFormComponent implements OnInit {
     public appStoreService: AppStoreService,
 
   ) { }
+  ngOnDestroy(): void {
+    this.appStoreService.onPatientChanged = this.appStoreService.onClear = () => { };
+  }
   ngOnInit(): void {
-    this._obj.refNo = this.appStoreService.patientDetail.adNo;
+    //this._obj.refNo = this.appStoreService.patientDetail.adNo;
+    this.appStoreService.onPatientChanged = () => {
+      this.getNurse1();
+
+    };
+    //this.getNurse();
     this.getNurse();
     this.parentcheck = true;
     this._obj.dayNight = 1;
@@ -119,7 +127,8 @@ export class NurseShiftSummaryFormComponent implements OnInit {
     //   alert("fill all blanks");
     //   return;
     // }
-    //this._obj.doctorId=this.appStoreService.drID;
+    this._obj.pId = this.appStoreService.pId,
+      this._obj.rgsNo = this.appStoreService.rgsNo;
     this._obj.refNo = this.appStoreService.patientDetail.adNo;
     let url: string = `nurseshiftsummary/save`;
     this.http.doPost(url, this._obj).subscribe(
@@ -156,15 +165,17 @@ export class NurseShiftSummaryFormComponent implements OnInit {
     this.instructionStoreService.deleteDialog = true;
     this.instructionStoreService._syskey = this._obj;
   }
-  // getNurse() {
-  //   let url: string = `nurseshiftsummary/get`;
-  //   this.http.doPost(url, { syskey: this.instructionStoreService._syskey }).subscribe(
-  //     (data: any) => {
-  //       this._obj = data.NurseList[0];
-  //     },
-  //   );
-  // }
   getNurse() {
+    let url: string = `nurseshiftsummary/get`;
+    this.http.doPost(url, { syskey: this.instructionStoreService._syskey }).subscribe(
+      (data: any) => {
+        this._obj = data.NurseList[0];
+        this.appStoreService.fetchPatientByRgsNo(data.NurseList[0].rgsNo);
+      },
+    );
+  }
+  getNurse1() {
+    this._obj.refNo = this.appStoreService.patientDetail.adNo;
     let url: string = `nurseshiftsummary/get`;
     this.http.doPost(url, this._obj).subscribe(
       (data: any) => {

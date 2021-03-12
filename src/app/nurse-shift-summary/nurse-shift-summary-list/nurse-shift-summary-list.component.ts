@@ -1,5 +1,6 @@
 import { Component, OnInit, SchemaMetadata } from '@angular/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { AppStoreService } from 'src/app/app-store.service';
 import { HttpService } from 'src/app/framework/http.service';
 import { InstructionStoreService } from 'src/app/inpatient-medical-record/instruction/instruction-store.service';
 
@@ -22,8 +23,10 @@ export class NurseShiftSummaryListComponent implements OnInit {
   _nurseList = [];
   _nurseObj = this.getObj();
   constructor(
+
     public instructionStoreService: NurseShiftSummaryService,
     private http: HttpService,
+    public appStoreService: AppStoreService,
 
   ) { }
 
