@@ -92,12 +92,13 @@ export class StatMedicationListComponent extends CommonUtil implements OnInit {
   }
 
   ngOnInit(): void {
+    this.statMedicationStoreService.statMedications = [];
     this.fetchAllStatMedications();
     this.statMedicationStoreService.isUpdate = false;
   }
 
   async fetchAllStatMedications() {
-    const { routes, doses } = await this.fetchRouteDoseTask(
+    const { routes, doses } = await this.fetchRouteDoseTaskAsync(
       this.http,
       this.statMedicationStoreService
     );
@@ -117,7 +118,7 @@ export class StatMedicationListComponent extends CommonUtil implements OnInit {
           (v) =>
             new StatMedication(
               v.syskey,
-              routes.find((item) => item.syskey == v.routeSyskey).route,
+              routes.find((item) => item.syskey == v.routeSyskey).syskey,
               v.stockDescription,
               v.dose,
               doses.find((item) => item.syskey == v.doseTypeSyskey).EngDesc,

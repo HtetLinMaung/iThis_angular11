@@ -13,7 +13,21 @@ export default class NonParenteral {
     public frequency = 0,
     public patientId = '',
     public patientName = '',
-    public adNo = ''
+    public adNo = '',
+    public moConfirmDate = '',
+    public moConfirmTime = '',
+    public nurseConfirmDate = '',
+    public nurseConfirmTime = '',
+    public diagnosis = '',
+    public drugAllergyTo = '',
+    public chronicRenalFailure = false,
+    public pregnant = false,
+    public tubeFeed = false,
+    public liquidMedication = false,
+    public dateStart = '',
+    public dateOff = '',
+    public givenByType = 'X1',
+    public rgsNo = 0
   ) {}
 }
 

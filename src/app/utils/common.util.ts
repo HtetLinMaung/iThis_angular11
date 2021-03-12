@@ -25,12 +25,19 @@ export default class CommonUtil extends PaginationUtil {
       .subscribe((data: { text: string; value: string }[]) => {
         appStoreService.patientDetail.adNos = data;
         appStoreService.patientDetail.adNo = patient.rgsNo + '';
-        http.doGet('patients/patient-types').subscribe((data: any) => {
-          appStoreService.patientDetail.patientType = data.patientTypeList.find(
+        if (!appStoreService.patientTypes.length) {
+          http.doGet('patients/patient-types').subscribe((data: any) => {
+            appStoreService.patientDetail.patientType = data.patientTypeList.find(
+              (v) => v.value == patient.patientType
+            ).text;
+            appStoreService.onPatientChanged();
+          });
+        } else {
+          appStoreService.patientDetail.patientType = appStoreService.patientTypes.find(
             (v) => v.value == patient.patientType
           ).text;
           appStoreService.onPatientChanged();
-        });
+        }
       });
     appStoreService.pId = patient.pId;
     appStoreService.rgsNo = patient.rgsNo;
@@ -50,52 +57,40 @@ export default class CommonUtil extends PaginationUtil {
     );
   }
 
-  fetchRouteDoseTask(
+  async fetchRouteDoseTaskAsync(
     http: HttpService,
-    store: any
-  ): Promise<{
-    routes: any[];
-    doses: any[];
-    drugTasks: any[];
-  }> {
-    return new Promise((resolve, reject) => {
-      try {
-        http
-          .doGet('inpatient-medical-record/routes')
-          .subscribe((routes: any) => {
-            http
-              .doGet('inpatient-medical-record/doses')
-              .subscribe((doses: any) => {
-                http
-                  .doGet('inpatient-medical-record/drug-tasks')
-                  .subscribe((drugTasks: any) => {
-                    store.routes = routes.map((v) => ({
-                      value: v.syskey + '',
-                      text: v.EngDesc,
-                      syskey: v.syskey,
-                    }));
-                    store.doses = doses.map((v) => ({
-                      value: v.syskey + '',
-                      text: v.Dose,
-                      syskey: v.syskey,
-                    }));
-                    store.drugTasks = drugTasks.map((v) => ({
-                      text: v.eng_desc,
-                      value: v.task,
-                      syskey: v.syskey,
-                    }));
+    store: any,
+    keys = ['routes', 'doses', 'drug-tasks']
+  ): Promise<any> {
+    const data: any = {};
+    for (const key of keys) {
+      data[key] = await http
+        .doGet(`inpatient-medical-record/${key}`)
+        .toPromise();
+    }
 
-                    resolve({ routes, doses, drugTasks } as {
-                      routes: any[];
-                      doses: any[];
-                      drugTasks: any[];
-                    });
-                  });
-              });
-          });
-      } catch (err) {
-        reject(err);
-      }
-    });
+    if (keys.includes('routes')) {
+      store.routes = data.routes.map((v) => ({
+        ...v,
+        value: v.syskey + '',
+        text: v.EngDesc,
+      }));
+    }
+    if (keys.includes('doses')) {
+      store.doses = data.doses.map((v) => ({
+        ...v,
+        value: v.syskey + '',
+        text: v.Dose,
+      }));
+    }
+    if (keys.includes('drug-tasks')) {
+      store.drugTasks = data['drug-tasks'].map((v) => ({
+        ...v,
+        text: v.eng_desc,
+        value: v.task,
+      }));
+    }
+
+    return data;
   }
 }
