@@ -98,6 +98,10 @@ export class StatMedicationListComponent extends CommonUtil implements OnInit {
   }
 
   async fetchAllStatMedications() {
+    this.appStoreService.isDoctorRank = await this.isDoctorRank(
+      this.appStoreService.userId,
+      this.http
+    );
     const { routes, doses } = await this.fetchRouteDoseTaskAsync(
       this.http,
       this.statMedicationStoreService

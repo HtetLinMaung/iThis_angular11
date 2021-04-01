@@ -93,4 +93,16 @@ export default class CommonUtil extends PaginationUtil {
 
     return data;
   }
+
+  async isDoctorRank(userId, http) {
+    if (!userId) {
+      throw new Error('User id is empty!');
+    }
+    const data: any = await http.doGet(`patients/role/${userId}`).toPromise();
+    if (data.status) {
+      return data.isDoctorRank;
+    } else {
+      throw new Error('User not found!');
+    }
+  }
 }

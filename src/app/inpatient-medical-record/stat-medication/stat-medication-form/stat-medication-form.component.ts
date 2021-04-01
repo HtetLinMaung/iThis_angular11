@@ -43,6 +43,12 @@ export class StatMedicationFormComponent
   }
 
   ngOnInit(): void {
+    (async () => {
+      this.appStoreService.isDoctorRank = await this.isDoctorRank(
+        this.appStoreService.userId,
+        this.http
+      );
+    })();
     (this.appStoreService.onPatientChanged = this.fetchStatMedications.bind(
       this
     ))();

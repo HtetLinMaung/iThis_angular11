@@ -7,13 +7,14 @@ import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import * as moment from 'moment';
 import Blood from '../blood.model';
+import CommonUtil from 'src/app/utils/common.util';
 
 @Component({
   selector: 'app-blood-form',
   templateUrl: './blood-form.component.html',
   styleUrls: ['./blood-form.component.css'],
 })
-export class BloodFormComponent implements OnInit {
+export class BloodFormComponent extends CommonUtil implements OnInit {
   date = '';
   time = '';
   givenByType = 'X1';
@@ -27,7 +28,9 @@ export class BloodFormComponent implements OnInit {
     private http: HttpService,
     public appStoreService: AppStoreService,
     public bloodStoreService: BloodStoreService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     const tabEle1 = document.getElementById('tab1');
@@ -64,7 +67,12 @@ export class BloodFormComponent implements OnInit {
     }
   }
 
-  fetchData() {
+  async fetchData() {
+    this.appStoreService.isDoctorRank = await this.isDoctorRank(
+      this.appStoreService.userId,
+      this.http
+    );
+    console.log(this.appStoreService.isDoctorRank);
     this.http
       .doGet('inpatient-medical-record/routes')
       .subscribe((routes: any) => {

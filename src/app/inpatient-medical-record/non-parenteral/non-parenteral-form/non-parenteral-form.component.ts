@@ -48,6 +48,12 @@ export class NonParenteralFormComponent
     const tabEle2 = document.getElementById('tab2');
     tabEle2.style.background = '#3b5998';
     tabEle1.style.background = '#8C9899';
+    (async () => {
+      this.appStoreService.isDoctorRank = await this.isDoctorRank(
+        this.appStoreService.userId,
+        this.http
+      );
+    })();
     (this.appStoreService.onPatientChanged = this.fetchNonParenterals.bind(
       this
     ))();

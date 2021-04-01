@@ -6,13 +6,14 @@ import * as moment from 'moment';
 import { AppStoreService } from 'src/app/app-store.service';
 import { HttpService } from 'src/app/framework/http.service';
 import Diet from '../diet.model';
+import CommonUtil from 'src/app/utils/common.util';
 
 @Component({
   selector: 'app-diet-form',
   templateUrl: './diet-form.component.html',
   styleUrls: ['./diet-form.component.css'],
 })
-export class DietFormComponent implements OnInit {
+export class DietFormComponent extends CommonUtil implements OnInit {
   headers = ['', 'No.', 'Diet And Enteral Feed', 'Noted By', 'Remark', ''];
   date = '';
   time = '';
@@ -22,17 +23,24 @@ export class DietFormComponent implements OnInit {
     public http: HttpService,
     public appStoreService: AppStoreService,
     public dietStoreService: DietStoreService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     const tabEle1 = document.getElementById('tab1');
     const tabEle2 = document.getElementById('tab2');
     tabEle2.style.background = '#3b5998';
     tabEle1.style.background = '#8C9899';
+
     this.bindEditData();
   }
 
-  bindEditData() {
+  async bindEditData() {
+    this.appStoreService.isDoctorRank = await this.isDoctorRank(
+      this.appStoreService.userId,
+      this.http
+    );
     if (this.dietStoreService.isUpdate) {
       const diet = this.dietStoreService.diets.find(
         (v) => v.syskey == this.dietStoreService.currentSysKey

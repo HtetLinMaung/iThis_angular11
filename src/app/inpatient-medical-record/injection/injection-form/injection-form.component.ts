@@ -7,13 +7,14 @@ import Injection from '../Injection.model';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import * as moment from 'moment';
+import CommonUtil from 'src/app/utils/common.util';
 
 @Component({
   selector: 'app-injection-form',
   templateUrl: './injection-form.component.html',
   styleUrls: ['./injection-form.component.css'],
 })
-export class InjectionFormComponent implements OnInit {
+export class InjectionFormComponent extends CommonUtil implements OnInit {
   date = '';
   givenByType = 'X1';
   moConfirmDate = '';
@@ -23,7 +24,9 @@ export class InjectionFormComponent implements OnInit {
     private http: HttpService,
     public appStoreService: AppStoreService,
     public injectionStoreService: InjectionStoreService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     const tabEle1 = document.getElementById('tab1');
@@ -41,7 +44,11 @@ export class InjectionFormComponent implements OnInit {
     }
   }
 
-  fetchInjections() {
+  async fetchInjections() {
+    this.appStoreService.isDoctorRank = await this.isDoctorRank(
+      this.appStoreService.userId,
+      this.http
+    );
     this.http
       .doGet('inpatient-medical-record/routes')
       .subscribe((routes: any) => {
