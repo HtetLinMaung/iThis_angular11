@@ -27,7 +27,7 @@ export class PatientHeaderComponent extends CommonUtil implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-      const userId = params?.userId;
+      const userId = params?.inputUserID;
       if (userId) {
         this.appStoreService.userId = userId;
       }
