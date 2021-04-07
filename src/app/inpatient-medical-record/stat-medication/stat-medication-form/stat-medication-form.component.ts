@@ -148,13 +148,16 @@ export class StatMedicationFormComponent
   }
 
   save() {
+    if (this.appStoreService.isDoctorRank == null) {
+      return alert('Unauthorized');
+    }
     if (this.statMedicationStoreService.isUpdate) {
       const v = this.statMedicationStoreService.statMedications[0];
       this.http
         .doPost(
           `inpatient-medical-record/update-stat-medication/${this.statMedicationStoreService.currentSysKey}`,
           {
-            userid: '',
+            userid: this.appStoreService.userId,
             username: '',
             stockId: v.stockId,
             stockDescription: v.medication,
@@ -191,7 +194,7 @@ export class StatMedicationFormComponent
               pId: this.appStoreService.pId,
               rgsNo: this.appStoreService.rgsNo,
               adNo: this.appStoreService.patientDetail.adNo,
-              userid: '',
+              userid: this.appStoreService.userId,
               username: '',
               parentId: v.syskey,
               doctorId: this.appStoreService.drID,

@@ -145,6 +145,9 @@ export class InjectionFormComponent extends CommonUtil implements OnInit {
   new() {}
 
   save() {
+    if (this.appStoreService.isDoctorRank == null) {
+      return alert('Unauthorized');
+    }
     if (this.injectionStoreService.isUpdate) {
       const v = this.injectionStoreService.injections[0];
       this.http
@@ -152,7 +155,7 @@ export class InjectionFormComponent extends CommonUtil implements OnInit {
           `inpatient-medical-record/update-injection/${this.injectionStoreService.currentSysKey}`,
           {
             ...v,
-            userid: '',
+            userid: this.appStoreService.userId,
             username: '',
 
             givenByType: this.givenByType,
@@ -171,7 +174,7 @@ export class InjectionFormComponent extends CommonUtil implements OnInit {
         .doPost('inpatient-medical-record/save-injection', {
           injections: this.injectionStoreService.injections.map((v) => ({
             ...v,
-            userid: '',
+            userid: this.appStoreService.userId,
             username: '',
             givenByType: this.givenByType,
             isDoctor: this.appStoreService.isDoctorRank,

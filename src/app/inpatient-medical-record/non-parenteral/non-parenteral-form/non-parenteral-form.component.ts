@@ -176,6 +176,9 @@ export class NonParenteralFormComponent
   }
 
   save() {
+    if (this.appStoreService.isDoctorRank == null) {
+      return alert('Unauthorized');
+    }
     if (this.nonParenteralStoreService.isUpdate) {
       const v = this.nonParenteralStoreService.nonParenterals[0];
       this.http
@@ -183,7 +186,7 @@ export class NonParenteralFormComponent
           `inpatient-medical-record/update-non-parenteral/${this.nonParenteralStoreService.currentSysKey}`,
           {
             ...v,
-            userid: '',
+            userid: this.appStoreService.userId,
             username: '',
             diagnosis: this.diagnosis,
             drugAllergyTo: this.drugAllergyTo,
@@ -219,7 +222,7 @@ export class NonParenteralFormComponent
               pId: this.appStoreService.pId,
               rgsNo: this.appStoreService.rgsNo,
               adNo: this.appStoreService.patientDetail.adNo,
-              userid: '',
+              userid: this.appStoreService.userId,
               username: '',
               parentId: v.syskey,
               doctorId: this.appStoreService.drID,

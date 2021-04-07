@@ -79,6 +79,9 @@ export class DietFormComponent extends CommonUtil implements OnInit {
   }
 
   save() {
+    if (this.appStoreService.isDoctorRank == null) {
+      return alert('Unauthorized');
+    }
     if (this.dietStoreService.isUpdate) {
       const v = this.diets[0];
       this.http
@@ -86,7 +89,7 @@ export class DietFormComponent extends CommonUtil implements OnInit {
           `inpatient-medical-record/update-diet/${this.dietStoreService.currentSysKey}`,
           {
             ...v,
-            userid: '',
+            userid: this.appStoreService.userId,
             username: '',
             isDoctor: this.appStoreService.isDoctorRank,
             date: this.date,
@@ -101,7 +104,7 @@ export class DietFormComponent extends CommonUtil implements OnInit {
             ...v,
             pId: this.appStoreService.pId,
             rgsNo: this.appStoreService.rgsNo,
-            userid: '',
+            userid: this.appStoreService.userId,
             username: '',
             isDoctor: this.appStoreService.isDoctorRank,
             date: this.date,

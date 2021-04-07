@@ -98,7 +98,7 @@ export class NursingActivityWorklistFormComponent implements OnInit {
         {
           pId: this.appStoreService.pId,
           rgsNo: this.appStoreService.rgsNo,
-          userid: '',
+          userid: this.appStoreService.userId,
           username: '',
           doctorSysKey: this.appStoreService.doctor.syskey,
           procedure: parseInt(this.procedure),

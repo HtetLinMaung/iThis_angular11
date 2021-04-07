@@ -220,7 +220,7 @@ export class GeneralWardFormComponent implements OnInit {
             parentId: innerItem.typeId,
             doctorId: this.appStoreService.drID,
             RgsNo: this.appStoreService.rgsNo,
-            userid: '',
+            userid: this.appStoreService.userId,
             username: '',
             type: item.type,
             headerDesc:

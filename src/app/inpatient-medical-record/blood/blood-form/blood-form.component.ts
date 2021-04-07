@@ -72,7 +72,7 @@ export class BloodFormComponent extends CommonUtil implements OnInit {
       this.appStoreService.userId,
       this.http
     );
-    console.log(this.appStoreService.isDoctorRank);
+
     this.http
       .doGet('inpatient-medical-record/routes')
       .subscribe((routes: any) => {
@@ -156,6 +156,9 @@ export class BloodFormComponent extends CommonUtil implements OnInit {
   }
 
   save() {
+    if (this.appStoreService.isDoctorRank == null) {
+      return alert('Unauthorized');
+    }
     if (this.bloodStoreService.isUpdate) {
       const v = this.bloods[0];
       this.http
@@ -163,7 +166,7 @@ export class BloodFormComponent extends CommonUtil implements OnInit {
           `inpatient-medical-record/update-blood/${this.bloodStoreService.currentSysKey}`,
           {
             ...v,
-            userid: '',
+            userid: this.appStoreService.userId,
             username: '',
             givenByType: this.givenByType,
             isDoctor: this.appStoreService.isDoctorRank,
@@ -189,7 +192,7 @@ export class BloodFormComponent extends CommonUtil implements OnInit {
             ...v,
             pId: this.appStoreService.pId,
             rgsNo: this.appStoreService.rgsNo,
-            userid: '',
+            userid: this.appStoreService.userId,
             username: '',
             givenByType: this.givenByType,
             isDoctor: this.appStoreService.isDoctorRank,

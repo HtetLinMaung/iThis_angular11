@@ -74,7 +74,7 @@ export class InstructionFormComponent implements OnInit {
           syskey: 0, // dummy syskey, it is not used in service
           pId: this.appStoreService.pId,
           rgsNo: this.appStoreService.rgsNo,
-          userid: '',
+          userid: this.appStoreService.userId,
           username: '',
           date: this.date,
           dateTaken: this.dateTaken,
