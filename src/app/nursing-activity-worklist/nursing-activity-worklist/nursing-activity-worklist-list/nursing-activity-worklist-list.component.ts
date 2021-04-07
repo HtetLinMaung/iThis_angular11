@@ -313,7 +313,8 @@ export class NursingActivityWorklistListComponent implements OnInit {
               v.externalLength + v.externalLengthUnit,
               v.patientId,
               v.patientName,
-              v.adNo
+              v.adNo,
+              v.rgsNo
             )
         );
         this.activities = this.nurseActivityWorkListStoreService.activities;

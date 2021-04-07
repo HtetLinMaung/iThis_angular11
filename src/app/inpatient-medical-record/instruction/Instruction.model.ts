@@ -11,6 +11,7 @@ export default class Instruction {
     public pId: number,
     public patientId: string,
     public patientName: string,
-    public adNo: string
+    public adNo: string,
+    public rgsNo = ''
   ) {}
 }

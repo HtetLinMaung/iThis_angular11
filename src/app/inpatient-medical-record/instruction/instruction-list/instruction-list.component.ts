@@ -119,7 +119,8 @@ export class InstructionListComponent implements OnInit {
               v.pId,
               v.patientId,
               v.patientName,
-              v.adNo
+              v.adNo,
+              v.rgsNo
             )
         );
         this.instructions = this.instructionStoreService.instructions;

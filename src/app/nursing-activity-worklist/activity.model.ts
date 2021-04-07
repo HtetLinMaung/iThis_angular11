@@ -25,6 +25,7 @@ export default class Activity {
     public fmtExternalLength: string,
     public patientId: string,
     public patientName: string,
-    public adNo: string
+    public adNo: string,
+    public rgsNo = ''
   ) {}
 }

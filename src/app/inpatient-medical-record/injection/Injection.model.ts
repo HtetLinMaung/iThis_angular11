@@ -15,6 +15,7 @@ export default class Injection {
     public frequency = 0,
     public patientId = '',
     public patientName = '',
-    public adNo = ''
+    public adNo = '',
+    public rgsNo = ''
   ) {}
 }

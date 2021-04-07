@@ -67,6 +67,7 @@ export class NursingActivityWorklistFormComponent implements OnInit {
         .doGet(`nurse-activity-worklist/doctors/${activity.doctorId}`)
         .subscribe((data: any) => {
           this.appStoreService.doctor = data;
+          this.appStoreService.fetchPatientByRgsNo(activity.rgsNo);
         });
     }
   }

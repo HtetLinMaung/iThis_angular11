@@ -120,6 +120,11 @@ export class GeneralWardFormComponent implements OnInit {
         date: this.date,
       })
       .subscribe((data: any[]) => {
+        if (this.generalWardStoreService.isUpdate) {
+          this.appStoreService.fetchPatientByRgsNo(
+            (this.updateForm as any).RgsNo
+          );
+        }
         const parentIdList = [...new Set(data.map((v) => v.parentId))];
         const newData = [...data.filter((v) => !v.parentId)];
         for (const parentId of parentIdList) {

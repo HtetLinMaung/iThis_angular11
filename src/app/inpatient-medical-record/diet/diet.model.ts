@@ -10,6 +10,7 @@ export default class Diet {
     public patientId = '',
     public patientName = '',
     public adNo = '',
+    public rgsNo = '',
     public key = new Date().toISOString()
   ) {}
 }

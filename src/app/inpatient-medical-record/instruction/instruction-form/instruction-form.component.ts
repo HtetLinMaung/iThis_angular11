@@ -55,6 +55,7 @@ export class InstructionFormComponent implements OnInit {
       this.drugAllergyTo = instruction.drugAllergyTo;
       this.instruction = instruction.instruction;
       this.remarks = instruction.remarks;
+      this.appStoreService.fetchPatientByRgsNo(instruction.rgsNo);
     } else {
       this.appStoreService.onPatientChanged = () => {
         this.fetchAllergiesByPatient(this.appStoreService.pId);

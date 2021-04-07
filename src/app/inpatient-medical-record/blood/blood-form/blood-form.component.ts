@@ -62,6 +62,7 @@ export class BloodFormComponent extends CommonUtil implements OnInit {
         : blood.nurseConfirmDate;
       this.givenByType = blood.givenByType;
       this.bloods = [blood];
+      this.appStoreService.fetchPatientByRgsNo(blood.rgsNo);
     } else {
       this.new();
     }

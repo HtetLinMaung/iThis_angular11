@@ -49,6 +49,7 @@ export class DietFormComponent extends CommonUtil implements OnInit {
       this.date = diet.date;
 
       this.diets = [diet];
+      this.appStoreService.fetchPatientByRgsNo(diet.rgsNo);
     } else {
       this.new();
     }

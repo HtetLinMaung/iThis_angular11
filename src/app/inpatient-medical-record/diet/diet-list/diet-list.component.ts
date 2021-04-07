@@ -115,7 +115,8 @@ export class DietListComponent implements OnInit {
             v.time,
             v.patientId,
             v.patientName,
-            v.adNo
+            v.adNo,
+            v.RgsNo
           )
       );
 

@@ -122,6 +122,10 @@ export class InjectionFormComponent extends CommonUtil implements OnInit {
                         (v) =>
                           v.syskey == this.injectionStoreService.currentSysKey
                       );
+                      console.log(this.injectionStoreService.injections[0]);
+                      this.appStoreService.fetchPatientByRgsNo(
+                        this.injectionStoreService.injections[0].rgsNo
+                      );
                     } else {
                       this.injectionStoreService.injections = injections;
                     }

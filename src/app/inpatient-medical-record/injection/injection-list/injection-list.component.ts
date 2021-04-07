@@ -181,7 +181,8 @@ export class InjectionListComponent implements OnInit {
                           v.checkList.filter((item) => item.done).length,
                           v.patientId,
                           v.patientName,
-                          v.adNo
+                          v.adNo,
+                          v.rgsNo
                         )
                     );
 
