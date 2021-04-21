@@ -78,6 +78,7 @@ export class InjectionFormComponent extends CommonUtil implements OnInit {
                     patientId: this.appStoreService.pId,
                     rgsno: this.appStoreService.rgsNo,
                     doctorId: this.appStoreService.drID,
+                    initial: true,
                   })
                   .subscribe((data: any) => {
                     const injections = data.map((v, i) => {
