@@ -105,8 +105,7 @@ export class NonParenteralListComponent extends CommonUtil implements OnInit {
   async fetchAllNonParenterals() {
     await this.fetchRouteDoseTaskAsync(
       this.http,
-      this.nonParenteralStoreService,
-      ['routes', 'doses']
+      this.nonParenteralStoreService
     );
     this.http
       .doPost(`inpatient-medical-record/non-parenterals`, {
