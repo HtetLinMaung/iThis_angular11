@@ -88,15 +88,6 @@ export class NonParenteralListComponent extends CommonUtil implements OnInit {
     this.nonParenteralStoreService.isUpdate = false;
   }
 
-  initPagination(data) {
-    this.start = 0;
-    this.end = this.perPage;
-    if (data.length < this.perPage) {
-      this.end = data.length;
-    }
-    this.calculateTotal(data);
-  }
-
   calculateTotal(data) {
     this.totalPage = Math.ceil(data.length / this.perPage);
     this.total = data.length;
