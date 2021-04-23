@@ -62,8 +62,7 @@ export class NonParenteralFormComponent
       this.nonParenteralStoreService.nonParenterals = this.nonParenteralStoreService.nonParenterals.filter(
         (v) => v.syskey == this.nonParenteralStoreService.currentSysKey
       );
-      const data: NonParenteral = this.nonParenteralStoreService
-        .nonParenterals[0];
+      const data = this.nonParenteralStoreService.nonParenterals[0];
       this.date = this.appStoreService.isDoctorRank
         ? data.moConfirmDate
         : data.nurseConfirmDate;
@@ -145,7 +144,7 @@ export class NonParenteralFormComponent
     data.done = e.target.checked;
     if (data.done) {
       data.doneAt = new Date().toISOString();
-      data.nurseId = 1;
+      data.nurseId = parseInt(this.appStoreService.userId || '0');
     } else {
       data.nurseId = 0;
       data.doneAt = '';

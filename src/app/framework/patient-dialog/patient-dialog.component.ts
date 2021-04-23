@@ -139,6 +139,8 @@ export class PatientDialogComponent extends CommonUtil implements OnInit {
   fetchPatients() {
     this.http
       .doPost('patients/', {
+        sortBy: 'syskey',
+        isLastFirst: false,
         patientType: this.patientType,
         rgsStatus: this.rgsStatus,
         page: this.page,

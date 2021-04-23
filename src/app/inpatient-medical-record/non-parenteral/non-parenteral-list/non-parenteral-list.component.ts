@@ -88,11 +88,6 @@ export class NonParenteralListComponent extends CommonUtil implements OnInit {
     this.nonParenteralStoreService.isUpdate = false;
   }
 
-  calculateTotal(data) {
-    this.totalPage = Math.ceil(data.length / this.perPage);
-    this.total = data.length;
-  }
-
   async fetchAllNonParenterals() {
     await this.fetchRouteDoseTaskAsync(
       this.http,

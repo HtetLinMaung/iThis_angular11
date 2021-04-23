@@ -141,7 +141,7 @@ export class BloodFormComponent extends CommonUtil implements OnInit {
     data.done = e.target.checked;
     if (data.done) {
       data.doneAt = new Date().toISOString();
-      data.nurseId = 1;
+      data.nurseId = parseInt(this.appStoreService.userId || '0');
     } else {
       data.nurseId = 0;
       data.doneAt = '';

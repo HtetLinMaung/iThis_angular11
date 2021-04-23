@@ -16,6 +16,11 @@ export default class Injection {
     public patientId = '',
     public patientName = '',
     public adNo = '',
-    public rgsNo = ''
+    public rgsNo = '',
+    public moConfirmDate: '',
+    public nurseConfirmDate: '',
+    public moConfirmTime: '',
+    public nurseConfirmTime: '',
+    public givenByType: ''
   ) {}
 }
