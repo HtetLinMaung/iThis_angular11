@@ -37,6 +37,9 @@ export class NursingActivityWorklistFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.appStoreService.doctor = new Doctor();
+    this.appStoreService.onClear = () => {
+      this.new();
+    };
     this.bindEditData();
   }
 
@@ -86,6 +89,7 @@ export class NursingActivityWorklistFormComponent implements OnInit {
     this.markingUnit = 'mm';
     this.externalLength = '';
     this.externalLengthUnit = 'mm';
+    this.appStoreService.doctor = new Doctor();
   }
 
   save() {
