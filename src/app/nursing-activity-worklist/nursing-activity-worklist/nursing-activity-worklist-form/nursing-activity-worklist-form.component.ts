@@ -93,43 +93,47 @@ export class NursingActivityWorklistFormComponent implements OnInit {
   }
 
   save() {
-    this.http
-      .doPost(
-        `nurse-activity-worklist/${
-          !this.nurseActivityWorkListStoreService.isUpdate
-            ? 'save'
-            : `update/${this.nurseActivityWorkListStoreService.currentSysKey}`
-        }`,
-        {
-          pId: this.appStoreService.pId,
-          rgsNo: this.appStoreService.rgsNo,
-          userid: this.appStoreService.userId,
-          username: '',
-          doctorSysKey: this.appStoreService.doctor.syskey,
-          procedure: parseInt(this.procedure),
-          date: this.date,
-          dueDateChange: this.dueDateChange,
-          dueDateRemove: this.dueDateRemove,
-          size: parseFloat(this.size || '0'),
-          site: parseFloat(this.site || '0'),
-          marking: parseFloat(this.marking || '0'),
-          externalLength: parseFloat(this.externalLength || '0'),
-          siteUnit: this.siteUnit,
-          sizeUnit: this.sizeUnit,
-          markingUnit: this.markingUnit,
-          externalLengthUnit: this.externalLengthUnit,
-        }
-      )
-      .subscribe(
-        (data: any) => {
+    if (this.appStoreService.loading) return;
+    this.appStoreService.loading = true;
+    try {
+      this.http
+        .doPost(
+          `nurse-activity-worklist/${
+            !this.nurseActivityWorkListStoreService.isUpdate
+              ? 'save'
+              : `update/${this.nurseActivityWorkListStoreService.currentSysKey}`
+          }`,
+          {
+            pId: this.appStoreService.pId,
+            rgsNo: this.appStoreService.rgsNo,
+            userid: this.appStoreService.userId,
+            username: '',
+            doctorSysKey: this.appStoreService.doctor.syskey,
+            procedure: parseInt(this.procedure),
+            date: this.date,
+            dueDateChange: this.dueDateChange,
+            dueDateRemove: this.dueDateRemove,
+            size: parseFloat(this.size || '0'),
+            site: parseFloat(this.site || '0'),
+            marking: parseFloat(this.marking || '0'),
+            externalLength: parseFloat(this.externalLength || '0'),
+            siteUnit: this.siteUnit,
+            sizeUnit: this.sizeUnit,
+            markingUnit: this.markingUnit,
+            externalLengthUnit: this.externalLengthUnit,
+          }
+        )
+        .subscribe((data: any) => {
+          this.appStoreService.loading = false;
           if (!this.nurseActivityWorkListStoreService.isUpdate) {
             this.nurseActivityWorkListStoreService.currentSysKey = data.syskey;
           }
           this.nurseActivityWorkListStoreService.isUpdate = true;
-        },
-        (error) => {},
-        () => {}
-      );
+        });
+    } catch (err) {
+      alert(err.message);
+      this.appStoreService.loading = false;
+    }
   }
 
   delete() {

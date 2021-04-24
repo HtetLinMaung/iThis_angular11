@@ -80,41 +80,52 @@ export class DietFormComponent extends CommonUtil implements OnInit {
   }
 
   save() {
+    if (this.appStoreService.loading) return;
     if (this.appStoreService.isDoctorRank == null) {
       return alert('Unauthorized');
     }
-    if (this.dietStoreService.isUpdate) {
-      const v = this.diets[0];
-      this.http
-        .doPost(
-          `inpatient-medical-record/update-diet/${this.dietStoreService.currentSysKey}`,
-          {
-            ...v,
-            userid: this.appStoreService.userId,
-            username: '',
-            isDoctor: this.appStoreService.isDoctorRank,
-            date: this.date,
-            time: this.time,
-          }
-        )
-        .subscribe((data: any) => {});
-    } else {
-      this.http
-        .doPost('inpatient-medical-record/save-diets', {
-          diets: this.diets.map((v) => ({
-            ...v,
-            pId: this.appStoreService.pId,
-            rgsNo: this.appStoreService.rgsNo,
-            userid: this.appStoreService.userId,
-            username: '',
-            isDoctor: this.appStoreService.isDoctorRank,
-            date: this.date,
-            time: this.time,
-          })),
-        })
-        .subscribe((data: any) => {
-          this.dietStoreService.tabNo = 1;
-        });
+    this.appStoreService.loading = true;
+    try {
+      if (this.dietStoreService.isUpdate) {
+        const v = this.diets[0];
+        this.http
+          .doPost(
+            `inpatient-medical-record/update-diet/${this.dietStoreService.currentSysKey}`,
+            {
+              ...v,
+              userid: this.appStoreService.userId,
+              username: '',
+              isDoctor: this.appStoreService.isDoctorRank,
+              date: this.date,
+              time: this.time,
+            }
+          )
+          .subscribe((data: any) => {
+            this.appStoreService.loading = false;
+            alert('update successful');
+          });
+      } else {
+        this.http
+          .doPost('inpatient-medical-record/save-diets', {
+            diets: this.diets.map((v) => ({
+              ...v,
+              pId: this.appStoreService.pId,
+              rgsNo: this.appStoreService.rgsNo,
+              userid: this.appStoreService.userId,
+              username: '',
+              isDoctor: this.appStoreService.isDoctorRank,
+              date: this.date,
+              time: this.time,
+            })),
+          })
+          .subscribe((data: any) => {
+            this.appStoreService.loading = false;
+            this.dietStoreService.tabNo = 1;
+          });
+      }
+    } catch (err) {
+      alert(err.message);
+      this.appStoreService.loading = false;
     }
   }
 

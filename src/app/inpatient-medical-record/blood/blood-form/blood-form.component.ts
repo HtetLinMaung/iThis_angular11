@@ -157,59 +157,70 @@ export class BloodFormComponent extends CommonUtil implements OnInit {
   }
 
   save() {
+    if (this.appStoreService.loading) return;
     if (this.appStoreService.isDoctorRank == null) {
       return alert('Unauthorized');
     }
-    if (this.bloodStoreService.isUpdate) {
-      const v = this.bloods[0];
-      this.http
-        .doPost(
-          `inpatient-medical-record/update-blood/${this.bloodStoreService.currentSysKey}`,
-          {
-            ...v,
-            userid: this.appStoreService.userId,
-            username: '',
-            givenByType: this.givenByType,
-            isDoctor: this.appStoreService.isDoctorRank,
-            moConfirmDate: this.appStoreService.isDoctorRank
-              ? this.date
-              : this.moConfirmDate,
-            nurseConfirmDate: !this.appStoreService.isDoctorRank
-              ? this.date
-              : this.nurseConfirmDate,
-            moConfirmTime: this.appStoreService.isDoctorRank
-              ? this.time
-              : this.moConfirmTime,
-            nurseConfirmTime: !this.appStoreService.isDoctorRank
-              ? this.time
-              : this.nurseConfirmTime,
-          }
-        )
-        .subscribe((data: any) => {});
-    } else {
-      this.http
-        .doPost('inpatient-medical-record/save-blood', {
-          bloods: this.bloods.map((v) => ({
-            ...v,
-            pId: this.appStoreService.pId,
-            rgsNo: this.appStoreService.rgsNo,
-            userid: this.appStoreService.userId,
-            username: '',
-            givenByType: this.givenByType,
-            isDoctor: this.appStoreService.isDoctorRank,
-            moConfirmDate: this.appStoreService.isDoctorRank ? this.date : '',
-            nurseConfirmDate: !this.appStoreService.isDoctorRank
-              ? this.date
-              : '',
-            moConfirmTime: this.appStoreService.isDoctorRank ? this.time : '',
-            nurseConfirmTime: !this.appStoreService.isDoctorRank
-              ? this.time
-              : '',
-          })),
-        })
-        .subscribe((data: any) => {
-          this.bloodStoreService.tabNo = 1;
-        });
+    this.appStoreService.loading = true;
+    try {
+      if (this.bloodStoreService.isUpdate) {
+        const v = this.bloods[0];
+        this.http
+          .doPost(
+            `inpatient-medical-record/update-blood/${this.bloodStoreService.currentSysKey}`,
+            {
+              ...v,
+              userid: this.appStoreService.userId,
+              username: '',
+              givenByType: this.givenByType,
+              isDoctor: this.appStoreService.isDoctorRank,
+              moConfirmDate: this.appStoreService.isDoctorRank
+                ? this.date
+                : this.moConfirmDate,
+              nurseConfirmDate: !this.appStoreService.isDoctorRank
+                ? this.date
+                : this.nurseConfirmDate,
+              moConfirmTime: this.appStoreService.isDoctorRank
+                ? this.time
+                : this.moConfirmTime,
+              nurseConfirmTime: !this.appStoreService.isDoctorRank
+                ? this.time
+                : this.nurseConfirmTime,
+            }
+          )
+          .subscribe((data: any) => {
+            this.appStoreService.loading = false;
+            alert('update successful');
+          });
+      } else {
+        this.http
+          .doPost('inpatient-medical-record/save-blood', {
+            bloods: this.bloods.map((v) => ({
+              ...v,
+              pId: this.appStoreService.pId,
+              rgsNo: this.appStoreService.rgsNo,
+              userid: this.appStoreService.userId,
+              username: '',
+              givenByType: this.givenByType,
+              isDoctor: this.appStoreService.isDoctorRank,
+              moConfirmDate: this.appStoreService.isDoctorRank ? this.date : '',
+              nurseConfirmDate: !this.appStoreService.isDoctorRank
+                ? this.date
+                : '',
+              moConfirmTime: this.appStoreService.isDoctorRank ? this.time : '',
+              nurseConfirmTime: !this.appStoreService.isDoctorRank
+                ? this.time
+                : '',
+            })),
+          })
+          .subscribe((data: any) => {
+            this.appStoreService.loading = false;
+            this.bloodStoreService.tabNo = 1;
+          });
+      }
+    } catch (err) {
+      alert(err.message);
+      this.appStoreService.loading = false;
     }
   }
 

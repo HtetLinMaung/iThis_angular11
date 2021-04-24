@@ -141,65 +141,76 @@ export class InjectionFormComponent
   }
 
   save() {
+    if (this.appStoreService.loading) return;
     if (this.appStoreService.isDoctorRank == null) {
       return alert('Unauthorized');
     }
-    if (this.injectionStoreService.isUpdate) {
-      const v = this.injectionStoreService.injections[0];
-      this.http
-        .doPost(
-          `inpatient-medical-record/update-injection/${this.injectionStoreService.currentSysKey}`,
-          {
-            ...v,
-            userid: this.appStoreService.userId,
-            username: '',
-            givenByType: this.givenByType,
-            isDoctor: this.appStoreService.isDoctorRank,
-            moConfirmDate: this.appStoreService.isDoctorRank
-              ? this.date
-              : this.moConfirmDate,
-            nurseConfirmDate: !this.appStoreService.isDoctorRank
-              ? this.date
-              : this.nurseConfirmDate,
-            moConfirmTime: this.appStoreService.isDoctorRank
-              ? this.time
-              : this.moConfirmTime,
-            nurseConfirmTime: !this.appStoreService.isDoctorRank
-              ? this.time
-              : this.nurseConfirmTime,
-          }
-        )
-        .subscribe((data: any) => {});
-    } else {
-      this.http
-        .doPost('inpatient-medical-record/save-injection', {
-          injections: this.injectionStoreService.injections.map((v) => ({
-            ...v,
-            pId: this.appStoreService.pId,
-            rgsNo: this.appStoreService.rgsNo,
-            adNo: this.appStoreService.patientDetail.adNo,
-            userid: this.appStoreService.userId,
-            username: '',
-            givenByType: this.givenByType,
-            isDoctor: this.appStoreService.isDoctorRank,
-            moConfirmDate: this.appStoreService.isDoctorRank
-              ? this.date
-              : this.moConfirmDate,
-            nurseConfirmDate: !this.appStoreService.isDoctorRank
-              ? this.date
-              : this.nurseConfirmDate,
-            moConfirmTime: this.appStoreService.isDoctorRank
-              ? this.time
-              : this.moConfirmTime,
-            nurseConfirmTime: !this.appStoreService.isDoctorRank
-              ? this.time
-              : this.nurseConfirmTime,
-          })),
-        })
-        .subscribe((data: any) => {
-          this.injectionStoreService.tabNo = 1;
-          this.clear();
-        });
+    this.appStoreService.loading = true;
+    try {
+      if (this.injectionStoreService.isUpdate) {
+        const v = this.injectionStoreService.injections[0];
+        this.http
+          .doPost(
+            `inpatient-medical-record/update-injection/${this.injectionStoreService.currentSysKey}`,
+            {
+              ...v,
+              userid: this.appStoreService.userId,
+              username: '',
+              givenByType: this.givenByType,
+              isDoctor: this.appStoreService.isDoctorRank,
+              moConfirmDate: this.appStoreService.isDoctorRank
+                ? this.date
+                : this.moConfirmDate,
+              nurseConfirmDate: !this.appStoreService.isDoctorRank
+                ? this.date
+                : this.nurseConfirmDate,
+              moConfirmTime: this.appStoreService.isDoctorRank
+                ? this.time
+                : this.moConfirmTime,
+              nurseConfirmTime: !this.appStoreService.isDoctorRank
+                ? this.time
+                : this.nurseConfirmTime,
+            }
+          )
+          .subscribe((data: any) => {
+            this.appStoreService.loading = false;
+            alert('update successful');
+          });
+      } else {
+        this.http
+          .doPost('inpatient-medical-record/save-injection', {
+            injections: this.injectionStoreService.injections.map((v) => ({
+              ...v,
+              pId: this.appStoreService.pId,
+              rgsNo: this.appStoreService.rgsNo,
+              adNo: this.appStoreService.patientDetail.adNo,
+              userid: this.appStoreService.userId,
+              username: '',
+              givenByType: this.givenByType,
+              isDoctor: this.appStoreService.isDoctorRank,
+              moConfirmDate: this.appStoreService.isDoctorRank
+                ? this.date
+                : this.moConfirmDate,
+              nurseConfirmDate: !this.appStoreService.isDoctorRank
+                ? this.date
+                : this.nurseConfirmDate,
+              moConfirmTime: this.appStoreService.isDoctorRank
+                ? this.time
+                : this.moConfirmTime,
+              nurseConfirmTime: !this.appStoreService.isDoctorRank
+                ? this.time
+                : this.nurseConfirmTime,
+            })),
+          })
+          .subscribe((data: any) => {
+            this.appStoreService.loading = false;
+            this.injectionStoreService.tabNo = 1;
+            this.clear();
+          });
+      }
+    } catch (err) {
+      alert(err.message);
+      this.appStoreService.loading = false;
     }
   }
 
