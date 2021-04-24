@@ -26,7 +26,12 @@
     </div>
     <div class="p__5" style="flex: 0 0 10%">
       <label class="form__label">Time</label>
-      <input type="time" class="form-control form__input" [(ngModel)]="time" />
+      <input
+        type="time"
+        step="1"
+        class="form-control form__input"
+        [(ngModel)]="time"
+      />
     </div>
   </div>
 
