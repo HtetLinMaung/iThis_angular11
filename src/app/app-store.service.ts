@@ -8,6 +8,7 @@ import { Patient } from './patient.model';
   providedIn: 'root',
 })
 export class AppStoreService {
+  private readonly _loading = new BehaviorSubject<boolean>(false);
   private readonly _pId = new BehaviorSubject<number>(0);
   private readonly _patientInfo = new BehaviorSubject<Patient>(
     new Patient('', '', '')
@@ -42,6 +43,7 @@ export class AppStoreService {
   private readonly _onClear = new BehaviorSubject<any>(() => {});
   private readonly _patientTypes = new BehaviorSubject<any[]>([]);
 
+  readonly loading$ = this._loading.asObservable();
   readonly pId$ = this._pId.asObservable();
   readonly patientInfo$ = this._patientInfo.asObservable();
   readonly doctor$ = this._doctor.asObservable();
@@ -205,5 +207,13 @@ export class AppStoreService {
 
   get userId(): string {
     return this._userId.getValue();
+  }
+
+  set loading(v: boolean) {
+    this._loading.next(v);
+  }
+
+  get loading() {
+    return this._loading.getValue();
   }
 }
