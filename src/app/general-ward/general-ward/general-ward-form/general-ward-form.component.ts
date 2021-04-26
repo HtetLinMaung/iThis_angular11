@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppStoreService } from 'src/app/app-store.service';
 import { HttpService } from 'src/app/framework/http.service';
 import { GeneralWardStoreService } from '../../general-ward-store.service';
@@ -9,7 +9,7 @@ import * as moment from 'moment';
   templateUrl: './general-ward-form.component.html',
   styleUrls: ['./general-ward-form.component.css'],
 })
-export class GeneralWardFormComponent implements OnInit {
+export class GeneralWardFormComponent implements OnInit, OnDestroy {
   date = new Date().toISOString().slice(0, 10);
   Type = {
     50: { problemName: 'Breathing', icon: 'fa-lungs' },
@@ -66,7 +66,14 @@ export class GeneralWardFormComponent implements OnInit {
         (v) => v.syskey == this.generalWardStoreService.currentSysKey
       ) as any;
     }
+    this.appStoreService.onPatientChanged = () => {
+      this.fetchFormData();
+    };
     this.fetchFormData();
+  }
+
+  ngOnDestroy(): void {
+    this.appStoreService.onPatientChanged = this.appStoreService.onClear = () => {};
   }
 
   formatDate(dateStr: string, format: string) {
@@ -122,7 +129,7 @@ export class GeneralWardFormComponent implements OnInit {
       .subscribe((data: any[]) => {
         if (this.generalWardStoreService.isUpdate) {
           this.appStoreService.fetchPatientByRgsNo(
-            (this.updateForm as any).RgsNo
+            (this.updateForm as any).rgsNo
           );
         }
         const parentIdList = [...new Set(data.map((v) => v.parentId))];
@@ -208,40 +215,52 @@ export class GeneralWardFormComponent implements OnInit {
   new() {}
 
   save() {
-    if (this.generalWardStoreService.isUpdate) {
-      this.http
-        .doPost(
-          `general-ward/update/${this.generalWardStoreService.currentSysKey}`,
-          this.updateForm
-        )
-        .subscribe((data) => {});
-    } else {
-      const generalWards = [];
-      for (const item of this.formData) {
-        for (const innerItem of item.items) {
-          generalWards.push({
-            ...innerItem,
-            pId: this.appStoreService.pId,
-            parentId: innerItem.typeId,
-            doctorId: this.appStoreService.drID,
-            RgsNo: this.appStoreService.rgsNo,
-            userid: this.appStoreService.userId,
-            username: '',
-            type: item.type,
-            headerDesc:
-              innerItem.interventions[innerItem.selectedInterventions],
+    if (this.appStoreService.loading) return;
+    this.appStoreService.loading = true;
+    try {
+      if (this.generalWardStoreService.isUpdate) {
+        this.http
+          .doPost(
+            `general-ward/update/${this.generalWardStoreService.currentSysKey}`,
+            this.updateForm
+          )
+          .subscribe((data) => {
+            this.appStoreService.loading = false;
+            alert('update successful');
           });
+      } else {
+        const generalWards = [];
+        for (const item of this.formData) {
+          for (const innerItem of item.items) {
+            generalWards.push({
+              ...innerItem,
+              pId: this.appStoreService.pId,
+              parentId: innerItem.typeId,
+              doctorId: this.appStoreService.drID,
+              rgsNo: this.appStoreService.rgsNo,
+              userid: this.appStoreService.userId,
+              username: '',
+              type: item.type,
+              headerDesc:
+                innerItem.interventions[innerItem.selectedInterventions],
+            });
+          }
         }
-      }
 
-      this.http
-        .doPost('general-ward/save', {
-          generalWards,
-          date: this.date,
-        })
-        .subscribe((data) => {
-          this.fetchFormData();
-        });
+        this.http
+          .doPost('general-ward/save', {
+            generalWards,
+            date: this.date,
+          })
+          .subscribe((data) => {
+            this.appStoreService.loading = false;
+            alert('save successful');
+            this.fetchFormData();
+          });
+      }
+    } catch (err) {
+      console.error(err.message);
+      this.appStoreService.loading = false;
     }
   }
 
