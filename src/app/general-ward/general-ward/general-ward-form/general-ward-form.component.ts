@@ -6,8 +6,8 @@ import * as moment from 'moment';
 import _ from 'lodash';
 
 const defaultItem = {
+  rgsNo: 0,
   id: new Date().toISOString(),
-
   syskey: 0,
   goal: '50',
   intervention: '-',
@@ -17,7 +17,6 @@ const defaultItem = {
   detailSyskey: 0,
   readonly: false,
   shifts: [],
-
   interventionOptions: [{ value: '-', text: '-' }],
 };
 
@@ -54,6 +53,8 @@ export class GeneralWardFormComponent implements OnInit, OnDestroy {
   shifts = [];
   currentId = '';
 
+  oldInitDate = '';
+
   constructor(
     private http: HttpService,
     public appStoreService: AppStoreService,
@@ -71,7 +72,9 @@ export class GeneralWardFormComponent implements OnInit, OnDestroy {
     };
 
     this.appStoreService.onPatientChanged = () => {
-      this.fetchGwsByRgsNo();
+      if (!this.generalWardStoreService.isUpdate) {
+        this.fetchGwsByRgsNo();
+      }
     };
 
     this.fetchInitData();
@@ -91,7 +94,17 @@ export class GeneralWardFormComponent implements OnInit, OnDestroy {
         value: type,
         text: this.Type[type].problemName,
       }));
-      this.fetchGwsByRgsNo();
+      if (this.generalWardStoreService.isUpdate) {
+        this.items = this.generalWardStoreService.generalWards.filter(
+          (v) => v.syskey == this.generalWardStoreService.currentSysKey
+        );
+        this.setInterventions(this.items[0].goal, this.items[0]);
+        console.log(this.items[0].rgsNo);
+        this.oldInitDate = this.items[0].initDate;
+        this.appStoreService.fetchPatientByRgsNo(this.items[0].rgsNo);
+      } else {
+        this.fetchGwsByRgsNo();
+      }
     } catch (err) {
       console.error(err.message);
     }
@@ -173,44 +186,33 @@ export class GeneralWardFormComponent implements OnInit, OnDestroy {
   onInitDateChanged(e, item) {
     if (moment(e.target.value).isAfter(moment())) {
       alert('Initial Date must not greater than current date');
-      item.initDate = '';
+      item.initDate = this.oldInitDate;
+      return;
     }
 
-    item.shifts = [];
     if (!item.syskey) {
+      item.shifts = [];
       const date = moment(item.initDate);
       while (date.isSameOrBefore(moment())) {
         item.shifts.push(this.getDefaultShift(date.format('yyyy-MM-DD')));
         date.add(1, 'day');
       }
     } else {
-      // const date = moment(item.initDate);
-      // let i = 0;
-      // while (date.isSameOrBefore(moment())) {
-      //   item.shifts[i++].date = date.format('yyyy-MM-DD');
-      //   date.add(1, 'day');
-      // }
-      // const date = moment(item.initDate);
-      // const shifts = [];
-      // while (date.isSameOrBefore(moment())) {
-      //   shifts.push({
-      //     syskey: 0,
-      //     day: false,
-      //     night: false,
-      //     date: date.format('yyyy-MM-DD'),
-      //     dayAt: '',
-      //     dayId: '',
-      //     dayName: '',
-      //     nightAt: '',
-      //     nightId: '',
-      //     nightName: '',
-      //   });
-      //   date.add(1, 'day');
-      // }
-      // item.shifts = shifts.map((shift) => {
-      //   if (shift.date == )
-      // });
+      const ok = confirm(
+        'Changing this will lost all shift records for this row. Are you sure?'
+      );
+      if (ok) {
+        item.shifts = [];
+        const date = moment(e.target.value);
+        while (date.isSameOrBefore(moment())) {
+          item.shifts.push(this.getDefaultShift(date.format('yyyy-MM-DD')));
+          date.add(1, 'day');
+        }
+      } else {
+        item.initDate = this.oldInitDate;
+      }
     }
+    this.oldInitDate = e.target.value;
   }
 
   openDialog(item) {
@@ -260,10 +262,32 @@ export class GeneralWardFormComponent implements OnInit, OnDestroy {
 
   toggleBtn(key: string, item: any) {
     item[key] = !item[key];
+    if (key == 'day') {
+      if (item['day']) {
+        item.dayAt = new Date().toISOString();
+        item.dayId = this.appStoreService.userId;
+        item.dayName = 'Daw Khin Cho Win';
+      } else {
+        item.dayAt = '';
+        item.dayId = '';
+        item.dayName = '';
+      }
+    } else if (key == 'night') {
+      if (item['night']) {
+        item.nightAt = new Date().toISOString();
+        item.nightId = this.appStoreService.userId;
+        item.nightName = 'Daw Su Mon Myat';
+      } else {
+        item.nightAt = '';
+        item.nightId = '';
+        item.nightName = '';
+      }
+    }
   }
 
   new() {
     this.items = [defaultItem];
+    this.setInterventions(this.items[0].goal, this.items[0]);
   }
 
   async save() {
@@ -300,12 +324,12 @@ export class GeneralWardFormComponent implements OnInit, OnDestroy {
             pId: this.appStoreService.pId,
             shifts: item.shifts.map((shift) => ({
               ...shift,
-              dayAt: shift.day ? now : shift.dayAt,
-              dayId: shift.day ? this.appStoreService.userId : shift.dayId,
-              nightAt: shift.night ? now : shift.nightAt,
-              nightId: shift.night
-                ? this.appStoreService.userId
-                : shift.nightId,
+              // dayAt: shift.day ? now : shift.dayAt,
+              // dayId: shift.day ? this.appStoreService.userId : shift.dayId,
+              // nightAt: shift.night ? now : shift.nightAt,
+              // nightId: shift.night
+              //   ? this.appStoreService.userId
+              //   : shift.nightId,
             })),
             outcomeMetAt: item.outcomeMet ? now : '',
           })),
@@ -313,15 +337,18 @@ export class GeneralWardFormComponent implements OnInit, OnDestroy {
         .toPromise();
       this.appStoreService.loading = false;
       alert('saved successful');
-      // this.new();
-      // this.generalWardStoreService.tabNo = 1;
+      this.new();
+      this.generalWardStoreService.tabNo = 1;
     } catch (err) {
       console.error(err.message);
       this.appStoreService.loading = false;
     }
   }
 
-  delete() {}
+  delete() {
+    if (this.generalWardStoreService.isUpdate)
+      this.generalWardStoreService.deleteDialog = true;
+  }
 
   openPrintDialog() {
     this.generalWardStoreService.printDialog = true;

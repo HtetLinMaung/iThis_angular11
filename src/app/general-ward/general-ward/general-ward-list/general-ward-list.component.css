@@ -2,3 +2,15 @@ td {
   font-size: 13px;
   text-align: center;
 }
+.icon__link {
+  margin: 0 1rem;
+  transition: all 0.3s;
+}
+
+.icon__link:hover {
+  transform: translateY(-5px);
+}
+
+.icon__link:focus {
+  transform: translateY(0);
+}

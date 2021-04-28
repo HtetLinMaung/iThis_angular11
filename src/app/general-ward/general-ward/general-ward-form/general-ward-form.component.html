@@ -30,6 +30,7 @@
     <div class="col-xl-3">
       <span class="form__label">Goal For Problems</span>
       <select
+        [disabled]="item.readonly"
         class="form__input form-control"
         [(ngModel)]="item.goal"
         (change)="onGoalChanged($event, item)"
@@ -42,6 +43,7 @@
     <div class="col-xl-3">
       <span class="form__label">Interventions</span>
       <select
+        [disabled]="item.readonly"
         class="form__input form-control"
         [(ngModel)]="item.intervention"
         (change)="onInterventionChanged($event, item)"
@@ -90,7 +92,10 @@
       >
         Outcome Met
       </button>
-      <app-icon-button (click)="addRow()">
+      <app-icon-button
+        *ngIf="!(generalWardStoreService.isUpdate$ | async)"
+        (click)="addRow()"
+      >
         <i class="fa fa-plus" aria-hidden="true" style="font-size: 11px"></i>
       </app-icon-button>
     </div>

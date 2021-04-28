@@ -8,9 +8,9 @@ import GeneralWard from './general-ward/general-ward.model';
 export class GeneralWardStoreService {
   private readonly _currentSysKey = new BehaviorSubject<number>(0);
   private readonly _detailSysKey = new BehaviorSubject<number>(0);
-  private readonly _generalWards = new BehaviorSubject<GeneralWard[]>([]);
+  private readonly _generalWards = new BehaviorSubject<any>([]);
   private readonly _isUpdate = new BehaviorSubject<boolean>(false);
-  private readonly _tabNo = new BehaviorSubject<number>(2);
+  private readonly _tabNo = new BehaviorSubject<number>(1);
   private readonly _deleteDialog = new BehaviorSubject<boolean>(false);
   private readonly _printDialog = new BehaviorSubject<boolean>(false);
   private readonly _printData = new BehaviorSubject<any>([]);
@@ -32,7 +32,7 @@ export class GeneralWardStoreService {
     this._currentSysKey.next(v);
   }
 
-  set generalWards(v: GeneralWard[]) {
+  set generalWards(v: any) {
     this._generalWards.next(v);
   }
 
@@ -72,7 +72,7 @@ export class GeneralWardStoreService {
     return this._tabNo.getValue();
   }
 
-  get generalWards(): GeneralWard[] {
+  get generalWards(): any {
     return this._generalWards.getValue();
   }
 

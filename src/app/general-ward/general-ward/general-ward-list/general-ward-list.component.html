@@ -46,9 +46,9 @@
 
   <div style="display: flex; margin: 0.5rem 0">
     <app-pagination
-      [total]="(generalWardStoreService.generalWards$ | async)?.length"
+      [total]="total"
       [perPage]="perPage"
-      [start]="start"
+      [start]="start - 1"
       [end]="end"
       [perPages]="perPages"
       style="flex: 0 0 25%"
@@ -64,25 +64,54 @@
     <tr
       class="__raised"
       *ngFor="
-        let nonParenteral of (
-          generalWardStoreService.generalWards$ | async
-        ).slice(start, end)
+        let gw of generalWardStoreService.generalWards$ | async;
+        index as i
       "
-      (click)="goToList(nonParenteral)"
+      (click)="expandRow($event, gw, i)"
     >
-      <td>{{ nonParenteral.patientId }}</td>
-      <td>{{ nonParenteral.adNo }}</td>
-      <td>{{ nonParenteral.patientName }}</td>
+      <td>{{ gw.patientId }}</td>
+      <td>{{ gw.adNo }}</td>
+      <td>{{ gw.patientName }}</td>
       <td>
-        {{ nonParenteral.intervention }}
+        {{ getInterDesc(gw) }}
       </td>
-      <td>{{ nonParenteral.problemName }}</td>
+      <td>{{ Type[gw.goal].problemName }}</td>
       <td>
-        {{ nonParenteral.fmtInitialDate }}
+        {{ convertTzToDate(gw.initDate) }}
       </td>
-      <td>{{ nonParenteral.fmtOutcomeMet }}</td>
-      <td>{{ nonParenteral.fmtDayAt }}</td>
-      <td>{{ nonParenteral.fmtNightAt }}</td>
+      <td *ngIf="gw.outcomeMet"><i class="fas fa-check"></i></td>
+      <td *ngIf="!gw.outcomeMet"><i class="fas fa-times"></i></td>
+      <td>{{ formatDate(gw.outcomeMetAt, "MMMM Do YYYY, h:mm:ss a") }}</td>
+      <td>
+        <i
+          class="fas fa-pencil-alt icon__link"
+          (click)="goToList($event, gw)"
+        ></i>
+        <i
+          class="fas fa-angle-right icon__link"
+          [style]="{
+            'font-size': '16px',
+            transform: gw.expand ? 'rotate(90deg)' : 'rotate(0)'
+          }"
+        ></i>
+      </td>
     </tr>
   </app-table>
+</div>
+
+<div style="display: none" id="innerTable">
+  <td colspan="9" style="padding: 0">
+    <app-table [headers]="innerHeaders">
+      <tr *ngFor="let shift of shifts">
+        <td *ngIf="shift.day"><i class="fas fa-check"></i></td>
+        <td *ngIf="!shift.day"><i class="fas fa-times"></i></td>
+        <td>{{ shift.dayName }}</td>
+        <td>{{ formatDate(shift.dayAt, "MMMM Do YYYY, h:mm:ss a") }}</td>
+        <td *ngIf="shift.night"><i class="fas fa-check"></i></td>
+        <td *ngIf="!shift.night"><i class="fas fa-times"></i></td>
+        <td>{{ shift.nightName }}</td>
+        <td>{{ formatDate(shift.nightAt, "MMMM Do YYYY, h:mm:ss a") }}</td>
+      </tr>
+    </app-table>
+  </td>
 </div>

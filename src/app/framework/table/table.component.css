@@ -1,5 +1,9 @@
 .header__row {
-  background-color: #446cb3;
-  color: #fff;
+  background-color: #f1f1f1;
+  color: #3f414d;
   text-align: center;
+}
+.table__container {
+  border-radius: 10px;
+  border: 1px solid #e9eaea !important;
 }

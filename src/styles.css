@@ -7,6 +7,7 @@
 
 * {
   font-family: "Poppins";
+  color: #363844;
 }
 
 .__raised {
@@ -102,4 +103,22 @@
 }
 router-outlet + * {
   flex: 1;
+}
+
+.__table th,
+td {
+  border: 1px solid #e9eaea !important;
+}
+
+.__table tr {
+  transition: all 0.3s;
+}
+.__table tr:hover {
+  background-color: #f4f4f7;
+}
+.__table {
+  border-radius: 10px !important;
+  height: 100%;
+  margin: 0 !important;
+  color: #6b6f78 !important;
 }
