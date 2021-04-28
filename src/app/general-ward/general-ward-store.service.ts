@@ -10,7 +10,7 @@ export class GeneralWardStoreService {
   private readonly _detailSysKey = new BehaviorSubject<number>(0);
   private readonly _generalWards = new BehaviorSubject<GeneralWard[]>([]);
   private readonly _isUpdate = new BehaviorSubject<boolean>(false);
-  private readonly _tabNo = new BehaviorSubject<number>(1);
+  private readonly _tabNo = new BehaviorSubject<number>(2);
   private readonly _deleteDialog = new BehaviorSubject<boolean>(false);
   private readonly _printDialog = new BehaviorSubject<boolean>(false);
   private readonly _printData = new BehaviorSubject<any>([]);

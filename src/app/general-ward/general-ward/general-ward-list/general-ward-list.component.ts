@@ -110,7 +110,7 @@ export class GeneralWardListComponent implements OnInit {
     const tabEle2 = document.getElementById('tab2');
     tabEle1.style.background = '#3b5998';
     tabEle2.style.background = '#8C9899';
-    this.fetchAllGeneralWards();
+    // this.fetchAllGeneralWards();
     this.generalWardStoreService.isUpdate = false;
   }
 

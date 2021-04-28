@@ -20,164 +20,132 @@
       Print
     </button>
     <div style="flex: 1"></div>
-    <div *ngIf="!(generalWardStoreService.isUpdate$ | async)">
+  </div>
+
+  <div
+    *ngFor="let item of items"
+    class="row gw__row my-4"
+    style="align-items: flex-end"
+  >
+    <div class="col-xl-3">
+      <span class="form__label">Goal For Problems</span>
+      <select
+        class="form__input form-control"
+        [(ngModel)]="item.goal"
+        (change)="onGoalChanged($event, item)"
+      >
+        <option *ngFor="let goal of goals" [value]="goal.value">
+          {{ goal.text }}
+        </option>
+      </select>
+    </div>
+    <div class="col-xl-3">
+      <span class="form__label">Interventions</span>
+      <select
+        class="form__input form-control"
+        [(ngModel)]="item.intervention"
+        (change)="onInterventionChanged($event, item)"
+      >
+        <option
+          *ngFor="let inter of item.interventionOptions"
+          [value]="inter.value"
+        >
+          {{ inter.text }}
+        </option>
+      </select>
+    </div>
+    <div class="col-xl-2">
+      <span class="form__label">Initial Date</span>
       <input
+        [readonly]="item.readonly"
         type="date"
-        [(ngModel)]="date"
         class="form-control form__input"
-        (change)="handleDateChange($event)"
+        [(ngModel)]="item.initDate"
+        (change)="onInitDateChanged($event, item)"
       />
     </div>
-  </div>
-  <div
-    class="flex__row"
-    style="flex-wrap: wrap; justify-content: space-around"
-    *ngIf="!(generalWardStoreService.isUpdate$ | async)"
-  >
     <div
-      class="card __raised gw__card"
-      *ngFor="let data of formData"
-      style="flex: 0 0 96%"
+      class="col-xl-4"
+      style="display: flex; align-items: center; justify-content: space-around"
     >
-      <div class="__title">
-        <i
-          [class]="['fas', data.icon]"
-          style="font-size: 2rem; margin-right: 1rem"
-          *ngIf="data.icon"
-        ></i>
-        <span
-          style="
-            background-color: #eceef1;
-            padding: 0.5rem 1rem;
-            border-radius: 1.5rem;
-          "
-          >{{ data.problemName }}</span
-        >
-      </div>
-      <div class="flex__row header__row">
-        <div class="flex__item">Interventions</div>
-        <div class="flex__item">Initial Date</div>
-        <div class="flex__item">Nurse</div>
-        <div class="flex__item">Outcome Met</div>
-      </div>
-      <hr />
-      <div
-        class="flex__row"
-        *ngFor="let innerData of data.items; let innerIndex = index"
+      <button
+        [disabled]="!item.initDate ? true : false"
+        class="btn btn__selector"
+        (click)="openDialog(item)"
       >
-        <div class="flex__item">
+        Nurse Shifts
+      </button>
+      <button
+        class="btn btn__selector"
+        (click)="toggleBtn('outcomeMet', item)"
+        [style]="
+          item.outcomeMet
+            ? {
+                color: '#fff',
+                backgroundColor: '#28A745',
+                border: '1px solid #28A745 !important'
+              }
+            : {}
+        "
+      >
+        Outcome Met
+      </button>
+      <app-icon-button (click)="addRow()">
+        <i class="fa fa-plus" aria-hidden="true" style="font-size: 11px"></i>
+      </app-icon-button>
+    </div>
+  </div>
+
+  <div class="shift__dialog" *ngIf="dialog" (click)="closeDialog($event)">
+    <div class="shift__dialog__content" (click)="stopPropagate($event)">
+      <div
+        *ngFor="let shift of shifts"
+        class="row my-3"
+        style="justify-content: center; align-items: center"
+      >
+        <div class="col-xl-7">
           <input
-            [readonly]="innerData.readonly"
-            *ngIf="innerData.interventions.length == 1"
-            type="text"
-            class="form-control form__input"
-            [(ngModel)]="innerData.interventions[0]"
-          />
-          <select
-            *ngIf="innerData.interventions.length != 1"
-            class="form-control form__input"
-            [(ngModel)]="innerData.selectedInterventions"
-          >
-            <option
-              *ngFor="
-                let intervention of innerData.interventions;
-                let i = index
-              "
-              [value]="i + ''"
-            >
-              {{ intervention }}
-            </option>
-          </select>
-        </div>
-        <div class="flex__item">
-          <input
+            [readonly]="true"
             type="date"
             class="form-control form__input"
-            [(ngModel)]="innerData.initialDate"
+            [(ngModel)]="shift.date"
           />
         </div>
         <div
-          class="flex__item flex__row"
-          style="align-items: center; justify-content: center"
+          class="col-xl-5"
+          style="justify-content: space-around; display: flex"
         >
-          <input
-            type="checkbox"
-            (change)="dayHandler($event, innerData)"
-            [(ngModel)]="innerData.dayNurse"
-          />
-          <div style="font-size: 12px; padding: 0 7px">day</div>
-          <input
-            type="checkbox"
-            (change)="nightHandler($event, innerData)"
-            [(ngModel)]="innerData.nightNurse"
-          />
-          <div style="font-size: 12px; padding: 0 7px">night</div>
+          <button
+            class="btn btn__selector"
+            (click)="toggleBtn('day', shift)"
+            [style]="
+              shift.day
+                ? {
+                    color: '#fff',
+                    backgroundColor: '#28A745',
+                    border: '1px solid #28A745 !important'
+                  }
+                : {}
+            "
+          >
+            Day
+          </button>
+          <button
+            class="btn btn__selector"
+            (click)="toggleBtn('night', shift)"
+            [style]="
+              shift.night
+                ? {
+                    color: '#fff',
+                    backgroundColor: '#28A745',
+                    border: '1px solid #28A745 !important'
+                  }
+                : {}
+            "
+          >
+            Night
+          </button>
         </div>
-        <div
-          class="flex__item flex__row"
-          style="align-items: center; justify-content: center"
-        >
-          <input
-            type="checkbox"
-            [(ngModel)]="innerData.outcomeMet"
-            (change)="outcomeHandler($event, innerData)"
-          />
-        </div>
-      </div>
-      <div class="flex__row" style="justify-content: center">
-        <button
-          (click)="addRow(data.items)"
-          class="btn btn-outline-secondary btn__more"
-        >
-          Add More
-        </button>
-      </div>
-    </div>
-  </div>
-  <div *ngIf="generalWardStoreService.isUpdate$ | async">
-    <div class="flex__row" style="align-items: flex-end">
-      <div class="p__5">
-        <div class="form__label">Intervention</div>
-        <input
-          readonly="true"
-          type="text"
-          [(ngModel)]="updateForm.intervention"
-          class="form-control form__input"
-        />
-      </div>
-      <div class="p__5">
-        <div class="form__label">Initial Date</div>
-        <input
-          type="date"
-          [(ngModel)]="updateForm.initialDate"
-          class="form-control form__input"
-        />
-      </div>
-    </div>
-    <div class="flex__row">
-      <div class="p__5 flex__row" style="align-items: center">
-        <input
-          type="checkbox"
-          [(ngModel)]="updateForm.outcomeMet"
-          (change)="outcomeHandler($event, updateForm)"
-        />
-        <div style="font-size: 12px; padding-left: 0.5rem">Outcome met</div>
-      </div>
-      <div class="p__5 flex__row" style="align-items: center">
-        <input
-          type="checkbox"
-          [(ngModel)]="updateForm.dayNurse"
-          (change)="dayHandler($event, updateForm)"
-        />
-        <div style="font-size: 12px; padding-left: 0.5rem">Day Nurse</div>
-      </div>
-      <div class="p__5 flex__row" style="align-items: center">
-        <input
-          type="checkbox"
-          [(ngModel)]="updateForm.nightNurse"
-          (change)="nightHandler($event, updateForm)"
-        />
-        <div style="font-size: 12px; padding-left: 0.5rem">Night Nurse</div>
       </div>
     </div>
   </div>
