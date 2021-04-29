@@ -1,16 +1,16 @@
-td {
-  font-size: 13px;
-  text-align: center;
-}
 .icon__link {
   margin: 0 1rem;
+  -webkit-transition: all 0.3s;
   transition: all 0.3s;
 }
 
 .icon__link:hover {
-  transform: translateY(-5px);
+  -webkit-transform: translateY(-5px);
+          transform: translateY(-5px);
 }
 
 .icon__link:focus {
-  transform: translateY(0);
+  -webkit-transform: translateY(0);
+          transform: translateY(0);
 }
+/*# sourceMappingURL=general-ward-list.component.css.map */

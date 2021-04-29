@@ -1,0 +1,51 @@
+#general-ward__report th,
+td {
+  border: 1px solid black;
+}
+#general-ward__report2 th,
+td {
+  border: 1px solid black;
+}
+
+.gw__row {
+  padding: 1rem;
+  margin: 0 0.4rem;
+  border-radius: 15px;
+  transition: all 0.3s;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12) !important;
+
+  &:hover {
+    box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2),
+      0 12px 17px 2px rgba(0, 0, 0, 0.14), 0 5px 22px 4px rgba(0, 0, 0, 0.12) !important;
+  }
+}
+
+.btn__selector {
+  transition: all 0.3s;
+  font-size: 13px;
+  border: 1px solid #8d8b8b !important;
+}
+
+.shift__dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.shift__dialog__content {
+  transition: all 0.3s;
+  max-height: 80%;
+  overflow-y: auto;
+  min-width: 420px;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12) !important;
+}
