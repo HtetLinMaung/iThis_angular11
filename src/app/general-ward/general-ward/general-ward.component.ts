@@ -5,7 +5,7 @@ import { GeneralWardStoreService } from '../general-ward-store.service';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import * as moment from 'moment';
-
+import _ from 'lodash';
 @Component({
   selector: 'app-general-ward',
   templateUrl: './general-ward.component.html',
@@ -15,6 +15,7 @@ export class GeneralWardComponent implements OnInit {
   from = '';
   to = '';
   Type = {
+    0: { problemName: '' },
     50: { problemName: 'Breathing', icon: 'fa-lungs' },
     51: { problemName: 'Circulation', icon: 'fa-heartbeat' },
     52: { problemName: 'Communications', icon: 'fa-brain' },
@@ -69,113 +70,151 @@ export class GeneralWardComponent implements OnInit {
     this.generalWardStoreService.printDialog = false;
   }
 
-  print() {
+  generateDateList(start: moment.Moment, end = moment()): string[] {
+    const date = start;
+    const dates: string[] = [];
+    while (date.isSameOrBefore(end)) {
+      dates.push(date.format('yyyy-MM-DD'));
+      date.add(1, 'day');
+    }
+    return dates;
+  }
+
+  async print() {
+    if (!this.appStoreService.rgsNo) {
+      return alert('Please select patient first!');
+    }
     this.generalWardStoreService.printDialog = false;
-    this.http
-      .doPost('general-ward/with-date', {
-        from: this.from,
-        to: this.to,
+
+    const res: any = await this.http
+      .doPost('general-ward/patient-adl', {
+        rgsno: this.appStoreService.rgsNo,
+        from: this.from.replace(/-/g, ''),
+        to: this.to.replace(/-/g, ''),
       })
-      .subscribe((data: any) => {
-        let types: number[] = [];
-        const printDates = [];
-        for (
-          let date = moment(this.from);
-          date.isSameOrBefore(this.to);
-          date.add(1, 'days')
-        ) {
-          this.generalWardStoreService.printDates.push(
-            date.format('DD/MM/yyyy')
-          );
-          printDates.push(date);
-        }
-        while (this.generalWardStoreService.printDates.length < 8) {
-          this.generalWardStoreService.printDates.push('');
-          printDates.push('');
-        }
-        this.generalWardStoreService.printData = data.map((v) => {
-          const problemName = !types.includes(v.type)
-            ? this.Type[v.type].problemName
-            : '';
-          types = [...new Set([...types, v.type])];
-          const checkList = [];
-          for (const date of this.generalWardStoreService.printDates) {
-            if (
-              v.detailList
-                .map((detail) => moment(detail.dayNurseAt).format('DD/MM/yyyy'))
-                .includes(date)
-            ) {
-              checkList.push(true);
-            } else {
-              checkList.push(false);
-            }
+      .toPromise();
 
-            if (
-              v.detailList
-                .map((detail) =>
-                  moment(detail.nightNurseAt).format('DD/MM/yyyy')
-                )
-                .includes(date)
-            ) {
-              checkList.push(true);
-            } else {
-              checkList.push(false);
-            }
+    this.generalWardStoreService.printDates = this.generateDateList(
+      moment(this.from),
+      moment(this.to)
+    );
+
+    const datesLength = this.generalWardStoreService.printDates.length;
+    if (datesLength < 8) {
+      for (const i of _.range(0, 8 - datesLength)) {
+        this.generalWardStoreService.printDates.push('');
+      }
+    }
+
+    let oldGoal = '';
+    for (const v of res) {
+      let goal = v.goal;
+      if (v.goal == oldGoal) {
+        goal = 0;
+      }
+
+      if (oldGoal && v.goal != oldGoal) {
+        const length = res.filter((e) => e.goal == oldGoal).length;
+        if (length <= 4) {
+          for (const i of _.range(0, length)) {
+            this.generalWardStoreService.printData.push({
+              interDesc: '',
+              goal: 0,
+              initDate: '',
+              printShifts: _.range(0, 16).map(() => false),
+              outcomeMetAt: '',
+              outcomeMet: false,
+            });
           }
-          return {
-            ...v,
-            problemName,
-            checkList,
-          };
-        });
-        this.generalWardStoreService.printData.sort((a, b) => a.type - b.type);
-        console.log(this.generalWardStoreService.printData);
-
-        setTimeout(() => {
-          let doc = new jsPDF();
-          doc.setFontSize(11);
-          doc.text('ASIA ROYAL HOSPITAL', 105, 15, { align: 'center' });
-
-          (doc as any).autoTable({
-            html: '#general-ward__report',
-            startY: 25,
-            theme: 'grid',
-            headStyles: {
-              fillColor: '#686869',
-            },
-            styles: {
-              minCellHeight: 7,
-              fontSize: 10,
-              valign: 'middle',
-              halign: 'center',
-              // cellPadding: 0,
-            },
-          });
-          doc.save('general-ward1.pdf');
-
-          doc = new jsPDF();
-          doc.setFontSize(11);
-          doc.text('ASIA ROYAL HOSPITAL', 105, 15, { align: 'center' });
-
-          (doc as any).autoTable({
-            html: '#general-ward__report2',
-            startY: 25,
-            theme: 'grid',
-            headStyles: {
-              fillColor: '#686869',
-            },
-            styles: {
-              minCellHeight: 7,
-              minCellWidth: 0,
-              fontSize: 9,
-              valign: 'middle',
-              halign: 'center',
-              cellPadding: 0,
-            },
-          });
-          doc.save('general-ward2.pdf');
-        }, 1000);
+        } else {
+          for (const i of _.range(0, 3)) {
+            this.generalWardStoreService.printData.push({
+              interDesc: '',
+              goal: 0,
+              initDate: '',
+              printShifts: _.range(0, 16).map(() => false),
+              outcomeMetAt: '',
+              outcomeMet: false,
+            });
+          }
+        }
+      }
+      const printShifts = [];
+      for (const date of this.generalWardStoreService.printDates) {
+        const shift = v.shifts.find((e) => e.date == date);
+        if (shift) {
+          printShifts.push(shift.day);
+          printShifts.push(shift.night);
+        } else {
+          printShifts.push(false);
+          printShifts.push(false);
+        }
+      }
+      this.generalWardStoreService.printData.push({
+        ...v,
+        goal,
+        originalGoal: v.goal,
+        printShifts,
       });
+
+      oldGoal = v.goal;
+    }
+
+    this.from = '';
+    this.to = '';
+
+    const img = document.createElement('img');
+    img.src = 'assets/images/check.png';
+
+    setTimeout(() => {
+      let doc = new jsPDF();
+      doc.setFontSize(11);
+      doc.text('ASIA ROYAL HOSPITAL', 105, 15, { align: 'center' });
+
+      (doc as any).autoTable({
+        html: '#general-ward__report',
+        startY: 25,
+        theme: 'grid',
+        headStyles: {
+          fillColor: '#686869',
+        },
+        styles: {
+          minCellHeight: 7,
+          fontSize: 10,
+          valign: 'middle',
+          halign: 'center',
+        },
+      });
+      doc.save('general-ward.pdf');
+
+      doc = new jsPDF();
+      doc.setFontSize(11);
+      doc.text('ASIA ROYAL HOSPITAL', 105, 15, { align: 'center' });
+
+      (doc as any).autoTable({
+        html: '#general-ward__report2',
+        startY: 25,
+        theme: 'grid',
+        headStyles: {
+          fillColor: '#686869',
+        },
+        styles: {
+          minCellHeight: 7,
+          minCellWidth: 0,
+          fontSize: 9,
+          valign: 'middle',
+          halign: 'center',
+          cellPadding: 0,
+        },
+        didDrawCell: (data) => {
+          if (data.cell.text[0] == 'T') {
+            data.cell.text[0] = '';
+            doc.addImage(img, 'PNG', data.cell.x + 2, data.cell.y + 1, 5, 5);
+          }
+        },
+      });
+      doc.save('general-ward-detail.pdf');
+    }, 1000);
   }
 
   checkFT(e) {

@@ -28,6 +28,7 @@ const defaultItem = {
 export class GeneralWardFormComponent implements OnInit, OnDestroy {
   date = new Date().toISOString().slice(0, 10);
   Type = {
+    0: { problemName: '' },
     50: { problemName: 'Breathing', icon: 'fa-lungs' },
     51: { problemName: 'Circulation', icon: 'fa-heartbeat' },
     52: { problemName: 'Communications', icon: 'fa-brain' },
@@ -251,6 +252,7 @@ export class GeneralWardFormComponent implements OnInit, OnDestroy {
   // }
 
   formatDate(dateStr: string, format: string) {
+    if (!dateStr) return '';
     return moment(dateStr).format(format);
   }
 
@@ -258,6 +260,16 @@ export class GeneralWardFormComponent implements OnInit, OnDestroy {
     this.items.push({ ...defaultItem, id: new Date().toISOString() });
     const item = this.items[this.items.length - 1];
     this.setInterventions(item.goal, item);
+  }
+
+  removeRow(item) {
+    if (this.items.length <= 1 || item.readonly) {
+      return alert("Can't delete!");
+    }
+    const ok = confirm('Are you sure you want to delete?');
+    if (ok && this.items.length > 1) {
+      this.items = this.items.filter((v) => v.id !== item.id);
+    }
   }
 
   toggleBtn(key: string, item: any) {

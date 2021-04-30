@@ -23,7 +23,7 @@
   </div>
 
   <div
-    *ngFor="let item of items"
+    *ngFor="let item of items; index as i"
     class="row gw__row my-4"
     style="align-items: flex-end"
   >
@@ -98,6 +98,17 @@
       >
         <i class="fa fa-plus" aria-hidden="true" style="font-size: 11px"></i>
       </app-icon-button>
+      <app-icon-button
+        color="red"
+        *ngIf="!(generalWardStoreService.isUpdate$ | async)"
+        (click)="removeRow(item)"
+      >
+        <i
+          class="fa fa-minus"
+          aria-hidden="true"
+          style="font-size: 11px; color: white"
+        ></i>
+      </app-icon-button>
     </div>
   </div>
 
@@ -167,13 +178,13 @@
     <tr
       *ngFor="
         let item of generalWardStoreService.printData$ | async;
-        let i = index
+        index as i
       "
     >
-      <td>{{ item.problemName }}</td>
-      <td>{{ item.headerDesc }}</td>
+      <td>{{ Type[item.goal].problemName }}</td>
+      <td>{{ item.interDesc }}</td>
       <td>{{ i + 1 }}</td>
-      <td>{{ item.initialDate }}</td>
+      <td>{{ formatDate(item.initDate, "DD/MM/yyyy") }}</td>
     </tr>
   </tbody>
 </table>
@@ -186,7 +197,7 @@
         *ngFor="let date of generalWardStoreService.printDates$ | async"
         colspan="2"
       >
-        {{ date }}
+        {{ formatDate(date, "DD/MM/yyyy") }}
       </td>
       <td colspan="4" rowspan="2">OUTCOME MET</td>
     </tr>
@@ -221,15 +232,13 @@
       "
     >
       <td colspan="2">{{ i + 1 }}</td>
-      <td *ngFor="let check of item.checkList">
-        {{ check ? "C" : "" }}
+      <td *ngFor="let ok of item.printShifts">
+        {{ ok ? "T" : "" }}
       </td>
       <td colspan="2">
-        {{
-          item.outcomeMetAt ? formatDate(item.outcomeMetAt, "DD/MM/yyyy") : ""
-        }}
+        {{ formatDate(item.outcomeMetAt, "DD/MM/yyyy") }}
       </td>
-      <td colspan="2"></td>
+      <td colspan="2">{{ item.outcomeMet ? "T" : "" }}</td>
     </tr>
   </tbody>
 </table>

@@ -31,6 +31,7 @@ td {
 }
 
 .shift__dialog {
+  background-color: rgba(0, 0, 0, 0.397);
   position: fixed;
   top: 0;
   left: 0;

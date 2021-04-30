@@ -1,4 +1,5 @@
 .icon__btn {
+  -webkit-transition: all 0.2s;
   transition: all 0.2s;
   width: 25px;
   height: 25px;
@@ -7,5 +8,7 @@
 }
 
 .icon__btn:active {
-  transform: scale(0.75);
+  -webkit-transform: scale(0.75);
+          transform: scale(0.75);
 }
+/*# sourceMappingURL=icon-button.component.css.map */
