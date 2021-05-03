@@ -63,12 +63,7 @@
   <app-table [headers]="headers">
     <tr
       class="__raised"
-      *ngFor="
-        let nonParenteral of (injectionStoreService.injections$ | async).slice(
-          start,
-          end
-        )
-      "
+      *ngFor="let nonParenteral of injectionStoreService.injections$ | async"
       (click)="goToList(nonParenteral)"
     >
       <td>{{ nonParenteral.patientId }}</td>
