@@ -40,12 +40,6 @@ export class InjectionFormComponent
     tabEle2.style.background = '#3b5998';
     tabEle1.style.background = '#8C9899';
 
-    (async () => {
-      this.appStoreService.isDoctorRank = await this.isDoctorRank(
-        this.appStoreService.userId,
-        this.http
-      );
-    })();
     this.appStoreService.onClear = this.new.bind(this);
     let callback;
     if (!this.injectionStoreService.isUpdate) {
@@ -59,6 +53,7 @@ export class InjectionFormComponent
         (v) => v.syskey == this.injectionStoreService.currentSysKey
       );
       const data = this.injectionStoreService.injections[0];
+
       this.date = this.appStoreService.isDoctorRank
         ? data.moConfirmDate
         : data.nurseConfirmDate;
@@ -70,6 +65,7 @@ export class InjectionFormComponent
       this.nurseConfirmDate = data.nurseConfirmDate;
       this.moConfirmTime = data.moConfirmTime;
       this.nurseConfirmTime = data.nurseConfirmTime;
+      this.appStoreService.onPatientChanged = callback;
       this.appStoreService.fetchPatientByRgsNo(data.rgsNo);
     }
     this.appStoreService.onPatientChanged = callback;

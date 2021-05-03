@@ -85,8 +85,13 @@ export class InjectionListComponent extends CommonUtil implements OnInit {
     const tabEle2 = document.getElementById('tab2');
     tabEle1.style.background = '#3b5998';
     tabEle2.style.background = '#8C9899';
-
-    this.fetchAllInjections();
+    (async () => {
+      this.appStoreService.isDoctorRank = await this.isDoctorRank(
+        this.appStoreService.userId,
+        this.http
+      );
+      this.fetchAllInjections();
+    })();
     this.injectionStoreService.isUpdate = false;
   }
 
