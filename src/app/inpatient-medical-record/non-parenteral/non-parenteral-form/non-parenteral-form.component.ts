@@ -189,7 +189,7 @@ export class NonParenteralFormComponent
             {
               ...v,
               userid: this.appStoreService.userId,
-              username: '',
+              username: this.appStoreService.username,
               diagnosis: this.diagnosis,
               drugAllergyTo: this.drugAllergyTo,
               dateStart: this.dateStart,
@@ -228,7 +228,7 @@ export class NonParenteralFormComponent
                 rgsNo: this.appStoreService.rgsNo,
                 adNo: this.appStoreService.patientDetail.adNo,
                 userid: this.appStoreService.userId,
-                username: '',
+                username: this.appStoreService.username,
                 parentId: v.syskey,
                 doctorId: this.appStoreService.drID,
                 diagnosis: this.diagnosis,

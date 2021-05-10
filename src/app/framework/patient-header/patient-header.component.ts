@@ -30,6 +30,11 @@ export class PatientHeaderComponent extends CommonUtil implements OnInit {
       const userId = params?.inputUserID;
       if (userId) {
         this.appStoreService.userId = userId;
+        this.http
+          .doGet(`patients/username/${userId}`)
+          .subscribe((data: any) => {
+            this.appStoreService.username = data.username;
+          });
       }
     });
   }

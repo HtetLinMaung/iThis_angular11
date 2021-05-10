@@ -151,7 +151,7 @@ export class InjectionFormComponent
             {
               ...v,
               userid: this.appStoreService.userId,
-              username: '',
+              username: this.appStoreService.username,
               givenByType: this.givenByType,
               isDoctor: this.appStoreService.isDoctorRank,
               moConfirmDate: this.appStoreService.isDoctorRank
@@ -181,7 +181,7 @@ export class InjectionFormComponent
               rgsNo: this.appStoreService.rgsNo,
               adNo: this.appStoreService.patientDetail.adNo,
               userid: this.appStoreService.userId,
-              username: '',
+              username: this.appStoreService.username,
               givenByType: this.givenByType,
               isDoctor: this.appStoreService.isDoctorRank,
               moConfirmDate: this.appStoreService.isDoctorRank

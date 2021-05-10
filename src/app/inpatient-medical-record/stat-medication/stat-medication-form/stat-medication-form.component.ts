@@ -161,7 +161,7 @@ export class StatMedicationFormComponent
             `inpatient-medical-record/update-stat-medication/${this.statMedicationStoreService.currentSysKey}`,
             {
               userid: this.appStoreService.userId,
-              username: '',
+              username: this.appStoreService.username,
               stockId: v.stockId,
               stockDescription: v.medication,
               timeAdmin: v.timeAdmin,
@@ -201,7 +201,7 @@ export class StatMedicationFormComponent
                 rgsNo: this.appStoreService.rgsNo,
                 adNo: this.appStoreService.patientDetail.adNo,
                 userid: this.appStoreService.userId,
-                username: '',
+                username: this.appStoreService.username,
                 parentId: v.syskey,
                 doctorId: this.appStoreService.drID,
                 stockId: v.stockId,

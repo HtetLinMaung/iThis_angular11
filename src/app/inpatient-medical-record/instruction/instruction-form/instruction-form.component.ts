@@ -80,7 +80,7 @@ export class InstructionFormComponent implements OnInit {
             pId: this.appStoreService.pId,
             rgsNo: this.appStoreService.rgsNo,
             userid: this.appStoreService.userId,
-            username: '',
+            username: this.appStoreService.username,
             date: this.date,
             dateTaken: this.dateTaken,
             drugAllergyTo: this.drugAllergyTo,

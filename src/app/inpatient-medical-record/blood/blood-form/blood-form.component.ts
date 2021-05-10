@@ -171,7 +171,7 @@ export class BloodFormComponent extends CommonUtil implements OnInit {
             {
               ...v,
               userid: this.appStoreService.userId,
-              username: '',
+              username: this.appStoreService.username,
               givenByType: this.givenByType,
               isDoctor: this.appStoreService.isDoctorRank,
               moConfirmDate: this.appStoreService.isDoctorRank
@@ -200,7 +200,7 @@ export class BloodFormComponent extends CommonUtil implements OnInit {
               pId: this.appStoreService.pId,
               rgsNo: this.appStoreService.rgsNo,
               userid: this.appStoreService.userId,
-              username: '',
+              username: this.appStoreService.username,
               givenByType: this.givenByType,
               isDoctor: this.appStoreService.isDoctorRank,
               moConfirmDate: this.appStoreService.isDoctorRank ? this.date : '',

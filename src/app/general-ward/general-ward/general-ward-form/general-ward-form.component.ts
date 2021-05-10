@@ -331,7 +331,7 @@ export class GeneralWardFormComponent implements OnInit, OnDestroy {
           generalWards: this.items.map((item) => ({
             ...item,
             userid: this.appStoreService.userId,
-            username: '',
+            username: this.appStoreService.username,
             rgsNo: this.appStoreService.rgsNo,
             pId: this.appStoreService.pId,
             shifts: item.shifts.map((shift) => ({
