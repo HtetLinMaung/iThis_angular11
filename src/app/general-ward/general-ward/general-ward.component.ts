@@ -85,6 +85,7 @@ export class GeneralWardComponent implements OnInit {
       return alert('Please select patient first!');
     }
     this.generalWardStoreService.printDialog = false;
+    this.generalWardStoreService.printData = [];
 
     const res: any = await this.http
       .doPost('general-ward/patient-adl', {
@@ -185,7 +186,12 @@ export class GeneralWardComponent implements OnInit {
           halign: 'center',
         },
       });
-      doc.save('general-ward.pdf');
+
+      doc.save(
+        `gw_${
+          this.appStoreService.patientDetail.patientName
+        }_${new Date().toISOString()}.pdf`
+      );
 
       doc = new jsPDF();
       doc.setFontSize(11);
@@ -213,7 +219,12 @@ export class GeneralWardComponent implements OnInit {
           }
         },
       });
-      doc.save('general-ward-detail.pdf');
+
+      doc.save(
+        `gwd_${
+          this.appStoreService.patientDetail.patientName
+        }_${new Date().toISOString()}.pdf`
+      );
     }, 1000);
   }
 
