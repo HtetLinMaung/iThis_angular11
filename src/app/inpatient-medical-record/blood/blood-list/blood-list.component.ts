@@ -178,7 +178,8 @@ export class BloodListComponent implements OnInit {
                           v.givenByType,
                           v.patientId,
                           v.patientName,
-                          v.adNo
+                          v.adNo,
+                          v.RgsNo
                         )
                     );
 

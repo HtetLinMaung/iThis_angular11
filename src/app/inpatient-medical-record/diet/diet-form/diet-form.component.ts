@@ -6,13 +6,14 @@ import * as moment from 'moment';
 import { AppStoreService } from 'src/app/app-store.service';
 import { HttpService } from 'src/app/framework/http.service';
 import Diet from '../diet.model';
+import CommonUtil from 'src/app/utils/common.util';
 
 @Component({
   selector: 'app-diet-form',
   templateUrl: './diet-form.component.html',
   styleUrls: ['./diet-form.component.css'],
 })
-export class DietFormComponent implements OnInit {
+export class DietFormComponent extends CommonUtil implements OnInit {
   headers = ['', 'No.', 'Diet And Enteral Feed', 'Noted By', 'Remark', ''];
   date = '';
   time = '';
@@ -22,17 +23,24 @@ export class DietFormComponent implements OnInit {
     public http: HttpService,
     public appStoreService: AppStoreService,
     public dietStoreService: DietStoreService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     const tabEle1 = document.getElementById('tab1');
     const tabEle2 = document.getElementById('tab2');
     tabEle2.style.background = '#3b5998';
     tabEle1.style.background = '#8C9899';
+
     this.bindEditData();
   }
 
-  bindEditData() {
+  async bindEditData() {
+    this.appStoreService.isDoctorRank = await this.isDoctorRank(
+      this.appStoreService.userId,
+      this.http
+    );
     if (this.dietStoreService.isUpdate) {
       const diet = this.dietStoreService.diets.find(
         (v) => v.syskey == this.dietStoreService.currentSysKey
@@ -41,6 +49,7 @@ export class DietFormComponent implements OnInit {
       this.date = diet.date;
 
       this.diets = [diet];
+      this.appStoreService.fetchPatientByRgsNo(diet.rgsNo);
     } else {
       this.new();
     }
@@ -71,38 +80,52 @@ export class DietFormComponent implements OnInit {
   }
 
   save() {
-    if (this.dietStoreService.isUpdate) {
-      const v = this.diets[0];
-      this.http
-        .doPost(
-          `inpatient-medical-record/update-diet/${this.dietStoreService.currentSysKey}`,
-          {
-            ...v,
-            userid: '',
-            username: '',
-            isDoctor: this.appStoreService.isDoctorRank,
-            date: this.date,
-            time: this.time,
-          }
-        )
-        .subscribe((data: any) => {});
-    } else {
-      this.http
-        .doPost('inpatient-medical-record/save-diets', {
-          diets: this.diets.map((v) => ({
-            ...v,
-            pId: this.appStoreService.pId,
-            rgsNo: this.appStoreService.rgsNo,
-            userid: '',
-            username: '',
-            isDoctor: this.appStoreService.isDoctorRank,
-            date: this.date,
-            time: this.time,
-          })),
-        })
-        .subscribe((data: any) => {
-          this.dietStoreService.tabNo = 1;
-        });
+    if (this.appStoreService.loading) return;
+    if (this.appStoreService.isDoctorRank == null) {
+      return alert('Unauthorized');
+    }
+    this.appStoreService.loading = true;
+    try {
+      if (this.dietStoreService.isUpdate) {
+        const v = this.diets[0];
+        this.http
+          .doPost(
+            `inpatient-medical-record/update-diet/${this.dietStoreService.currentSysKey}`,
+            {
+              ...v,
+              userid: this.appStoreService.userId,
+              username: this.appStoreService.username,
+              isDoctor: this.appStoreService.isDoctorRank,
+              date: this.date,
+              time: this.time,
+            }
+          )
+          .subscribe((data: any) => {
+            this.appStoreService.loading = false;
+            alert('update successful');
+          });
+      } else {
+        this.http
+          .doPost('inpatient-medical-record/save-diets', {
+            diets: this.diets.map((v) => ({
+              ...v,
+              pId: this.appStoreService.pId,
+              rgsNo: this.appStoreService.rgsNo,
+              userid: this.appStoreService.userId,
+              username: this.appStoreService.username,
+              isDoctor: this.appStoreService.isDoctorRank,
+              date: this.date,
+              time: this.time,
+            })),
+          })
+          .subscribe((data: any) => {
+            this.appStoreService.loading = false;
+            this.dietStoreService.tabNo = 1;
+          });
+      }
+    } catch (err) {
+      alert(err.message);
+      this.appStoreService.loading = false;
     }
   }
 

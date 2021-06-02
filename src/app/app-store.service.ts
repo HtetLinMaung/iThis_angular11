@@ -8,6 +8,7 @@ import { Patient } from './patient.model';
   providedIn: 'root',
 })
 export class AppStoreService {
+  private readonly _loading = new BehaviorSubject<boolean>(false);
   private readonly _pId = new BehaviorSubject<number>(0);
   private readonly _patientInfo = new BehaviorSubject<Patient>(
     new Patient('', '', '')
@@ -15,6 +16,8 @@ export class AppStoreService {
   private readonly _doctor = new BehaviorSubject<Doctor>(new Doctor());
   private readonly _doctorDialog = new BehaviorSubject<boolean>(false);
   private readonly _doctors = new BehaviorSubject<Doctor[]>([]);
+  private readonly _userId = new BehaviorSubject<string>('0');
+  private readonly _username = new BehaviorSubject<string>('');
   private readonly _isDoctorRank = new BehaviorSubject<boolean>(true);
   private readonly _rgsNo = new BehaviorSubject<number>(0);
   private readonly _drID = new BehaviorSubject<number>(0);
@@ -41,6 +44,7 @@ export class AppStoreService {
   private readonly _onClear = new BehaviorSubject<any>(() => {});
   private readonly _patientTypes = new BehaviorSubject<any[]>([]);
 
+  readonly loading$ = this._loading.asObservable();
   readonly pId$ = this._pId.asObservable();
   readonly patientInfo$ = this._patientInfo.asObservable();
   readonly doctor$ = this._doctor.asObservable();
@@ -58,6 +62,8 @@ export class AppStoreService {
   readonly onAdNoChanged$ = this._onAdNoChanged.asObservable();
   readonly onClear$ = this._onClear.asObservable();
   readonly patientTypes$ = this._patientTypes.asObservable();
+  readonly userId$ = this._userId.asObservable();
+  readonly username$ = this._username.asObservable();
 
   constructor() {}
 
@@ -195,5 +201,29 @@ export class AppStoreService {
 
   get patientTypes(): any[] {
     return this._patientTypes.getValue();
+  }
+
+  set userId(v: string) {
+    this._userId.next(v);
+  }
+
+  get userId(): string {
+    return this._userId.getValue();
+  }
+
+  set loading(v: boolean) {
+    this._loading.next(v);
+  }
+
+  get loading() {
+    return this._loading.getValue();
+  }
+
+  set username(v: string) {
+    this._username.next(v);
+  }
+
+  get username() {
+    return this._username.getValue();
   }
 }

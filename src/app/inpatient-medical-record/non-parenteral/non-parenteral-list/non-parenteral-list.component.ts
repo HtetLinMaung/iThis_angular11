@@ -88,25 +88,10 @@ export class NonParenteralListComponent extends CommonUtil implements OnInit {
     this.nonParenteralStoreService.isUpdate = false;
   }
 
-  initPagination(data) {
-    this.start = 0;
-    this.end = this.perPage;
-    if (data.length < this.perPage) {
-      this.end = data.length;
-    }
-    this.calculateTotal(data);
-  }
-
-  calculateTotal(data) {
-    this.totalPage = Math.ceil(data.length / this.perPage);
-    this.total = data.length;
-  }
-
   async fetchAllNonParenterals() {
     await this.fetchRouteDoseTaskAsync(
       this.http,
-      this.nonParenteralStoreService,
-      ['routes', 'doses']
+      this.nonParenteralStoreService
     );
     this.http
       .doPost(`inpatient-medical-record/non-parenterals`, {

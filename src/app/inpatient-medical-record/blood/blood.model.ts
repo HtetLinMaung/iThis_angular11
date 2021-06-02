@@ -21,6 +21,7 @@ export default class Blood {
     public patientId = '',
     public patientName = '',
     public adNo = '',
+    public rgsNo = '',
     public key = new Date().toISOString()
   ) {}
 }

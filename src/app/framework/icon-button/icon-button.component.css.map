@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,UAAU,CAAC;EACT,UAAU,EAAE,QAAQ;EACpB,KAAK,EAAE,IAAI;EACX,MAAM,EAAE,IAAI;EACZ,MAAM,EAAE,CAAC;EACT,OAAO,EAAE,IAAI;CAKd;;AAVD,AAOE,UAPQ,AAOP,OAAO,CAAC;EACP,SAAS,EAAE,WAAW;CACvB",
+    "sources": [
+        "icon-button.component.scss"
+    ],
+    "names": [],
+    "file": "icon-button.component.css"
+}

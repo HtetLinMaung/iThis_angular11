@@ -69,6 +69,7 @@ export class DoctorDialogComponent extends CommonUtil implements OnInit {
   fetchDoctors() {
     this.http
       .doPost('nurse-activity-worklist/doctors', {
+        sortBy: 'syskey',
         page: this.page,
         perPage: this.perPage,
         search: this.search,

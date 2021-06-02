@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppStoreService } from 'src/app/app-store.service';
 import { HttpService } from 'src/app/framework/http.service';
 import { CheckList } from '../../non-parenteral/non-parenteral.model';
@@ -7,30 +7,72 @@ import Injection from '../Injection.model';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import * as moment from 'moment';
+import CommonUtil from 'src/app/utils/common.util';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-injection-form',
   templateUrl: './injection-form.component.html',
   styleUrls: ['./injection-form.component.css'],
 })
-export class InjectionFormComponent implements OnInit {
+export class InjectionFormComponent
+  extends CommonUtil
+  implements OnInit, OnDestroy {
   date = '';
+  time = '';
   givenByType = 'X1';
   moConfirmDate = '';
   nurseConfirmDate = '';
+  moConfirmTime = '';
+  nurseConfirmTime = '';
 
   constructor(
     private http: HttpService,
     public appStoreService: AppStoreService,
     public injectionStoreService: InjectionStoreService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     const tabEle1 = document.getElementById('tab1');
     const tabEle2 = document.getElementById('tab2');
     tabEle2.style.background = '#3b5998';
     tabEle1.style.background = '#8C9899';
-    this.fetchInjections();
+
+    this.appStoreService.onClear = this.new.bind(this);
+    let callback;
+    if (!this.injectionStoreService.isUpdate) {
+      this.fetchInitInjections();
+      callback = () => {
+        this.fetchInitInjections();
+      };
+    } else {
+      callback = () => {};
+      this.injectionStoreService.injections = this.injectionStoreService.injections.filter(
+        (v) => v.syskey == this.injectionStoreService.currentSysKey
+      );
+      const data = this.injectionStoreService.injections[0];
+
+      this.date = this.appStoreService.isDoctorRank
+        ? data.moConfirmDate
+        : data.nurseConfirmDate;
+      this.time = this.appStoreService.isDoctorRank
+        ? data.moConfirmTime
+        : data.nurseConfirmTime;
+      this.givenByType = data.givenByType;
+      this.moConfirmDate = data.moConfirmDate;
+      this.nurseConfirmDate = data.nurseConfirmDate;
+      this.moConfirmTime = data.moConfirmTime;
+      this.nurseConfirmTime = data.nurseConfirmTime;
+      this.appStoreService.onPatientChanged = callback;
+      this.appStoreService.fetchPatientByRgsNo(data.rgsNo);
+    }
+    this.appStoreService.onPatientChanged = callback;
+  }
+
+  ngOnDestroy(): void {
+    this.appStoreService.onPatientChanged = this.appStoreService.onClear = () => {};
   }
 
   getHeaders() {
@@ -41,86 +83,28 @@ export class InjectionFormComponent implements OnInit {
     }
   }
 
-  fetchInjections() {
-    this.http
-      .doGet('inpatient-medical-record/routes')
-      .subscribe((routes: any) => {
-        this.http
-          .doGet('inpatient-medical-record/doses')
-          .subscribe((doses: any) => {
-            this.http
-              .doGet('inpatient-medical-record/drug-tasks')
-              .subscribe((drugTasks: any) => {
-                this.injectionStoreService.routes = routes.map((v) => ({
-                  value: v.syskey + '',
-                  text: v.EngDesc,
-                  syskey: v.syskey,
-                }));
-                this.injectionStoreService.doses = doses.map((v) => ({
-                  value: v.syskey + '',
-                  text: v.Dose,
-                  syskey: v.syskey,
-                }));
-                this.injectionStoreService.drugTasks = drugTasks.map((v) => ({
-                  text: v.eng_desc,
-                  value: v.task,
-                  syskey: v.syskey,
-                }));
-                this.http
-                  .doPost('inpatient-medical-record/injections-initial', {
-                    patientId: this.appStoreService.pId,
-                    rgsno: this.appStoreService.rgsNo,
-                    doctorId: this.appStoreService.drID,
-                  })
-                  .subscribe((data: any) => {
-                    const injections = data.map((v, i) => {
-                      if (i == 0) {
-                        this.date = this.appStoreService.isDoctorRank
-                          ? v.moConfirmDate
-                          : v.nurseConfirmDate;
-                        this.moConfirmDate = v.moConfirmDate;
-                        this.nurseConfirmDate = v.nurseConfirmDate;
-                      }
-                      return new Injection(
-                        v.syskey,
-                        v.routeSyskey + '',
-                        v.medication,
-                        v.dose,
-                        v.stockId,
-                        v.doseTypeSyskey,
-                        v.remark,
-                        v.checkList
-                          .map(
-                            (item) =>
-                              new CheckList(
-                                item.syskey,
-                                item.done,
-                                item.nurseId,
-                                item.doneAt
-                              )
-                          )
-                          .sort((a, b) => a.syskey - b.syskey),
-                        this.injectionStoreService.routes.find(
-                          (route) => route.syskey == v.routeSyskey
-                        ).text,
-                        this.injectionStoreService.doses.find(
-                          (dose) => dose.syskey == v.doseTypeSyskey
-                        ).text,
-                        v.checkList.filter((item) => item.done).length
-                      );
-                    });
+  async fetchInitInjections() {
+    this.appStoreService.isDoctorRank = await this.isDoctorRank(
+      this.appStoreService.userId,
+      this.http
+    );
 
-                    if (this.injectionStoreService.isUpdate) {
-                      this.injectionStoreService.injections = this.injectionStoreService.injections.filter(
-                        (v) =>
-                          v.syskey == this.injectionStoreService.currentSysKey
-                      );
-                    } else {
-                      this.injectionStoreService.injections = injections;
-                    }
-                  });
-              });
-          });
+    this.http
+      .doPost('inpatient-medical-record/injections-initial', {
+        rgsno: this.appStoreService.rgsNo,
+      })
+      .subscribe((data: any) => {
+        this.injectionStoreService.injections = data.map((v) => ({
+          ...v,
+          routeSyskey: v.routeSyskey.toString(),
+          routeDesc: this.injectionStoreService.routes.find(
+            (route) => route.syskey == v.routeSyskey
+          ).text,
+          doseTypeDesc: this.injectionStoreService.doses.find(
+            (dose) => dose.syskey == v.doseTypeSyskey
+          ).text,
+          checkList: _.range(1, v.frequency + 1).map((n) => new CheckList(n)),
+        }));
       });
   }
 
@@ -128,55 +112,101 @@ export class InjectionFormComponent implements OnInit {
     data.done = e.target.checked;
     if (data.done) {
       data.doneAt = new Date().toISOString();
-      data.nurseId = 1;
+      data.nurseId = parseInt(this.appStoreService.userId || '0');
     } else {
       data.nurseId = 0;
       data.doneAt = '';
     }
   }
 
-  new() {}
+  new() {
+    this.clear();
+    this.injectionStoreService.isUpdate = false;
+    this.fetchInitInjections();
+  }
+
+  clear() {
+    this.date = '';
+    this.time = '';
+    this.givenByType = 'X1';
+    this.moConfirmDate = '';
+    this.nurseConfirmDate = '';
+    this.moConfirmTime = '';
+    this.nurseConfirmTime = '';
+    this.injectionStoreService.injections = [];
+  }
 
   save() {
-    if (this.injectionStoreService.isUpdate) {
-      const v = this.injectionStoreService.injections[0];
-      this.http
-        .doPost(
-          `inpatient-medical-record/update-injection/${this.injectionStoreService.currentSysKey}`,
-          {
-            ...v,
-            userid: '',
-            username: '',
-
-            givenByType: this.givenByType,
-            isDoctor: this.appStoreService.isDoctorRank,
-            moConfirmDate: this.appStoreService.isDoctorRank
-              ? this.date
-              : this.moConfirmDate,
-            nurseConfirmDate: !this.appStoreService.isDoctorRank
-              ? this.date
-              : this.nurseConfirmDate,
-          }
-        )
-        .subscribe((data: any) => {});
-    } else {
-      this.http
-        .doPost('inpatient-medical-record/save-injection', {
-          injections: this.injectionStoreService.injections.map((v) => ({
-            ...v,
-            userid: '',
-            username: '',
-            givenByType: this.givenByType,
-            isDoctor: this.appStoreService.isDoctorRank,
-            moConfirmDate: this.appStoreService.isDoctorRank
-              ? this.date
-              : this.moConfirmDate,
-            nurseConfirmDate: !this.appStoreService.isDoctorRank
-              ? this.date
-              : this.nurseConfirmDate,
-          })),
-        })
-        .subscribe((data: any) => {});
+    if (this.appStoreService.loading) return;
+    if (this.appStoreService.isDoctorRank == null) {
+      return alert('Unauthorized');
+    }
+    this.appStoreService.loading = true;
+    try {
+      if (this.injectionStoreService.isUpdate) {
+        const v = this.injectionStoreService.injections[0];
+        this.http
+          .doPost(
+            `inpatient-medical-record/update-injection/${this.injectionStoreService.currentSysKey}`,
+            {
+              ...v,
+              userid: this.appStoreService.userId,
+              username: this.appStoreService.username,
+              givenByType: this.givenByType,
+              isDoctor: this.appStoreService.isDoctorRank,
+              moConfirmDate: this.appStoreService.isDoctorRank
+                ? this.date
+                : this.moConfirmDate,
+              nurseConfirmDate: !this.appStoreService.isDoctorRank
+                ? this.date
+                : this.nurseConfirmDate,
+              moConfirmTime: this.appStoreService.isDoctorRank
+                ? this.time
+                : this.moConfirmTime,
+              nurseConfirmTime: !this.appStoreService.isDoctorRank
+                ? this.time
+                : this.nurseConfirmTime,
+            }
+          )
+          .subscribe((data: any) => {
+            this.appStoreService.loading = false;
+            alert('update successful');
+          });
+      } else {
+        this.http
+          .doPost('inpatient-medical-record/save-injection', {
+            injections: this.injectionStoreService.injections.map((v) => ({
+              ...v,
+              pId: this.appStoreService.pId,
+              rgsNo: this.appStoreService.rgsNo,
+              adNo: this.appStoreService.patientDetail.adNo,
+              userid: this.appStoreService.userId,
+              username: this.appStoreService.username,
+              givenByType: this.givenByType,
+              isDoctor: this.appStoreService.isDoctorRank,
+              moConfirmDate: this.appStoreService.isDoctorRank
+                ? this.date
+                : this.moConfirmDate,
+              nurseConfirmDate: !this.appStoreService.isDoctorRank
+                ? this.date
+                : this.nurseConfirmDate,
+              moConfirmTime: this.appStoreService.isDoctorRank
+                ? this.time
+                : this.moConfirmTime,
+              nurseConfirmTime: !this.appStoreService.isDoctorRank
+                ? this.time
+                : this.nurseConfirmTime,
+            })),
+          })
+          .subscribe((data: any) => {
+            this.appStoreService.loading = false;
+            this.injectionStoreService.tabNo = 1;
+            this.clear();
+          });
+      }
+    } catch (err) {
+      alert(err.message);
+      this.appStoreService.loading = false;
     }
   }
 

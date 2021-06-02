@@ -1,0 +1,11 @@
+.icon__link {
+  margin: 0 1rem;
+  transition: all 0.3s;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+  &:focus {
+    transform: translateY(0);
+  }
+}

@@ -1,30 +1,41 @@
 .dialog__wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   position: absolute;
   top: 0px;
   right: 0px;
   bottom: 0px;
   left: 0px;
+  -webkit-transition: all 0.3s;
   transition: all 0.3s;
-  background-color: rgb(33, 33, 33, 0.46);
-  border-color: rgb(33, 33, 33, 0.46);
+  background-color: rgba(33, 33, 33, 0.46);
+  border-color: rgba(33, 33, 33, 0.46);
   z-index: 98;
 }
+
 .dialog__content {
   width: 950px;
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  -webkit-box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+          box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   padding: 0.5rem;
   max-width: 1200px;
   background: #fff;
+  -webkit-transition: all 0.3s;
   transition: all 0.3s;
   z-index: 99;
   overflow-y: auto;
   border-radius: 10px;
-  height: 750px;
+  height: 80%;
 }
+
 .doctor__table td {
   font-size: 11px !important;
 }
+/*# sourceMappingURL=doctor-dialog.component.css.map */

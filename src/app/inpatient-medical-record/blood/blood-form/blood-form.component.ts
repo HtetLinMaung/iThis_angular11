@@ -7,13 +7,14 @@ import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import * as moment from 'moment';
 import Blood from '../blood.model';
+import CommonUtil from 'src/app/utils/common.util';
 
 @Component({
   selector: 'app-blood-form',
   templateUrl: './blood-form.component.html',
   styleUrls: ['./blood-form.component.css'],
 })
-export class BloodFormComponent implements OnInit {
+export class BloodFormComponent extends CommonUtil implements OnInit {
   date = '';
   time = '';
   givenByType = 'X1';
@@ -27,7 +28,9 @@ export class BloodFormComponent implements OnInit {
     private http: HttpService,
     public appStoreService: AppStoreService,
     public bloodStoreService: BloodStoreService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     const tabEle1 = document.getElementById('tab1');
@@ -59,12 +62,18 @@ export class BloodFormComponent implements OnInit {
         : blood.nurseConfirmDate;
       this.givenByType = blood.givenByType;
       this.bloods = [blood];
+      this.appStoreService.fetchPatientByRgsNo(blood.rgsNo);
     } else {
       this.new();
     }
   }
 
-  fetchData() {
+  async fetchData() {
+    this.appStoreService.isDoctorRank = await this.isDoctorRank(
+      this.appStoreService.userId,
+      this.http
+    );
+
     this.http
       .doGet('inpatient-medical-record/routes')
       .subscribe((routes: any) => {
@@ -132,7 +141,7 @@ export class BloodFormComponent implements OnInit {
     data.done = e.target.checked;
     if (data.done) {
       data.doneAt = new Date().toISOString();
-      data.nurseId = 1;
+      data.nurseId = parseInt(this.appStoreService.userId || '0');
     } else {
       data.nurseId = 0;
       data.doneAt = '';
@@ -148,56 +157,70 @@ export class BloodFormComponent implements OnInit {
   }
 
   save() {
-    if (this.bloodStoreService.isUpdate) {
-      const v = this.bloods[0];
-      this.http
-        .doPost(
-          `inpatient-medical-record/update-blood/${this.bloodStoreService.currentSysKey}`,
-          {
-            ...v,
-            userid: '',
-            username: '',
-            givenByType: this.givenByType,
-            isDoctor: this.appStoreService.isDoctorRank,
-            moConfirmDate: this.appStoreService.isDoctorRank
-              ? this.date
-              : this.moConfirmDate,
-            nurseConfirmDate: !this.appStoreService.isDoctorRank
-              ? this.date
-              : this.nurseConfirmDate,
-            moConfirmTime: this.appStoreService.isDoctorRank
-              ? this.time
-              : this.moConfirmTime,
-            nurseConfirmTime: !this.appStoreService.isDoctorRank
-              ? this.time
-              : this.nurseConfirmTime,
-          }
-        )
-        .subscribe((data: any) => {});
-    } else {
-      this.http
-        .doPost('inpatient-medical-record/save-blood', {
-          bloods: this.bloods.map((v) => ({
-            ...v,
-            pId: this.appStoreService.pId,
-            rgsNo: this.appStoreService.rgsNo,
-            userid: '',
-            username: '',
-            givenByType: this.givenByType,
-            isDoctor: this.appStoreService.isDoctorRank,
-            moConfirmDate: this.appStoreService.isDoctorRank ? this.date : '',
-            nurseConfirmDate: !this.appStoreService.isDoctorRank
-              ? this.date
-              : '',
-            moConfirmTime: this.appStoreService.isDoctorRank ? this.time : '',
-            nurseConfirmTime: !this.appStoreService.isDoctorRank
-              ? this.time
-              : '',
-          })),
-        })
-        .subscribe((data: any) => {
-          this.bloodStoreService.tabNo = 1;
-        });
+    if (this.appStoreService.loading) return;
+    if (this.appStoreService.isDoctorRank == null) {
+      return alert('Unauthorized');
+    }
+    this.appStoreService.loading = true;
+    try {
+      if (this.bloodStoreService.isUpdate) {
+        const v = this.bloods[0];
+        this.http
+          .doPost(
+            `inpatient-medical-record/update-blood/${this.bloodStoreService.currentSysKey}`,
+            {
+              ...v,
+              userid: this.appStoreService.userId,
+              username: this.appStoreService.username,
+              givenByType: this.givenByType,
+              isDoctor: this.appStoreService.isDoctorRank,
+              moConfirmDate: this.appStoreService.isDoctorRank
+                ? this.date
+                : this.moConfirmDate,
+              nurseConfirmDate: !this.appStoreService.isDoctorRank
+                ? this.date
+                : this.nurseConfirmDate,
+              moConfirmTime: this.appStoreService.isDoctorRank
+                ? this.time
+                : this.moConfirmTime,
+              nurseConfirmTime: !this.appStoreService.isDoctorRank
+                ? this.time
+                : this.nurseConfirmTime,
+            }
+          )
+          .subscribe((data: any) => {
+            this.appStoreService.loading = false;
+            alert('update successful');
+          });
+      } else {
+        this.http
+          .doPost('inpatient-medical-record/save-blood', {
+            bloods: this.bloods.map((v) => ({
+              ...v,
+              pId: this.appStoreService.pId,
+              rgsNo: this.appStoreService.rgsNo,
+              userid: this.appStoreService.userId,
+              username: this.appStoreService.username,
+              givenByType: this.givenByType,
+              isDoctor: this.appStoreService.isDoctorRank,
+              moConfirmDate: this.appStoreService.isDoctorRank ? this.date : '',
+              nurseConfirmDate: !this.appStoreService.isDoctorRank
+                ? this.date
+                : '',
+              moConfirmTime: this.appStoreService.isDoctorRank ? this.time : '',
+              nurseConfirmTime: !this.appStoreService.isDoctorRank
+                ? this.time
+                : '',
+            })),
+          })
+          .subscribe((data: any) => {
+            this.appStoreService.loading = false;
+            this.bloodStoreService.tabNo = 1;
+          });
+      }
+    } catch (err) {
+      alert(err.message);
+      this.appStoreService.loading = false;
     }
   }
 

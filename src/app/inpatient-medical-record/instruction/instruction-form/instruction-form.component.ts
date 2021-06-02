@@ -55,6 +55,7 @@ export class InstructionFormComponent implements OnInit {
       this.drugAllergyTo = instruction.drugAllergyTo;
       this.instruction = instruction.instruction;
       this.remarks = instruction.remarks;
+      this.appStoreService.fetchPatientByRgsNo(instruction.rgsNo);
     } else {
       this.appStoreService.onPatientChanged = () => {
         this.fetchAllergiesByPatient(this.appStoreService.pId);
@@ -63,32 +64,41 @@ export class InstructionFormComponent implements OnInit {
   }
 
   save() {
-    this.http
-      .doPost(
-        `inpatient-medical-record/${
-          this.instructionStoreService.isUpdate
-            ? 'update-instruction/' + this.instructionStoreService.currentSysKey
-            : 'save-instruction'
-        }`,
-        {
-          syskey: 0, // dummy syskey, it is not used in service
-          pId: this.appStoreService.pId,
-          rgsNo: this.appStoreService.rgsNo,
-          userid: '',
-          username: '',
-          date: this.date,
-          dateTaken: this.dateTaken,
-          drugAllergyTo: this.drugAllergyTo,
-          instruction: this.instruction,
-          remarks: this.remarks,
-        }
-      )
-      .subscribe((data: any) => {
-        if (!this.instructionStoreService.isUpdate) {
-          this.instructionStoreService.currentSysKey = data.syskey;
-        }
-        this.instructionStoreService.isUpdate = true;
-      });
+    if (this.appStoreService.loading) return;
+    this.appStoreService.loading = true;
+    try {
+      this.http
+        .doPost(
+          `inpatient-medical-record/${
+            this.instructionStoreService.isUpdate
+              ? 'update-instruction/' +
+                this.instructionStoreService.currentSysKey
+              : 'save-instruction'
+          }`,
+          {
+            syskey: 0, // dummy syskey, it is not used in service
+            pId: this.appStoreService.pId,
+            rgsNo: this.appStoreService.rgsNo,
+            userid: this.appStoreService.userId,
+            username: this.appStoreService.username,
+            date: this.date,
+            dateTaken: this.dateTaken,
+            drugAllergyTo: this.drugAllergyTo,
+            instruction: this.instruction,
+            remarks: this.remarks,
+          }
+        )
+        .subscribe((data: any) => {
+          this.appStoreService.loading = false;
+          if (!this.instructionStoreService.isUpdate) {
+            this.instructionStoreService.currentSysKey = data.syskey;
+          }
+          this.instructionStoreService.isUpdate = true;
+        });
+    } catch (err) {
+      alert(err.message);
+      this.appStoreService.loading = false;
+    }
   }
 
   delete() {

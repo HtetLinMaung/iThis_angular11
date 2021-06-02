@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AppStoreService } from 'src/app/app-store.service';
 import CommonUtil from 'src/app/utils/common.util';
 
@@ -13,7 +14,8 @@ import PatientData from '../patient-dialog/patient.model';
 export class PatientHeaderComponent extends CommonUtil implements OnInit {
   constructor(
     private http: HttpService,
-    public appStoreService: AppStoreService
+    public appStoreService: AppStoreService,
+    public route: ActivatedRoute
   ) {
     super();
     this.appStoreService.fetchPatientByRgsNo = (rgsNo: number) => {
@@ -23,7 +25,19 @@ export class PatientHeaderComponent extends CommonUtil implements OnInit {
     };
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      const userId = params?.inputUserID;
+      if (userId) {
+        this.appStoreService.userId = userId;
+        this.http
+          .doGet(`patients/username/${userId}`)
+          .subscribe((data: any) => {
+            this.appStoreService.username = data.username;
+          });
+      }
+    });
+  }
 
   onAdNoChanged(event) {
     this.appStoreService.fetchPatientByRgsNo(

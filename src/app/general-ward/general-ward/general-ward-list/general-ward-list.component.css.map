@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,WAAW,CAAC;EACV,MAAM,EAAE,MAAM;EACd,UAAU,EAAE,QAAQ;CAQrB;;AAVD,AAIE,WAJS,AAIR,MAAM,CAAC;EACN,SAAS,EAAE,gBAAgB;CAC5B;;AANH,AAOE,WAPS,AAOR,MAAM,CAAC;EACN,SAAS,EAAE,aAAa;CACzB",
+    "sources": [
+        "general-ward-list.component.scss"
+    ],
+    "names": [],
+    "file": "general-ward-list.component.css"
+}

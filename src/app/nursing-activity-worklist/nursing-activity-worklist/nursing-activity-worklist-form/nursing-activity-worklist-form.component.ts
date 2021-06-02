@@ -37,6 +37,9 @@ export class NursingActivityWorklistFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.appStoreService.doctor = new Doctor();
+    this.appStoreService.onClear = () => {
+      this.new();
+    };
     this.bindEditData();
   }
 
@@ -67,6 +70,7 @@ export class NursingActivityWorklistFormComponent implements OnInit {
         .doGet(`nurse-activity-worklist/doctors/${activity.doctorId}`)
         .subscribe((data: any) => {
           this.appStoreService.doctor = data;
+          this.appStoreService.fetchPatientByRgsNo(activity.rgsNo);
         });
     }
   }
@@ -85,46 +89,51 @@ export class NursingActivityWorklistFormComponent implements OnInit {
     this.markingUnit = 'mm';
     this.externalLength = '';
     this.externalLengthUnit = 'mm';
+    this.appStoreService.doctor = new Doctor();
   }
 
   save() {
-    this.http
-      .doPost(
-        `nurse-activity-worklist/${
-          !this.nurseActivityWorkListStoreService.isUpdate
-            ? 'save'
-            : `update/${this.nurseActivityWorkListStoreService.currentSysKey}`
-        }`,
-        {
-          pId: this.appStoreService.pId,
-          rgsNo: this.appStoreService.rgsNo,
-          userid: '',
-          username: '',
-          doctorSysKey: this.appStoreService.doctor.syskey,
-          procedure: parseInt(this.procedure),
-          date: this.date,
-          dueDateChange: this.dueDateChange,
-          dueDateRemove: this.dueDateRemove,
-          size: parseFloat(this.size || '0'),
-          site: parseFloat(this.site || '0'),
-          marking: parseFloat(this.marking || '0'),
-          externalLength: parseFloat(this.externalLength || '0'),
-          siteUnit: this.siteUnit,
-          sizeUnit: this.sizeUnit,
-          markingUnit: this.markingUnit,
-          externalLengthUnit: this.externalLengthUnit,
-        }
-      )
-      .subscribe(
-        (data: any) => {
+    if (this.appStoreService.loading) return;
+    this.appStoreService.loading = true;
+    try {
+      this.http
+        .doPost(
+          `nurse-activity-worklist/${
+            !this.nurseActivityWorkListStoreService.isUpdate
+              ? 'save'
+              : `update/${this.nurseActivityWorkListStoreService.currentSysKey}`
+          }`,
+          {
+            pId: this.appStoreService.pId,
+            rgsNo: this.appStoreService.rgsNo,
+            userid: this.appStoreService.userId,
+            username: this.appStoreService.username,
+            doctorSysKey: this.appStoreService.doctor.syskey,
+            procedure: parseInt(this.procedure),
+            date: this.date,
+            dueDateChange: this.dueDateChange,
+            dueDateRemove: this.dueDateRemove,
+            size: parseFloat(this.size || '0'),
+            site: parseFloat(this.site || '0'),
+            marking: parseFloat(this.marking || '0'),
+            externalLength: parseFloat(this.externalLength || '0'),
+            siteUnit: this.siteUnit,
+            sizeUnit: this.sizeUnit,
+            markingUnit: this.markingUnit,
+            externalLengthUnit: this.externalLengthUnit,
+          }
+        )
+        .subscribe((data: any) => {
+          this.appStoreService.loading = false;
           if (!this.nurseActivityWorkListStoreService.isUpdate) {
             this.nurseActivityWorkListStoreService.currentSysKey = data.syskey;
           }
           this.nurseActivityWorkListStoreService.isUpdate = true;
-        },
-        (error) => {},
-        () => {}
-      );
+        });
+    } catch (err) {
+      alert(err.message);
+      this.appStoreService.loading = false;
+    }
   }
 
   delete() {

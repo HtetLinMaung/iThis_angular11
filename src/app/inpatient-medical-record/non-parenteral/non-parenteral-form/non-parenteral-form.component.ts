@@ -48,6 +48,12 @@ export class NonParenteralFormComponent
     const tabEle2 = document.getElementById('tab2');
     tabEle2.style.background = '#3b5998';
     tabEle1.style.background = '#8C9899';
+    (async () => {
+      this.appStoreService.isDoctorRank = await this.isDoctorRank(
+        this.appStoreService.userId,
+        this.http
+      );
+    })();
     (this.appStoreService.onPatientChanged = this.fetchNonParenterals.bind(
       this
     ))();
@@ -56,8 +62,7 @@ export class NonParenteralFormComponent
       this.nonParenteralStoreService.nonParenterals = this.nonParenteralStoreService.nonParenterals.filter(
         (v) => v.syskey == this.nonParenteralStoreService.currentSysKey
       );
-      const data: NonParenteral = this.nonParenteralStoreService
-        .nonParenterals[0];
+      const data = this.nonParenteralStoreService.nonParenterals[0];
       this.date = this.appStoreService.isDoctorRank
         ? data.moConfirmDate
         : data.nurseConfirmDate;
@@ -139,7 +144,7 @@ export class NonParenteralFormComponent
     data.done = e.target.checked;
     if (data.done) {
       data.doneAt = new Date().toISOString();
-      data.nurseId = 1;
+      data.nurseId = parseInt(this.appStoreService.userId || '0');
     } else {
       data.nurseId = 0;
       data.doneAt = '';
@@ -170,53 +175,21 @@ export class NonParenteralFormComponent
   }
 
   save() {
-    if (this.nonParenteralStoreService.isUpdate) {
-      const v = this.nonParenteralStoreService.nonParenterals[0];
-      this.http
-        .doPost(
-          `inpatient-medical-record/update-non-parenteral/${this.nonParenteralStoreService.currentSysKey}`,
-          {
-            ...v,
-            userid: '',
-            username: '',
-            diagnosis: this.diagnosis,
-            drugAllergyTo: this.drugAllergyTo,
-            dateStart: this.dateStart,
-            dateOff: this.dateOff,
-            tubeFeed: this.tubeFeed,
-            liquidMedication: this.liquidMedication,
-            chronicRenalFailure: this.chronicRenalFailure,
-            pregnant: this.pregnant,
-            givenByType: this.givenByType,
-            isDoctor: this.appStoreService.isDoctorRank,
-            moConfirmDate: this.appStoreService.isDoctorRank
-              ? this.date
-              : this.moConfirmDate,
-            nurseConfirmDate: !this.appStoreService.isDoctorRank
-              ? this.date
-              : this.nurseConfirmDate,
-            moConfirmTime: this.appStoreService.isDoctorRank
-              ? this.time
-              : this.moConfirmTime,
-            nurseConfirmTime: !this.appStoreService.isDoctorRank
-              ? this.time
-              : this.nurseConfirmTime,
-          }
-        )
-        .subscribe((data: any) => {});
-    } else {
-      this.http
-        .doPost('inpatient-medical-record/save-non-parenteral', {
-          nonParenterals: this.nonParenteralStoreService.nonParenterals.map(
-            (v) => ({
+    if (this.appStoreService.loading) return;
+    if (this.appStoreService.isDoctorRank == null) {
+      return alert('Unauthorized');
+    }
+    this.appStoreService.loading = true;
+    try {
+      if (this.nonParenteralStoreService.isUpdate) {
+        const v = this.nonParenteralStoreService.nonParenterals[0];
+        this.http
+          .doPost(
+            `inpatient-medical-record/update-non-parenteral/${this.nonParenteralStoreService.currentSysKey}`,
+            {
               ...v,
-              pId: this.appStoreService.pId,
-              rgsNo: this.appStoreService.rgsNo,
-              adNo: this.appStoreService.patientDetail.adNo,
-              userid: '',
-              username: '',
-              parentId: v.syskey,
-              doctorId: this.appStoreService.drID,
+              userid: this.appStoreService.userId,
+              username: this.appStoreService.username,
               diagnosis: this.diagnosis,
               drugAllergyTo: this.drugAllergyTo,
               dateStart: this.dateStart,
@@ -239,13 +212,59 @@ export class NonParenteralFormComponent
               nurseConfirmTime: !this.appStoreService.isDoctorRank
                 ? this.time
                 : this.nurseConfirmTime,
-            })
-          ),
-        })
-        .subscribe((data: any) => {
-          this.nonParenteralStoreService.tabNo = 1;
-          this.clear();
-        });
+            }
+          )
+          .subscribe((data: any) => {
+            alert('update successful');
+            this.appStoreService.loading = false;
+          });
+      } else {
+        this.http
+          .doPost('inpatient-medical-record/save-non-parenteral', {
+            nonParenterals: this.nonParenteralStoreService.nonParenterals.map(
+              (v) => ({
+                ...v,
+                pId: this.appStoreService.pId,
+                rgsNo: this.appStoreService.rgsNo,
+                adNo: this.appStoreService.patientDetail.adNo,
+                userid: this.appStoreService.userId,
+                username: this.appStoreService.username,
+                parentId: v.syskey,
+                doctorId: this.appStoreService.drID,
+                diagnosis: this.diagnosis,
+                drugAllergyTo: this.drugAllergyTo,
+                dateStart: this.dateStart,
+                dateOff: this.dateOff,
+                tubeFeed: this.tubeFeed,
+                liquidMedication: this.liquidMedication,
+                chronicRenalFailure: this.chronicRenalFailure,
+                pregnant: this.pregnant,
+                givenByType: this.givenByType,
+                isDoctor: this.appStoreService.isDoctorRank,
+                moConfirmDate: this.appStoreService.isDoctorRank
+                  ? this.date
+                  : this.moConfirmDate,
+                nurseConfirmDate: !this.appStoreService.isDoctorRank
+                  ? this.date
+                  : this.nurseConfirmDate,
+                moConfirmTime: this.appStoreService.isDoctorRank
+                  ? this.time
+                  : this.moConfirmTime,
+                nurseConfirmTime: !this.appStoreService.isDoctorRank
+                  ? this.time
+                  : this.nurseConfirmTime,
+              })
+            ),
+          })
+          .subscribe((data: any) => {
+            this.appStoreService.loading = false;
+            this.nonParenteralStoreService.tabNo = 1;
+            this.clear();
+          });
+      }
+    } catch (err) {
+      alert(err.message);
+      this.appStoreService.loading = false;
     }
   }
 
