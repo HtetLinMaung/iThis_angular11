@@ -39,9 +39,9 @@ export class GeneralWardComponent implements OnInit {
     public appStoreService: AppStoreService,
     public generalWardStoreService: GeneralWardStoreService,
     private http: HttpService
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   tabClickHandler(n: number) {
     this.generalWardStoreService.tabNo = n;
@@ -188,8 +188,7 @@ export class GeneralWardComponent implements OnInit {
       });
 
       doc.save(
-        `gw_${
-          this.appStoreService.patientDetail.patientName
+        `gw_${this.appStoreService.patientDetail.patientName
         }_${new Date().toISOString()}.pdf`
       );
 
@@ -221,8 +220,7 @@ export class GeneralWardComponent implements OnInit {
       });
 
       doc.save(
-        `gwd_${
-          this.appStoreService.patientDetail.patientName
+        `gwd_${this.appStoreService.patientDetail.patientName
         }_${new Date().toISOString()}.pdf`
       );
     }, 1000);

@@ -16,7 +16,6 @@ import { MenuModule } from './menu/menu.module';
 import { NurseShiftSummaryModule } from './nurse-shift-summary/nurse-shift-summary.module';
 import { NursingActivityWorklistModule } from './nursing-activity-worklist/nursing-activity-worklist.module';
 import { NursingCareRecordModule } from './nursing-care-record/nursing-care-record.module';
-import { PatientTypeModule } from './patient-type/patient-type.module';
 import { RoomcodeModule } from './roomcode/roomcode.module';
 import { RoomrateModule } from './roomrate/roomrate.module';
 import { RouteModule } from './route/route.module';
@@ -42,7 +41,6 @@ import { SharedModule } from './shared/shared.module';
     CommonTypeModule,
     RouteModule,
     GeneralWardModule,
-    PatientTypeModule,
     RoomrateModule,
     RoomcodeModule,
     MenuModule,

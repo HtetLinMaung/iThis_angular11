@@ -239,8 +239,7 @@ export class BloodFormComponent extends CommonUtil implements OnInit {
     doc.setFontSize(11);
     doc.text('ASIA ROYAL HOSPITAL', 105, 15, { align: 'center' });
     doc.text(
-      `BLOOD, BLOOD PRODUCTS AND TPN - ${
-        this.appStoreService.isDoctorRank ? 'DOCTOR' : 'NURSE'
+      `BLOOD, BLOOD PRODUCTS AND TPN - ${this.appStoreService.isDoctorRank ? 'DOCTOR' : 'NURSE'
       }`,
       105,
       23,

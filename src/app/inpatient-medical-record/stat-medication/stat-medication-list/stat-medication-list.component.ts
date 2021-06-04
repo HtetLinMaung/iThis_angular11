@@ -16,6 +16,7 @@ export class StatMedicationListComponent extends CommonUtil implements OnInit {
     'Patient ID',
     'Ad No',
     'Patient Name',
+    'Date',
     'Route',
     'Medication',
     'Dose',
@@ -80,6 +81,11 @@ export class StatMedicationListComponent extends CommonUtil implements OnInit {
       text: 'Ad No',
       value: '11',
       key: 'adNo',
+    },
+    {
+      text: 'Date',
+      value: '12',
+      key: 'date',
     },
   ];
 

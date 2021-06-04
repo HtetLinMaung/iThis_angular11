@@ -33,7 +33,7 @@ export class NursingActivityWorklistFormComponent implements OnInit {
     public appStoreService: AppStoreService,
     public nurseActivityWorkListStoreService: NurseActivityWorkListStoreService,
     private http: HttpService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.appStoreService.doctor = new Doctor();
@@ -98,10 +98,9 @@ export class NursingActivityWorklistFormComponent implements OnInit {
     try {
       this.http
         .doPost(
-          `nurse-activity-worklist/${
-            !this.nurseActivityWorkListStoreService.isUpdate
-              ? 'save'
-              : `update/${this.nurseActivityWorkListStoreService.currentSysKey}`
+          `nurse-activity-worklist/${!this.nurseActivityWorkListStoreService.isUpdate
+            ? 'save'
+            : `update/${this.nurseActivityWorkListStoreService.currentSysKey}`
           }`,
           {
             pId: this.appStoreService.pId,
@@ -168,6 +167,8 @@ export class NursingActivityWorklistFormComponent implements OnInit {
               if (this.filterdPrintData.length) {
                 elems[i].innerHTML = moment(
                   this.filterdPrintData[0].dueDateChange
+                ).format('DD/MM/yyyy') + ' - ' + moment(
+                  this.filterdPrintData[0].dueDateRemove
                 ).format('DD/MM/yyyy');
               }
             }
@@ -308,9 +309,10 @@ export class NursingActivityWorklistFormComponent implements OnInit {
 
           doc.save('nurse activity.pdf');
         },
-        (error) => {},
-        () => {}
+        (error) => { },
+        () => { }
       );
+
   }
 
   browseDoctor() {

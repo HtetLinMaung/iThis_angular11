@@ -25,7 +25,6 @@
     "bootstrap": "^4.5.3",
     "jspdf": "^2.2.0",
     "jspdf-autotable": "^3.5.13",
-    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

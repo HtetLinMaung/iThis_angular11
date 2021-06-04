@@ -1,18 +1,12 @@
 <div style="flex: 1">
   <div style="display: flex; margin-top: 1rem; margin-bottom: 2rem">
     <button class="btn btn-primary btn__crud" (click)="new()">New</button>
-    <button
-      *ngIf="nurseActivityWorkListStoreService.isUpdate$ | async"
-      class="btn btn-success btn__crud"
-      (click)="save()"
-    >
+    <button *ngIf="nurseActivityWorkListStoreService.isUpdate$ | async" class="btn btn-success btn__crud"
+      (click)="save()">
       Update
     </button>
-    <button
-      *ngIf="!(nurseActivityWorkListStoreService.isUpdate$ | async)"
-      class="btn btn-success btn__crud"
-      (click)="save()"
-    >
+    <button *ngIf="!(nurseActivityWorkListStoreService.isUpdate$ | async)" class="btn btn-success btn__crud"
+      (click)="save()">
       Save
     </button>
     <button class="btn btn-danger btn__crud" (click)="delete()">Delete</button>
@@ -22,21 +16,10 @@
   <div class="flex__row">
     <div class="p__5" style="flex: 0 0 30%">
       <label class="form__label">Doctor</label>
-      <div
-        class="flex__row"
-        style="align-items: center; justify-content: space-between"
-      >
-        <input
-          style="flex: 0 0 85%"
-          type="text"
-          class="form-control form__input"
-          [value]="(appStoreService.doctor$ | async)?.doctorName || ''"
-        />
-        <div
-          class="__fab __raised"
-          title="Browse Doctor"
-          (click)="browseDoctor()"
-        >
+      <div class="flex__row" style="align-items: center; justify-content: space-between">
+        <input style="flex: 0 0 85%" type="text" class="form-control form__input"
+          [value]="(appStoreService.doctor$ | async)?.doctorName || ''" />
+        <div class="__fab __raised" title="Browse Doctor" (click)="browseDoctor()">
           <i class="fas fa-search"></i>
         </div>
       </div>
@@ -46,12 +29,7 @@
 
     <div class="p__5" style="flex: 0 0 30%">
       <label class="form__label">Due Date for Change</label>
-      <input
-        style="flex: 0 0 85%"
-        type="date"
-        class="form-control form__input"
-        [(ngModel)]="dueDateChange"
-      />
+      <input style="flex: 0 0 85%" type="date" class="form-control form__input" [(ngModel)]="dueDateChange" />
     </div>
   </div>
 
@@ -59,24 +37,14 @@
     <div class="p__5" style="flex: 0 0 30%">
       <label class="form__label">Date</label>
 
-      <input
-        style="flex: 0 0 85%"
-        type="date"
-        class="form-control form__input"
-        [(ngModel)]="date"
-      />
+      <input style="flex: 0 0 85%" type="date" class="form-control form__input" [(ngModel)]="date" />
     </div>
 
     <div style="flex: 0 0 10%"></div>
 
     <div class="p__5" style="flex: 0 0 30%">
       <label class="form__label">Due Date for Remove</label>
-      <input
-        style="flex: 0 0 85%"
-        type="date"
-        class="form-control form__input"
-        [(ngModel)]="dueDateRemove"
-      />
+      <input style="flex: 0 0 85%" type="date" class="form-control form__input" [(ngModel)]="dueDateRemove" />
     </div>
   </div>
 
@@ -85,12 +53,9 @@
       <label class="form__label">Procedure</label>
 
       <select class="form-control form__input" [(ngModel)]="procedure">
-        <option
-          *ngFor="
+        <option *ngFor="
             let item of nurseActivityWorkListStoreService.procedures$ | async
-          "
-          [value]="item.value"
-        >
+          " [value]="item.value">
           {{ item.text }}
         </option>
       </select>
@@ -98,23 +63,10 @@
 
     <div style="flex: 0 0 10%"></div>
 
-    <div
-      class="p__5 flex__row"
-      style="flex: 0 0 40%; justify-content: space-between; align-items: center"
-    >
+    <div class="p__5 flex__row" style="flex: 0 0 40%; justify-content: space-between; align-items: center">
       <div class="form__label" style="flex: 0 0 30%">Size</div>
-      <input
-        style="flex: 0 0 30%"
-        type="text"
-        class="form-control form__input"
-        [(ngModel)]="size"
-      />
-      <input
-        style="flex: 0 0 30%"
-        type="text"
-        class="form-control form__input"
-        [(ngModel)]="sizeUnit"
-      />
+      <input style="flex: 0 0 30%" type="text" class="form-control form__input" [(ngModel)]="size" />
+      <input style="flex: 0 0 30%" type="text" class="form-control form__input" [(ngModel)]="sizeUnit" />
     </div>
   </div>
 
@@ -123,23 +75,10 @@
 
     <div style="flex: 0 0 10%"></div>
 
-    <div
-      class="p__5 flex__row"
-      style="flex: 0 0 40%; justify-content: space-between; align-items: center"
-    >
+    <div class="p__5 flex__row" style="flex: 0 0 40%; justify-content: space-between; align-items: center">
       <div class="form__label" style="flex: 0 0 30%">Site</div>
-      <input
-        style="flex: 0 0 30%"
-        type="text"
-        class="form-control form__input"
-        [(ngModel)]="site"
-      />
-      <input
-        style="flex: 0 0 30%"
-        type="text"
-        class="form-control form__input"
-        [(ngModel)]="siteUnit"
-      />
+      <input style="flex: 0 0 30%" type="text" class="form-control form__input" [(ngModel)]="site" />
+      <input style="flex: 0 0 30%" type="text" class="form-control form__input" [(ngModel)]="siteUnit" />
     </div>
   </div>
 
@@ -148,23 +87,10 @@
 
     <div style="flex: 0 0 10%"></div>
 
-    <div
-      class="p__5 flex__row"
-      style="flex: 0 0 40%; justify-content: space-between; align-items: center"
-    >
+    <div class="p__5 flex__row" style="flex: 0 0 40%; justify-content: space-between; align-items: center">
       <div class="form__label" style="flex: 0 0 30%">Marking</div>
-      <input
-        style="flex: 0 0 30%"
-        type="text"
-        class="form-control form__input"
-        [(ngModel)]="marking"
-      />
-      <input
-        style="flex: 0 0 30%"
-        type="text"
-        class="form-control form__input"
-        [(ngModel)]="markingUnit"
-      />
+      <input style="flex: 0 0 30%" type="text" class="form-control form__input" [(ngModel)]="marking" />
+      <input style="flex: 0 0 30%" type="text" class="form-control form__input" [(ngModel)]="markingUnit" />
     </div>
   </div>
 
@@ -173,23 +99,10 @@
 
     <div style="flex: 0 0 10%"></div>
 
-    <div
-      class="p__5 flex__row"
-      style="flex: 0 0 40%; justify-content: space-between; align-items: center"
-    >
+    <div class="p__5 flex__row" style="flex: 0 0 40%; justify-content: space-between; align-items: center">
       <div class="form__label" style="flex: 0 0 30%">External Length</div>
-      <input
-        style="flex: 0 0 30%"
-        type="text"
-        class="form-control form__input"
-        [(ngModel)]="externalLength"
-      />
-      <input
-        style="flex: 0 0 30%"
-        type="text"
-        class="form-control form__input"
-        [(ngModel)]="externalLengthUnit"
-      />
+      <input style="flex: 0 0 30%" type="text" class="form-control form__input" [(ngModel)]="externalLength" />
+      <input style="flex: 0 0 30%" type="text" class="form-control form__input" [(ngModel)]="externalLengthUnit" />
     </div>
   </div>
 </div>
@@ -232,7 +145,7 @@
     <td></td>
   </tr>
   <tr>
-    <td>asd</td>
+    <td></td>
     <td></td>
     <td></td>
     <td></td>
@@ -392,7 +305,6 @@
   <tr>
     <td colspan="8"></td>
   </tr>
-
   <tr>
     <td rowspan="2">Pacing Wire</td>
     <td></td>
@@ -425,7 +337,6 @@
   <tr>
     <td colspan="8"></td>
   </tr>
-
   <tr>
     <td rowspan="2">General Venous Catheter</td>
     <td></td>

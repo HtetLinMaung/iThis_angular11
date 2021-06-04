@@ -39,7 +39,7 @@ export class StatMedicationFormComponent
   }
 
   ngOnDestroy(): void {
-    this.appStoreService.onPatientChanged = this.appStoreService.onClear = () => {};
+    this.appStoreService.onPatientChanged = this.appStoreService.onClear = () => { };
   }
 
   ngOnInit(): void {
@@ -253,6 +253,64 @@ export class StatMedicationFormComponent
       this.statMedicationStoreService.deleteDialog = true;
   }
 
+  // print() {
+  //   const doc = new jsPDF();
+  //   doc.setFontSize(11);
+  //   doc.text('ASIA ROYAL HOSPITAL', 105, 15, { align: 'center' });
+  //   doc.text('IN-PATIENT MEDICATION RECORD - INSTRUCTION', 105, 23, {
+  //     align: 'center',
+  //   });
+
+  //   this.http
+  //     //.doPost(`inpatient-medical-record/stat-medications-initial`, { rgsno: this.appStoreService.rgsNo, })
+  //     .doPost(`inpatient-medical-record/stat-medications`, { all: true })
+  //     //.doPost(`inpatient-medical-record/stat-medications`, { rgsno: this.appStoreService.rgsNo, })
+  //     .subscribe((data: any) => {
+  //       this.printData = data.data.map((v) => {
+  //         return new StatMedication(
+  //           v.syskey,
+  //           this.statMedicationStoreService.routes.find(
+  //             (item) => item.syskey == v.routeSyskey
+  //           ).value,
+  //           v.stockDescription,
+  //           v.dose,
+  //           '',
+  //           v.prescriptionRemark,
+  //           v.timeAdmin,
+  //           v.givenBy,
+  //           '',
+  //           v.drRemark,
+  //           v.stockId,
+  //           v.remark,
+  //           this.statMedicationStoreService.routes.find(
+  //             (item) => item.syskey == v.routeSyskey
+  //           ).text,
+  //           this.appStoreService.isDoctorRank
+  //             ? v.moConfirmDate
+  //             : v.nurseConfirmDate
+  //         );
+  //       });
+
+  //       setTimeout(() => {
+  //         (doc as any).autoTable({
+  //           html: '#stat-medication__record',
+  //           startY: 35,
+  //           theme: 'grid',
+  //           headStyles: {
+  //             fillColor: '#686869',
+  //           },
+  //           styles: {
+  //             fontSize: 9,
+  //             valign: 'middle',
+  //             halign: 'center',
+  //           },
+  //         });
+  //         // doc.autoPrint();
+  //         doc.autoPrint({ variant: 'non-conform' });
+  //         doc.save('stat-medication.pdf');
+  //       }, 1000);
+  //     });
+  // }
   print() {
     const doc = new jsPDF();
     doc.setFontSize(11);
@@ -262,9 +320,10 @@ export class StatMedicationFormComponent
     });
 
     this.http
-      .doPost(`inpatient-medical-record/stat-medications`, { all: true })
+      .doPost(`inpatient-medical-record/stat-medications-print`, { rgsno: this.appStoreService.rgsNo, })
       .subscribe((data: any) => {
-        this.printData = data.data.map((v) => {
+        // this.printData = data.DataList;
+        this.printData = data.DataList.map((v) => {
           return new StatMedication(
             v.syskey,
             this.statMedicationStoreService.routes.find(

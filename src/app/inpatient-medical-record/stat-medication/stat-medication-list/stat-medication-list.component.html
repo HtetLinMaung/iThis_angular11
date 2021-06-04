@@ -1,19 +1,12 @@
 <div style="flex: 1">
   <div style="display: flex; margin: 1rem 0">
-    <div
-      style="
+    <div style="
         display: flex;
         flex: 0 0 40%;
         align-items: center;
         justify-content: space-between;
-      "
-    >
-      <input
-        [(ngModel)]="search"
-        type="text"
-        class="form-control form__input"
-        style="flex: 0 0 45%"
-      />
+      ">
+      <input [(ngModel)]="search" type="text" class="form-control form__input" style="flex: 0 0 45%" />
       <div class="__fab __raised" title="Search" (click)="normalSearch()">
         <i class="fas fa-arrow-right"></i>
       </div>
@@ -23,11 +16,7 @@
       <div class="__fab __raised" title="Clear" (click)="clearSearch()">
         <i class="fas fa-times"></i>
       </div>
-      <div
-        class="__fab __raised"
-        title="Advanced Search"
-        (click)="openAdvSearch()"
-      >
+      <div class="__fab __raised" title="Advanced Search" (click)="openAdvSearch()">
         <i class="fas fa-search"></i>
       </div>
       <div class="__fab __raised" title="Export">
@@ -37,42 +26,26 @@
   </div>
 
   <div *ngIf="open">
-    <app-advance-search
-      [fields]="fields"
-      (onAdvanceSearch)="advanceSearch($event)"
-      (onCloseFilter)="closeFilter()"
-    ></app-advance-search>
+    <app-advance-search [fields]="fields" (onAdvanceSearch)="advanceSearch($event)" (onCloseFilter)="closeFilter()">
+    </app-advance-search>
   </div>
 
   <div style="display: flex; margin: 0.5rem 0">
-    <app-pagination
-      [total]="total"
-      [perPage]="perPage"
-      [start]="start - 1"
-      [end]="end"
-      [perPages]="perPages"
-      style="flex: 0 0 25%"
-      (onPerPageChanged)="handlePerPageChanged($event)"
-      (onNext)="handleSkip(1)"
-      (onPrev)="handleSkip(2)"
-      (onSkipFirst)="handleSkip(3)"
-      (onSkipLast)="handleSkip(4)"
-    ></app-pagination>
+    <app-pagination [total]="total" [perPage]="perPage" [start]="start - 1" [end]="end" [perPages]="perPages"
+      style="flex: 0 0 25%" (onPerPageChanged)="handlePerPageChanged($event)" (onNext)="handleSkip(1)"
+      (onPrev)="handleSkip(2)" (onSkipFirst)="handleSkip(3)" (onSkipLast)="handleSkip(4)"></app-pagination>
   </div>
 
   <app-table [headers]="headers">
-    <tr
-      class="__raised"
-      *ngFor="
+    <tr class="__raised" *ngFor="
         let statMedication of (
           statMedicationStoreService.statMedications$ | async
         )
-      "
-      (click)="goToList(statMedication)"
-    >
+      " (click)="goToList(statMedication)">
       <td>{{ statMedication.patientId }}</td>
       <td>{{ statMedication.adNo }}</td>
       <td>{{ statMedication.patientName }}</td>
+      <td>{{ statMedication.confirmDate|date:'dd-MM-yyyy'}}</td>
       <td>
         {{ statMedication.routeDesc }}
       </td>
